@@ -1,0 +1,6 @@
+html, body { margin: 0 !important; width: 100% !important; height: 100% !important; overflow: hidden !important; background: #101624 !important; cursor: pointer; }
+#film { position: absolute; transform-origin: 0 0; pointer-events: none; opacity: 0; }
+#film[data-ready='true'] { opacity: 1; }
+body:focus-visible { outline: 2px solid #c8d8ff; outline-offset: -2px; }
+* { scrollbar-width: none; -ms-overflow-style: none; }
+*::-webkit-scrollbar { display: none; width: 0; height: 0; }

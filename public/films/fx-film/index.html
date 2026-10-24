@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN" data-composition-variables='[{"id":"brand","type":"string","label":"产品名","default":"电影级特效总工坊"},{"id":"hook","type":"string","label":"开场标题","default":"突破屏幕。"},{"id":"tagline","type":"string","label":"落版文案","default":"让下一条视频，有电影的瞬间。"},{"id":"accent","type":"color","default":"#ff2a85"},{"id":"count","type":"number","label":"特效数量","default":30},{"id":"endHold","type":"number","default":4,"label":"落版秒数","min":2,"max":8}]'>
+<head><meta charset="utf-8"><title>电影级特效总工坊 · 宣传片</title><script src="vendor/gsap.min.js"></script><script src="vendor/om.js"></script><script src="../composition-runtime.js"></script>
+<style>@font-face{font-family:Noto;src:url(assets/fonts/NotoSansSC-500.woff);font-weight:500}@font-face{font-family:Noto;src:url(assets/fonts/NotoSansSC-900.woff);font-weight:900}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#030306}#film{width:1920px;height:1080px;position:relative}canvas{width:1920px;height:1080px;display:block}iframe{position:absolute;left:-5000px;width:1280px;height:900px;border:0}</style><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="../player.css"></head>
+<body><div id="film" data-composition-id="film" data-width="1920" data-height="1080" data-fps="30">
+  <audio id="om-sound" src="assets/sound.wav" data-start="0" data-duration="16" data-track-index="8" data-volume="1"></audio><canvas id="screen" width="1920" height="1080" data-om-id="picture"></canvas></div><iframe id="product" src="assets/product.html"></iframe>
+<script style="display:none" type="text/vnd.abc" id="om-score">
+X:1
+T:Break the Frame
+M:4/4
+L:1/8
+Q:1/4=120
+K:Em
+V:P inst=synpluck gain=0.5
+!mark:hook! !mp! E2 G2 B2 e2 | !mark:range! E/B/e/B/ G/B/e/B/ E/B/e/B/ G/B/e/B/ | !mark:montage! !f! C/G/e/G/ E/G/e/G/ C/G/e/G/ E/G/e/G/ | D/A/d/A/ F/A/d/A/ D/A/d/A/ F/A/d/A/ | !mark:workflow! !p! E2 z2 G2 z2 | B2 z2 e2 z2 | !mark:brand! !mp! E2 G2 B2 z2 | e4 z4 |
+V:H inst=pad gain=0.32
+!p! [EGB]8 | [EGB]8 | !mf! [CEG]8 | [DFA]8 | !pp! [EGB]8 | [DFA]8 | !mp! [EGB]8 | [EGB]4 z4 |
+V:B inst=synbass gain=0.55
+!mp! E,,2 z2 E,,2 z2 | E,,2 E,,2 E,,2 E,,2 | !f! C,,2 C,,2 C,,2 C,,2 | D,,2 D,,2 D,,2 D,,2 | !p! E,,2 z6 | D,,2 z2 D,,2 z2 | E,,2 z6 | z8 |
+V:D inst=drums kit=808 gain=0.6
+!mp! C,,2 z2 [D,,^F,,]2 z2 | C,,2 ^F,,2 [D,,^F,,]2 ^F,,2 | !f! C,,^F,, [D,,^F,,]^F,, C,,^F,, [D,,^F,,]^F,, | C,,^F,, [D,,^F,,]^F,, C,,^F,, [D,,^F,,]^F,, | !p! z8 | C,,2 z2 D,,2 z2 | C,,2 z6 | z8 |
+</script>
+<script>
+const V=OM.vars(),c=document.querySelector('canvas'),ctx=c.getContext('2d'),frame=document.querySelector('iframe');
+const W=1920,H=1080,pink=V.accent,cyan='#00f2fe',gold='#ffbe55';
+const clamp=x=>Math.max(0,Math.min(1,x)),ease=x=>1-Math.pow(1-clamp(x),4);
+function txt(s,x,y,size=40,col='#f8fafc',weight=500,align='left'){ctx.font=`${weight} ${size}px Noto, sans-serif`;ctx.fillStyle=col;ctx.textAlign=align;ctx.textBaseline='alphabetic';ctx.fillText(s,x,y)}
+function line(x,y,x2,y2,col='#ffffff25',w=1){ctx.strokeStyle=col;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x2,y2);ctx.stroke()}
+function box(x,y,w,h,r=20,fill='#11111a',stroke='#ffffff26'){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1.5;ctx.stroke()}}
+function back(t,light=false){ctx.fillStyle=light?'#e9edf1':'#030306';ctx.fillRect(0,0,W,H);const g=ctx.createRadialGradient(1420,470,10,1420,470,950);g.addColorStop(0,light?'#cbd9e6':'#141529');g.addColorStop(1,light?'#e9edf1':'#030306');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);for(let i=0;i<55;i++){let x=(i*173.43)%W,y=(i*97.31+t*(7+i%5))%H;ctx.fillStyle=i%3?'#ffffff28':pink+'66';ctx.fillRect(x,y,1.5,1.5)}}
+function chrome(t,label){txt('VFX / ULTIMATE',86,78,21,'#a5a7bd');txt(label,1834,78,21,'#a5a7bd',500,'right');line(86,101,1834,101);txt('电影级特效总工坊',86,1018,22,'#9799ae');txt('30 SCENES  /  9:16 OUTPUT',1834,1018,21,'#9799ae',500,'right');line(86,976,1834,976);ctx.fillStyle=pink;ctx.fillRect(86,974,1748*clamp(t/(12+V.endHold)),3)}
+function source(scene,t,p){try{frame.contentWindow.promoClean=t>=7&&t<8;return frame.contentWindow.productFrame(scene,t,p)}catch(e){return null}}
+function preview(scene,t,p,x,y,w,h,r=16){ctx.save();box(x-2,y-2,w+4,h+4,r+2,'#15151d','#ffffff38');ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.clip();const a=source(scene,t,p);if(a)ctx.drawImage(a,x,y,w,h);ctx.restore()}
+function badge(s,x,y,color=pink){box(x,y,ctx.measureText(s).width+50,46,23,'#030306cc',color+'77');txt(s,x+23,y+32,21,color)}
+function cursor(x,y,click){ctx.save();ctx.translate(x,y);ctx.fillStyle='#fff';ctx.strokeStyle='#030306';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,45);ctx.lineTo(12,33);ctx.lineTo(23,54);ctx.lineTo(32,50);ctx.lineTo(21,30);ctx.lineTo(40,29);ctx.closePath();ctx.fill();ctx.stroke();if(click>0){ctx.strokeStyle=pink;ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,20+click*60,0,Math.PI*2);ctx.globalAlpha=1-click;ctx.stroke()}ctx.restore()}
+const effects=[[2,'流金焚纸',gold],[7,'钻石棱镜',cyan],[11,'点云扫描',cyan],[9,'流金裂变',gold],[23,'宣纸水墨','#fff'],[20,'全息流光',pink]];
+function draw(t){back(t);if(t<2){let k=ease(t/.6);ctx.save();ctx.translate(-35*(1-k),0);txt('让画面，',90,377,100,'#f8fafc',900);txt(V.hook,90,514,132,pink,900);txt('你的创意，不必止于屏幕。',97,602,31,'#a4a6ba');box(97,663,310,56,28,'#ffffff0b','#ffffff22');txt('30 种特效  ·  即刻破壁',121,701,23);ctx.restore();preview(4,t,.02+clamp(t/2)*.12,970,174,395,702);preview(9,t,.08+clamp(t/2)*.12,1400,242,300,534);txt('REAL-TIME VFX',973,925,21,cyan);chrome(t,'01 / BREAK THE FRAME');}
+else if(t<4){let q=ease((t-2)/.45);txt(String(V.count),90,465,300,'#f8fafc',900);txt('种特效',110,575,75,'#f8fafc',900);txt('一个工坊，装下你的想象。',110,650,31,'#aaaec0');['电影','高奢','赛博','破壁','创意'].forEach((s,i)=>{box(110+i*135,718,116,54,27,'#14141f');txt(s,168+i*135,755,24,i===3?pink:'#bfc1cd',500,'center')});preview(7,t,.08,1010+80*(1-q),172,400,711);preview(11,t,.18,1460+130*(1-q),245,290,516);chrome(t,'02 / ALL THE POSSIBILITIES');}
+else if(t<7){let i=Math.min(5,Math.floor((t-4)*2)),a=effects[i],u=(t-4)%0.5;ctx.fillStyle=a[2];ctx.fillRect(0,0,710,1080);txt('30种可能',86,220,40,'#030306',900);txt(String(i+1).padStart(2,'0'),77,594,290,'#030306',900);txt(a[1],91,708,70,'#030306',900);txt('ONE FRAME. NEW WORLD.',91,809,21,'#030306');preview(a[0],t,.015+u*.4,922,70,515,916);txt('原产品实时特效 · 用户上传素材',1834,1020,20,'#b4b5c4',500,'right');}
+else if(t<8){preview(9,t,.10+(t-7)*.09,0,-1120,1920,3413,0);const g=ctx.createLinearGradient(0,0,1920,0);g.addColorStop(0,'#030306ef');g.addColorStop(.7,'#03030600');ctx.fillStyle=g;ctx.fillRect(0,0,1920,1080);txt('一瞬间。',97,479,128,'#fff',900);txt('进入电影。',97,631,128,'#fff',900);txt('电影级破壁高潮',104,742,31,cyan);chrome(t,'03 / THE HERO MOMENT');}
+else if(t<12){const u=t-8;txt('创意到大片，',86,268,86,'#fff',900);txt('只差一次点击。',86,377,86,'#fff',900);const steps=['导入视频','选择特效','一键自动导演'];steps.forEach((s,i)=>{let on=u>=i*.8;txt('0'+(i+1),100,524+i*111,26,on?pink:'#5a5d73');txt(s,171,525+i*111,42,on?'#fff':'#565a6e');if(i<2)line(116,544+i*111,116,597+i*111,'#ffffff22')});box(938,177,830,721,28,'#101018','#ffffff30');txt('电影级破壁导演台',978,234,27,'#dce0ed');preview(2,t,clamp((u-1.3)/1.8),995,272,285,506);box(1320,286,397,75,16,'#ffffff0c','#ffffff22');txt('baby_lumirae_Animee.mp4',1340,333,22,'#78edb4');box(1320,383,397,75,16,'#242130','#ff2a8555');txt('007 / 高奢 · 流金焚纸',1346,430,26);box(1320,506,397,98,18,u>1.6?pink:'#403046',pink);txt('一键自动导演',1518,549,31,'#fff',900,'center');txt('8秒大片运镜 (A)',1518,583,22,'#fff',500,'center');txt('微粒 · 引力 · 转场',1335,686,25,'#a0a6bb');line(1335,728,1685,728,'#ffffff30',4);ctx.fillStyle=cyan;ctx.beginPath();ctx.arc(1550,728,8,0,Math.PI*2);ctx.fill();box(978,823,748,38,10,'#ffffff0b',null);ctx.fillStyle=pink;ctx.fillRect(985,830,730*clamp((u-1.5)/2.5),24);cursor(1450+80*ease(u/1.5),330+220*ease(u/1.5),u>1.5&&u<2.05?(u-1.5)/.55:0);chrome(t,'04 / YOUR NEXT CREATIVE WORKFLOW');}
+else{let u=t-12;for(let i=0;i<7;i++){let x=960+Math.cos(i*.9+t*.12)*(700+u*20),y=540+Math.sin(i*.9+t*.12)*330;line(x,y,x+100,y+190,i%2?'#00f2fe20':'#ff2a8520',2)}const k=ease(u/.7);ctx.save();ctx.translate(0,(1-k)*50);ctx.globalAlpha=k;txt('30 PRO VFX SCENES',960,315,25,cyan,500,'center');txt(V.brand,960,491,110,'#fff',900,'center');txt(V.tagline,960,598,44,'#b9bdd0',500,'center');box(751,684,418,79,40,pink,null);txt('现在，开始你的创作',960,737,30,'#fff',900,'center');ctx.restore();txt('导入视频  /  选择特效  /  一键导演',960,872,25,'#9399b0',500,'center');chrome(t,'ULTIMATE / CREATE YOUR MOMENT');}}
+const tl=gsap.timeline({paused:true});OM.music({bpm:120});[['hook',0],['range',2],['montage',4],['hero',7],['workflow',8],['brand',12]].forEach(([s,t])=>tl.addLabel('scene:'+s,t));OM.clock(tl,draw,12+V.endHold);window.__timelines={film:tl};
+OM.region('hook-title',t=>t<2?[86,260,800,370]:null,'开场标题');OM.region('feature-count',t=>t>=2&&t<4?[90,170,730,650]:null,'30种特效');OM.region('director-button',t=>t>=8&&t<12?[1320,506,397,98]:null,'一键自动导演');OM.region('brand',t=>t>=12?[300,350,1320,300]:null,'品牌与落版文案');
+[[.25,'whoosh'],[.6,'thud'],[2,'thud'],[4,'hit'],[4.5,'tick'],[5,'tick'],[5.5,'tick'],[6,'tick'],[6.5,'tick'],[7,'impact'],[9.5,'click'],[12.3,'chime']].forEach(([t,s])=>OM.sfx(s,t,{gain:s==='impact'?.5:.4}));frame.addEventListener('load',()=>draw(tl.time()));document.fonts.ready.then(()=>draw(tl.time()));
+</script><script src="../player.js"></script></body></html>
+
+

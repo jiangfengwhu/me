@@ -1,0 +1,61 @@
+{
+  "updatedAt": "2026-10-24",
+  "source": "https://github.com/jiangfengwhu",
+  "repositoryCount": 43,
+  "achievements": [
+    {
+      "label": "YOLO",
+      "src": "/assets/github/yolo.png",
+      "source": "https://github.githubassets.com/assets/yolo-default-be0bbff04951.png"
+    },
+    {
+      "label": "Pull Shark",
+      "src": "/assets/github/pull-shark.png",
+      "source": "https://github.githubassets.com/assets/pull-shark-default-498c279a747d.png"
+    }
+  ],
+  "activity": {
+    "total": 743,
+    "startDate": "2025-10-19",
+    "endDate": "2026-10-24",
+    "weeks": 53,
+    "levels": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000100100000000100100000000000000000000000000000000000000001000000000010000000000000000000000001100000000000000000000000000000000011001000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000003443444444332101000000000",
+    "languages": [
+      {
+        "name": "TypeScript",
+        "count": 10,
+        "color": "#3178c6"
+      },
+      {
+        "name": "Go",
+        "count": 10,
+        "color": "#00add8"
+      },
+      {
+        "name": "JavaScript",
+        "count": 8,
+        "color": "#f1e05a"
+      },
+      {
+        "name": "Python",
+        "count": 3,
+        "color": "#3572a5"
+      },
+      {
+        "name": "Dart",
+        "count": 2,
+        "color": "#00b4ab"
+      },
+      {
+        "name": "Swift",
+        "count": 2,
+        "color": "#f05138"
+      },
+      {
+        "name": "Other",
+        "count": 8,
+        "color": "#64748b"
+      }
+    ]
+  }
+}

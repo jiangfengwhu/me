@@ -1,0 +1,5 @@
+export const clamp=x=>Math.max(0,Math.min(1,x));
+export const smooth=x=>{x=clamp(x);return x*x*(3-2*x);};
+export const out=x=>1-(1-clamp(x))**3;
+export const lerp=(a,b,x)=>a+(b-a)*x;
+export function pose(t){if(t<4)return{rx:lerp(0,-.28,smooth((t-2.8)/1.2)),ry:lerp(0,.36,smooth((t-2.5)/1.5)),rz:0,scale:1.18,x:0,y:-3};if(t<6){const k=smooth((t-4)/2);return{rx:lerp(-.28,-.18,k),ry:lerp(.36,-.38,k),rz:lerp(0,-.035,k),scale:1.23,x:0,y:-3};}if(t<6.5)return{rx:-.15,ry:.24+(t-6)*.12,rz:0,scale:3.8,x:-5,y:-44};if(t<7)return{rx:-.08,ry:1.1+(t-6.5)*.2,rz:-.05,scale:1.5,x:0,y:-3};if(t<7.5)return{rx:-.42,ry:-.32+(t-7)*.2,rz:0,scale:2.3,x:0,y:-28};if(t<8)return{rx:-.23,ry:lerp(-.35,.15,smooth((t-7.5)/.5)),rz:0,scale:lerp(1.4,1.05,out((t-7.5)/.5)),x:0,y:0};if(t<12){const k=smooth((t-8)/.65);return{rx:-.16,ry:Math.sin((t-8)*.65)*.2,rz:0,scale:lerp(1.05,.94,k),x:0,y:5};}const k=out((t-12)/.65);return{rx:lerp(-.16,-.2,k),ry:lerp(.1,-.25,k)+Math.sin((t-12)*.8)*.05,rz:-.035,scale:lerp(.94,1.04,k),x:0,y:-1};}

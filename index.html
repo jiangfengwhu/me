@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script defer src="https://stats.297782.xyz/b.js"></script>
+  <title>JIANG FENG (@jiangfengwhu) — 3D Portfolio</title>
+  <meta
+    name="description"
+    content="Jiang Feng (@jiangfengwhu) 3D 个人主页 — 第一幕：光滑反光 3D 公告栏与 Saber 公仔跟随交互；第二幕：Stripe Press 3D 硬壳书架与全屏连续滚动作品详情。"
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Non-blocking: Google Fonts must never delay the first paint of the 3D stage. -->
+  <link
+    id="font-stylesheet"
+    rel="stylesheet"
+    media="print"
+    onload="this.media='all'"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,700;1,6..72,500&display=swap"
+  />
+  <link rel="stylesheet" href="/src/styles/main.css" />
+</head>
+<body>
+  <!-- ======================================================================
+       0. CREATIVE FULL-SCREEN PRELOADER (`#preloader`) — THEATRE CURTAIN
+          A red velvet curtain is closed over the stage while textures / shaders /
+          Act II boards are prepared, then the two panels part sideways and the
+          3D stage fades up behind them. Removed from the DOM after the reveal.
+       ====================================================================== -->
+  <div id="preloader" class="preloader" role="status" aria-live="polite" aria-label="正在准备 3D 作品集">
+    <div class="stage">
+      <div class="curtain curtain--left"><span class="curtain__braid"></span></div>
+      <div class="curtain curtain--right"><span class="curtain__braid"></span></div>
+      <div class="stage__scrim"></div>
+      <div class="stage__footlights"></div>
+      <div class="stage__playbill">
+        <p class="preloader__kicker">Bulletin Board &amp; Stripe Press Archive</p>
+        <h1 class="preloader__title">Jiang Feng<span>Independent Maker · Ex-Frontend</span></h1>
+        <p class="preloader__sub">VOL. I – VII · 3D Portfolio · 2026</p>
+        <div class="preloader__meter">
+          <div class="preloader__bar"><i></i></div>
+          <span class="preloader__count">00%</span>
+        </div>
+        <p class="preloader__status">正在装订牛皮纸书脊</p>
+      </div>
+      <div class="stage__valance"></div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       1. FULL-VIEWPORT THREE.JS 3D STAGE (`#street-webgl-stage`)
+          No top or bottom indicator bars — pure edge-to-edge 3D canvas
+       ====================================================================== -->
+  <div id="street-webgl-stage" aria-label="3D Bulletin Board and Portfolio Stage"></div>
+
+  <!-- ======================================================================
+       2. STRIPE PRESS SECONDARY DETAIL ROUTE (`#stripe-detail-route`)
+          - Left 50% 3D Unfolded Book Twirl Stage (pass-through to Three.js)
+          - Right 50% Continuous Vertical Scroll Container switching all books
+          - Fullscreen wheel hotzone forwards scroll anywhere on screen
+       ====================================================================== -->
+  <section id="stripe-detail-route" aria-label="Stripe Press 作品集二级详情路由页">
+    <!-- Right 50% Continuous Vertical Scroll List (`.PressHomepageProductDetailsList`) -->
+    <div id="press-details-scroll-container" class="PressHomepageProductDetailsList">
+      <div id="press-details-list-inner" class="PressHomepageProductDetailsList__inner"></div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       3. LIVE `/` MATERIAL & LIGHTING CONTROL PANEL (`.PressHomepageControlPanel`)
+       ====================================================================== -->
+  <aside id="press-control-panel" class="PressHomepageControlPanel is-hidden" aria-label="材质与灯光参数面板">
+    <div class="cp-header">
+      <span>[/] GLOSSY MATERIAL &amp; LIGHT LAB</span>
+      <button id="btn-close-material" type="button" aria-label="关闭面板">✕</button>
+    </div>
+
+    <div class="cp-row">
+      <label for="cp-wall-roughness">
+        <span>BOARD &amp; CARD ROUGHNESS (卡片光泽粗糙度)</span>
+        <span id="val-wall-roughness">0.16</span>
+      </label>
+      <input id="cp-wall-roughness" type="range" min="0.04" max="0.65" step="0.01" value="0.16" />
+    </div>
+
+    <div class="cp-row">
+      <label for="cp-book-roughness">
+        <span>BOOK GLOSS ROUGHNESS (书本光泽粗糙度)</span>
+        <span id="val-book-roughness">0.16</span>
+      </label>
+      <input id="cp-book-roughness" type="range" min="0.04" max="0.65" step="0.01" value="0.16" />
+    </div>
+
+    <div class="cp-row">
+      <label for="cp-lamp-intensity">
+        <span>DIAGONAL &amp; HOVER LIGHT (对角光与悬停光强度)</span>
+        <span id="val-lamp-intensity">1.00</span>
+      </label>
+      <input id="cp-lamp-intensity" type="range" min="0.3" max="2.2" step="0.05" value="1.00" />
+    </div>
+  </aside>
+
+  <!-- ======================================================================
+       4. EXTENSIBLE MOCK BOOK CREATOR MODAL (`#mock-book-modal`)
+       ====================================================================== -->
+  <div id="mock-book-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="mock-modal-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <span class="modal-eyebrow">// EXTENSIBLE STRIPE PRESS ARCHIVE</span>
+          <h3 id="mock-modal-title">新增自定义 3D 典藏书卷 (Mock)</h3>
+        </div>
+        <button id="btn-close-mock-modal" type="button" class="modal-close-btn">✕</button>
+      </div>
+
+      <form id="mock-book-form" class="modal-form-grid">
+        <div class="modal-field">
+          <label for="mock-title">作品名称 (Book Title)</label>
+          <input id="mock-title" type="text" placeholder="例如：Photum iOS 胶片工坊" required />
+        </div>
+
+        <div class="modal-field">
+          <label for="mock-category">技术领域标签 (Category)</label>
+          <input id="mock-category" type="text" value="Swift · Creative Camera Engine" />
+        </div>
+
+        <div class="modal-field full">
+          <label for="mock-subtitle">副标题 / 一句话定位 (Subtitle)</label>
+          <input id="mock-subtitle" type="text" placeholder="例如：专为移动创作者打造的胶片感实时滤镜与构图助手" required />
+        </div>
+
+        <div class="modal-field">
+          <label for="mock-url">作品体验 / 仓库链接 (URL)</label>
+          <input id="mock-url" type="url" value="https://github.com/jiangfengwhu/photum-ios" />
+        </div>
+
+        <div class="modal-field">
+          <label for="mock-color">书脊与封面装帧主色 (Cover Hex)</label>
+          <input id="mock-color" type="color" value="#1a2ffb" />
+        </div>
+
+        <div class="modal-field full">
+          <label for="mock-synopsis">作品详细介绍 (Synopsis)</label>
+          <textarea id="mock-synopsis" rows="3" placeholder="输入作品背景、核心特性与技术实现..."></textarea>
+        </div>
+
+        <div class="modal-field full modal-actions">
+          <button type="submit" class="hud-cta-btn hud-cta-btn--press">
+            铸造 3D 硬壳书并挂载至书架 →
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/src/audio/boot.js"></script>
+  <script>
+    // Safety net: the curtain must never become a dead end. If the module graph
+    // fails (offline, WebGL missing, old browser) or warm-up stalls, reveal the
+    // page anyway so the DOM content stays reachable.
+    (function () {
+      function reveal() {
+        var el = document.getElementById('preloader');
+        if (!el || el.classList.contains('is-leaving')) return;
+        document.body.classList.add('is-ready');
+        el.classList.add('is-leaving');
+        setTimeout(function () { if (el.parentNode) el.remove(); }, 1800);
+      }
+      // Scene never even initialised → the app module failed.
+      setTimeout(function () { if (!window.__nightStreetScene) reveal(); }, 8000);
+      // Absolute ceiling, whatever the state.
+      setTimeout(reveal, 20000);
+    })();
+  </script>
+</body>
+</html>

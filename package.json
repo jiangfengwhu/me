@@ -1,0 +1,25 @@
+{
+  "name": "jiangfeng-lusion-stripe-portfolio",
+  "version": "1.0.0",
+  "description": "Jiang Feng (@jiangfengwhu) Personal Homepage — Lusion Spatial Evolution + Stripe Press 3D Book Portfolio",
+  "type": "module",
+  "scripts": {
+    "build:film": "node scripts/build-film.mjs",
+    "predev": "npm run build:film",
+    "prebuild": "npm run build:film",
+    "dev": "vite --host",
+    "build": "vite build",
+    "postbuild": "node scripts/prepare-deploy.mjs",
+    "deploy": "npm run build && wrangler deploy",
+    "preview": "vite preview --host"
+  },
+  "dependencies": {
+    "gsap": "^3.15.0",
+    "three": "^0.175.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.12",
+    "vite": "^6.2.0",
+    "wrangler": "4.152.0"
+  }
+}

@@ -1,0 +1,4287 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>9:16 电影级创意广告与破壁特效总工坊 Ultimate | 24 Pro VFX Scenes</title>
+  <!-- Tailwind CSS -->
+  
+  <!-- Three.js r128 -->
+  <script src="../vendor/three.min.js"></script>
+  <!-- Font Awesome Icons -->
+  
+  <!-- Google Fonts -->
+  
+
+  <style>
+    :root {
+      --neon-pink: #ff2a85;
+      --neon-gold: #ffbe55;
+      --neon-cyan: #00f2fe;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #030306;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: #f8fafc;
+    }
+
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 42, 133, 0.65);
+    }
+
+    /* Glassmorphism Sidebars */
+    .glass-sidebar {
+      background: rgba(9, 10, 16, 0.9);
+      backdrop-filter: blur(26px);
+      -webkit-backdrop-filter: blur(26px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.88);
+    }
+
+    /* Scene Card Item */
+    .scene-card {
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid rgba(255, 255, 255, 0.055);
+      background: rgba(255, 255, 255, 0.022);
+    }
+    .scene-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateX(2px);
+    }
+    .scene-card.active {
+      background: linear-gradient(135deg, rgba(255, 42, 133, 0.25) 0%, rgba(139, 92, 246, 0.2) 100%);
+      border-color: rgba(255, 42, 133, 0.75);
+      box-shadow: 0 6px 20px -4px rgba(255, 42, 133, 0.38), inset 0 0 12px rgba(255, 42, 133, 0.15);
+    }
+
+    /* Reality Pill Button */
+    .reality-btn {
+      transition: all 0.16s ease;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .reality-btn.active {
+      background: rgba(255, 190, 85, 0.22);
+      border-color: rgba(255, 190, 85, 0.7);
+      color: #fde68a;
+    }
+
+    /* Strict 9:16 Vertical Stage Container */
+    #stageWrapper {
+      aspect-ratio: 9 / 16;
+      height: calc(100vh - 24px);
+      max-height: 1020px;
+      position: relative;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .phone-bezel {
+      border-radius: 40px;
+      border: 10px solid #131520;
+      box-shadow:
+        0 0 0 2px rgba(255, 255, 255, 0.12),
+        0 30px 90px rgba(0, 0, 0, 0.95),
+        0 0 80px rgba(255, 42, 133, 0.18);
+      overflow: hidden;
+    }
+
+    .frameless-bezel {
+      border-radius: 0px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.96);
+      overflow: hidden;
+    }
+
+    @keyframes pulseClimax {
+      0%, 100% { box-shadow: 0 0 16px rgba(255, 42, 133, 0.55), 0 0 32px rgba(255, 190, 85, 0.3); }
+      50% { box-shadow: 0 0 28px rgba(255, 42, 133, 0.92), 0 0 56px rgba(255, 190, 85, 0.65); }
+    }
+
+    .btn-climax {
+      background: linear-gradient(135deg, #ff2a85 0%, #ff6b3d 55%, #ffbe55 100%);
+      animation: pulseClimax 2.4s infinite;
+    }
+
+    .btn-director {
+      background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+    }
+    .btn-director.running {
+      background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
+    }
+
+    /* Range Slider Styling */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #ff2a85;
+      border: 2px solid #ffffff;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 42, 133, 0.85);
+    }
+
+    /* Sidebar Hide Transition for Pure Recording Mode */
+    .studio-panel {
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .panel-hidden-left {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transform: translateX(-48px) !important;
+    }
+    .panel-hidden-right {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transform: translateX(48px) !important;
+    }
+  </style>
+</head>
+<body class="w-screen h-screen overflow-hidden flex items-center justify-between px-2.5 lg:px-5 bg-[#030306] relative">
+
+  <!-- Ambient Blur Background Canvas (Ambilight) -->
+  <canvas id="ambiCanvas" class="fixed inset-0 w-full h-full object-cover opacity-35 blur-[95px] pointer-events-none z-0"></canvas>
+
+  <!-- Hidden Video Element for Local Video File Input -->
+  <img hidden id="promo-sheet-1" src="demo/sheet-01.jpg"><img hidden id="promo-sheet-2" src="demo/sheet-02.jpg"><img hidden id="promo-sheet-3" src="demo/sheet-03.jpg"><img hidden id="promo-sheet-4" src="demo/sheet-04.jpg"><img hidden id="promo-sheet-5" src="demo/sheet-05.jpg"><img hidden id="promo-sheet-6" src="demo/sheet-06.jpg"><video id="userVideo" class="hidden" loop playsinline crossorigin="anonymous"></video>
+  <input type="file" id="videoFileInput" accept="video/*" class="hidden" />
+
+  <!-- Global Drag & Drop Video Overlay -->
+  <div id="dropOverlay" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-xl flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 border-4 border-dashed border-pink-500 m-4 rounded-3xl">
+    <i class="fa-solid fa-cloud-arrow-up text-6xl text-pink-500 mb-4 animate-bounce"></i>
+    <h2 class="text-2xl font-extrabold text-white mb-2">松开鼠标，立即载入你的 9:16 美女视频</h2>
+    <p class="text-slate-400 text-sm">支持 MP4 / WebM / MOV · 实时驱动全部 24 大电影与商业大片级特效</p>
+  </div>
+
+  <!-- =====================================================================
+       LEFT SIDEBAR: VIDEO SOURCE, 5 REALITY SCRIPTS & 20 PRO VFX SCENES
+       ===================================================================== -->
+  <aside id="leftPanel" class="studio-panel glass-sidebar w-80 lg:w-[375px] h-[calc(100vh-20px)] rounded-3xl p-3.5 flex flex-col justify-between z-20 shrink-0">
+    <div>
+      <!-- Brand Header -->
+      <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-pink-500 via-purple-500 to-amber-400 flex items-center justify-center shadow-lg shadow-pink-500/30">
+            <i class="fa-solid fa-film text-white text-sm"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <h1 class="font-extrabold text-sm tracking-tight text-white">9:16 电影级特效总工坊</h1>
+              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gradient-to-r from-pink-500/30 to-amber-500/30 text-amber-200 border border-pink-500/40">24 PRO</span>
+            </div>
+            <p class="text-[10px] text-slate-400">720×1280 高清 · 8万亚像素微粒 · 24大商业级转场</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1. Video Source Loader -->
+      <div class="p-2 rounded-2xl bg-white/[0.03] border border-white/10 mb-2">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-[11px] font-bold text-slate-300">
+            <i class="fa-solid fa-video text-pink-400 mr-1"></i>美女视频源
+          </span>
+          <span id="sourceBadge" class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-medium">
+            已上传: baby_lumirae_Animee.mp4
+          </span>
+        </div>
+        <div class="grid grid-cols-2 gap-1.5">
+          <button id="uploadBtn" class="py-1.5 px-2.5 rounded-xl bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-500 hover:to-rose-400 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-lg shadow-pink-600/25 transition active:scale-95">
+            <i class="fa-solid fa-upload"></i>
+            <span>导入本地视频</span>
+          </button>
+          <button id="presetBtn" class="py-1.5 px-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 border border-white/10 transition active:scale-95">
+            <i class="fa-solid fa-wand-sparkles text-amber-400"></i>
+            <span>切换内置女神(3套)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. 5 Switchable Mundane Reality Scripts (现实反差底图) -->
+      <div class="p-2 rounded-2xl bg-white/[0.025] border border-white/10 mb-2">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+            <i class="fa-solid fa-masks-theater text-amber-400 mr-1"></i>5 套现实反差底图 (可自由混搭任意特效)
+          </span>
+        </div>
+        <div class="grid grid-cols-5 gap-1" id="realitySelector">
+          <button data-reality="exam" class="reality-btn active py-1 px-1 rounded-lg text-[10px] font-semibold text-center truncate" title="2026高数期末绝密押题卷(59分)">📄高数卷</button>
+          <button data-reality="code" class="reality-btn py-1 px-1 rounded-lg text-[10px] font-semibold text-slate-300 text-center truncate" title="凌晨03:42 崩溃代码终端">💻报错码</button>
+          <button data-reality="lockscreen" class="reality-btn py-1 px-1 rounded-lg text-[10px] font-semibold text-slate-300 text-center truncate" title="暴雨深夜催命锁屏(28条未读)">🌧️催命屏</button>
+          <button data-reality="davinci" class="reality-btn py-1 px-1 rounded-lg text-[10px] font-semibold text-slate-300 text-center truncate" title="达芬奇黄金分割几何手稿">📐达芬奇</button>
+          <button data-reality="obsidian" class="reality-btn py-1 px-1 rounded-lg text-[10px] font-semibold text-slate-300 text-center truncate" title="黑曜石自律戒律碑">🪨戒律碑</button>
+        </div>
+      </div>
+
+      <!-- 3. Category Filter Tabs for 20 VFX Scenes -->
+      <div class="flex items-center justify-between mb-1.5">
+        <div class="flex gap-1 text-[10px] w-full justify-between" id="categoryTabs">
+          <button data-cat="all" class="cat-tab flex-1 py-1 rounded-lg bg-pink-500/30 text-pink-200 font-bold border border-pink-500/40">全部(24)</button>
+          <button data-cat="movie" class="cat-tab flex-1 py-1 rounded-lg bg-white/5 text-slate-400 hover:text-white">电影(5)</button>
+          <button data-cat="luxury" class="cat-tab flex-1 py-1 rounded-lg bg-white/5 text-slate-400 hover:text-white">高奢(5)</button>
+          <button data-cat="cyber" class="cat-tab flex-1 py-1 rounded-lg bg-white/5 text-slate-400 hover:text-white">赛博(5)</button>
+          <button data-cat="viral" class="cat-tab flex-1 py-1 rounded-lg bg-white/5 text-slate-400 hover:text-white">破壁(5)</button>
+          <button data-cat="creative" class="cat-tab flex-1 py-1 rounded-lg bg-white/5 text-slate-400 hover:text-white">创意(4)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scrollable 20 Scene Cards List -->
+    <div class="flex-1 overflow-y-auto space-y-1.5 pr-1" id="sceneList">
+      <!-- GROUP 1: 殿堂级电影大片特效 (01-05) -->
+      <button data-scene="1" data-cat="movie" data-default-reality="exam" class="scene-card active w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-pink-500/20 border border-pink-500/40 flex items-center justify-center text-pink-400 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">01</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">星际穿越·8万微粒星尘流体</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-pink-500/25 text-pink-300 font-semibold">GPU亚像素微粒</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">76,800颗高斯柔光星尘受3D旋度湍流凝聚成她</p>
+        </div>
+      </button>
+
+      <button data-scene="2" data-cat="movie" data-default-reality="exam" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">02</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">007/高奢·烈焰流金焚纸</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/25 text-amber-300 font-semibold">6层fBm分形火</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">24K流金岩浆灼烧试卷碳化黑边+微粒火星升腾</p>
+        </div>
+      </button>
+
+      <button data-scene="3" data-cat="movie" data-default-reality="code" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-orange-400 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">03</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">奇异博士·切向火花传送门</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-500/25 text-orange-300 font-semibold">切向物理火花</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">旋转秘法符文环喷射上千道超细切向拖尾金火光</p>
+        </div>
+      </button>
+
+      <button data-scene="4" data-cat="movie" data-default-reality="exam" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-yellow-500/20 border border-yellow-500/40 flex items-center justify-center text-yellow-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">04</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">诺兰大片·黑洞引力透镜</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-yellow-500/25 text-yellow-200 font-semibold">卡冈图雅吸积盘</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">爱因斯坦环引力弯曲书页，从流金吸积盘拉出女神</p>
+        </div>
+      </button>
+
+      <button data-scene="5" data-cat="movie" data-default-reality="obsidian" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">05</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">盗梦空间·3D时空折叠走廊</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/25 text-indigo-200 font-semibold">3D镜像维度</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">现实切分为几何面片在3D空间90°外折，镜头冲入视界</p>
+        </div>
+      </button>
+
+      <!-- GROUP 2: 顶流高奢商业广告特效 (06-10) -->
+      <button data-scene="6" data-cat="luxury" data-default-reality="exam" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">06</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">A24/MV·液态水银亮度溶解</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/25 text-cyan-300 font-semibold">流体铬金高光</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">高光亮度优先渗透+液态水银镜面边缘色散转场</p>
+        </div>
+      </button>
+
+      <button data-scene="7" data-cat="luxury" data-default-reality="obsidian" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">07</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">Dior高定·八心八箭钻石棱镜</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-purple-500/25 text-purple-300 font-semibold">水晶色散折射</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">高奢香水广告八切面钻石万花筒旋转，一键展开真容</p>
+        </div>
+      </button>
+
+      <button data-scene="8" data-cat="luxury" data-default-reality="obsidian" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-fuchsia-500/20 border border-fuchsia-500/40 flex items-center justify-center text-fuchsia-400 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">08</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">索尼高奢·微距流光磁流体</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-fuchsia-500/25 text-fuchsia-300 font-semibold">孔雀薄膜干涉</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">黑色磁流体尖峰随磁场律动，绽放孔雀虹彩显露画面</p>
+        </div>
+      </button>
+
+      <button data-scene="9" data-cat="luxury" data-default-reality="obsidian" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">09</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">高定金缮·24K流金裂变</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/25 text-amber-200 font-semibold">Voronoi金缮</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">24K液态纯金注入瓷器裂纹，碎块视差漂移显露绝色</p>
+        </div>
+      </button>
+
+      <button data-scene="10" data-cat="luxury" data-default-reality="davinci" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">10</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">杜比影院·3D丝绸帷幕掀开</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-rose-500/25 text-rose-200 font-semibold">3D绸缎布料解算</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">现实化作真丝绸缎随风泛起高光波浪，一键掀开帷幕</p>
+        </div>
+      </button>
+
+      <!-- GROUP 3: 赛博科幻与大师美学 (11-15) -->
+      <button data-scene="11" data-cat="cyber" data-default-reality="code" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-teal-500/20 border border-teal-500/40 flex items-center justify-center text-teal-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">11</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">黑客帝国·3D激光点云扫描</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-teal-500/25 text-teal-200 font-semibold">LiDAR全息浮雕</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">激光束自上而下扫描终端，重构8万点3D景深全息浮雕</p>
+        </div>
+      </button>
+
+      <button data-scene="12" data-cat="cyber" data-default-reality="code" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sky-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">12</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">西部世界·3D双螺旋丝带编织</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-sky-500/25 text-sky-200 font-semibold">3D DNA螺旋切片</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">40道3D丝带在空间呈正弦双螺旋交织，一键严丝合缝</p>
+        </div>
+      </button>
+
+      <button data-scene="13" data-cat="cyber" data-default-reality="lockscreen" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">13</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">王家卫·重庆森林抽帧霓虹</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/25 text-emerald-200 font-semibold">Step-Print残影</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">杜可风复古抽帧重影+红绿霓虹晕染+文艺台词定格</p>
+        </div>
+      </button>
+
+      <button data-scene="14" data-cat="cyber" data-default-reality="code" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-lime-500/20 border border-lime-500/40 flex items-center justify-center text-lime-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">14</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">边缘行者·斯安威斯坦切片</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-lime-500/25 text-lime-200 font-semibold">Sandevistan时停</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">高频水平错位切片+青紫幻影残像，重低音冲击收束</p>
+        </div>
+      </button>
+
+      <button data-scene="15" data-cat="cyber" data-default-reality="code" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-violet-500/20 border border-violet-500/40 flex items-center justify-center text-violet-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">15</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">赛博大片·光学流体像素拉丝</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-violet-500/25 text-violet-200 font-semibold">Pixel Stretch</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">潮牌广告标志性光学像素极速拉丝与RGB流光收束</p>
+        </div>
+      </button>
+
+      <!-- GROUP 4: 爆款破壁互动与经典精修 (16-20) -->
+      <button data-scene="16" data-cat="viral" data-default-reality="davinci" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-amber-600/20 border border-amber-500/40 flex items-center justify-center text-amber-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">16</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">达芬奇手稿·素描破壁成真</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/25 text-amber-200 font-semibold">Sobel铅笔手绘</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">实时边缘检测将视频化作羊皮纸素描，水彩晕染成真</p>
+        </div>
+      </button>
+
+      <button data-scene="17" data-cat="viral" data-default-reality="lockscreen" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-blue-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">17</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">寒夜窗前·真实水滴哈气擦窗</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-blue-500/25 text-blue-200 font-semibold">物理滑落水珠</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">冷雾凝结车窗+滑落雨滴折射，指尖擦出窗外明媚的她</p>
+        </div>
+      </button>
+
+      <button data-scene="18" data-cat="viral" data-default-reality="exam" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">18</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">学霸摸鱼·X光流光透视镜</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-rose-500/25 text-rose-200 font-semibold">光学放大色散</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">59分高数卷上的RGB色散放大透视镜，一键冲击波破壁</p>
+        </div>
+      </button>
+
+      <button data-scene="19" data-cat="viral" data-default-reality="exam" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">19</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">微距流光·高精数学矩阵化形</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/25 text-cyan-200 font-semibold">微距符号采样</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">高密微距发光微积分符号(∫∑π∞♥)实时拟合五官光影</p>
+        </div>
+      </button>
+
+      <button data-scene="20" data-cat="viral" data-default-reality="obsidian" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">20</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">3D典藏·SSR全息镭射流光卡</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-purple-500/25 text-purple-200 font-semibold">3D衍射闪卡</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">3D视差倾角镭射流光典藏卡悬浮律动，一键破框全屏</p>
+        </div>
+      </button>
+
+      <!-- GROUP 5: 创意实验室 (21-24) -->
+      <button data-scene="21" data-cat="creative" data-default-reality="exam" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-orange-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">21</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">情书翻页·3D圆柱卷页掀角</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-orange-500/25 text-orange-200 font-semibold">Page Curl</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">鼠标捏住试卷右下角真实卷起，纸背透光，一键整页翻飞</p>
+        </div>
+      </button>
+
+      <button data-scene="22" data-cat="creative" data-default-reality="obsidian" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sky-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">22</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">子弹时间·3D镜面玻璃爆碎</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-sky-500/25 text-sky-200 font-semibold">Bullet Time</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">现实化作600片3D玻璃从击点慢动作炸裂，碎片背面映出她</p>
+        </div>
+      </button>
+
+      <button data-scene="23" data-cat="creative" data-default-reality="davinci" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-slate-400/20 border border-slate-300/40 flex items-center justify-center text-slate-200 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">23</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">东方水墨·宣纸墨滴洇开</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-slate-400/25 text-slate-200 font-semibold">毛细晕染</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">指尖落墨在宣纸上毛细洇开，墨晕褪成水彩，浮现画中人</p>
+        </div>
+      </button>
+
+      <button data-scene="24" data-cat="creative" data-default-reality="lockscreen" class="scene-card w-full text-left p-2 rounded-xl flex items-start gap-2">
+        <div class="w-6 h-6 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-300 shrink-0 mt-0.5 font-mono-code font-bold text-[11px]">24</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-white truncate">水月镜花·涟漪倒影</h3>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/25 text-cyan-200 font-semibold">多源波动干涉</span>
+          </div>
+          <p class="text-[10px] text-slate-400 truncate">点击水面荡开涟漪，波纹里一闪而过她的倒影，破壁时满池花开</p>
+        </div>
+      </button>
+    </div>
+
+    <!-- Bottom Prev/Next Navigation -->
+    <div class="pt-2 mt-1.5 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400">
+      <button id="prevSceneBtn" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 font-semibold">
+        <i class="fa-solid fa-chevron-left mr-1"></i>上一特效([)
+      </button>
+      <span id="currentSceneIndicator" class="font-mono-code text-pink-400 font-bold">01 / 24</span>
+      <button id="nextSceneBtn" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 font-semibold">
+        下一特效(])<i class="fa-solid fa-chevron-right ml-1"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- =====================================================================
+       CENTER STAGE: STRICT 9:16 VERTICAL STAGE (720x1280 INTERNAL HD)
+       ===================================================================== -->
+  <main class="flex-1 h-full flex flex-col items-center justify-center relative z-10 px-2">
+    <div id="stageWrapper" class="phone-bezel bg-black relative select-none cursor-crosshair">
+      
+      <!-- Top Dynamic Island / Speaker Notch -->
+      <div id="phoneNotch" class="absolute top-2.5 left-1/2 -translate-x-1/2 w-28 h-5 bg-black rounded-full z-30 flex items-center justify-between px-3 border border-white/10 pointer-events-none">
+        <span class="w-2 h-2 rounded-full bg-indigo-950 border border-indigo-500/40"></span>
+        <span id="recIndicatorDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      </div>
+
+      <!-- Master 9:16 Composite Output Canvas (720x1280 High-DPI 9:16) -->
+      <canvas id="masterOutCanvas" width="720" height="1280" class="w-full h-full block"></canvas>
+
+      <!-- Active Scene Floating Tag (Top-Left inside Stage, auto-hides in Pure Mode) -->
+      <div id="stageBadge" class="absolute top-10 left-4 z-20 pointer-events-none transition-opacity duration-300">
+        <div class="px-2.5 py-1 rounded-full bg-black/65 backdrop-blur-md border border-white/15 text-[10px] text-slate-200 flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-pink-500"></span>
+          <span id="stageSceneTitle" class="font-bold">01 · 星际穿越·8万微粒星尘流体</span>
+        </div>
+      </div>
+
+      <!-- Auto-Director HUD Timeline Bar -->
+      <div id="directorHud" class="absolute bottom-4 left-4 right-4 z-30 pointer-events-none opacity-0 transition-opacity duration-300">
+        <div class="bg-black/80 backdrop-blur-md border border-white/15 rounded-2xl p-2.5">
+          <div class="flex items-center justify-between text-[11px] font-bold mb-1.5">
+            <span id="directorPhaseText" class="text-amber-300 flex items-center gap-1.5">
+              <i class="fa-solid fa-clapperboard"></i> 自动导演运镜中...
+            </span>
+            <span id="directorTimeText" class="font-mono-code text-white">0.0s / 8.0s</span>
+          </div>
+          <div class="w-full h-1.5 bg-white/15 rounded-full overflow-hidden">
+            <div id="directorProgressBar" class="h-full bg-gradient-to-r from-indigo-500 via-pink-500 to-amber-400 w-0"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- =====================================================================
+       RIGHT SIDEBAR: DIRECTOR CONTROLS, PARTICLE DELICACY, POST-FX & RECORDER
+       ===================================================================== -->
+  <aside id="rightPanel" class="studio-panel glass-sidebar w-80 lg:w-[360px] h-[calc(100vh-20px)] rounded-3xl p-3.5 flex flex-col justify-between z-20 shrink-0 overflow-y-auto">
+    <div class="space-y-3">
+
+      <!-- 1. Director Core Action Buttons -->
+      <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+            <i class="fa-solid fa-bolt text-amber-400 mr-1"></i>电影级破壁导演台
+          </span>
+          <span id="sceneStatusBadge" class="text-[10px] font-mono-code px-2 py-0.5 rounded bg-slate-800 text-slate-300">
+            状态: 现实铺垫态
+          </span>
+        </div>
+
+        <!-- Primary Climax Button (Space) -->
+        <button id="climaxBtn" class="btn-climax w-full py-2.5 px-4 rounded-xl text-white font-extrabold text-sm flex items-center justify-center gap-2 transition transform hover:scale-[1.01] active:scale-95">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span id="climaxBtnLabel">触发电影级破壁高潮 (Space)</span>
+        </button>
+
+        <!-- Auto-Director 8s Viral Script Button (Key A) -->
+        <button id="autoDirectorBtn" class="btn-director w-full py-2 px-3 rounded-xl text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition transform active:scale-95">
+          <i class="fa-solid fa-clapperboard"></i>
+          <span id="autoDirectorLabel">一键自动导演 8秒大片运镜 (A)</span>
+        </button>
+
+        <!-- Direct 9:16 Video Export Recorder -->
+        <div class="grid grid-cols-3 gap-1.5 pt-0.5">
+          <button id="resetBtn" class="py-1.5 px-2 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 text-[11px] font-semibold flex items-center justify-center gap-1 border border-white/10 transition active:scale-95">
+            <i class="fa-solid fa-rotate-left text-cyan-400"></i>
+            <span>重置(R)</span>
+          </button>
+          <button id="bezelToggleBtn" class="py-1.5 px-2 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 text-[11px] font-semibold flex items-center justify-center gap-1 border border-white/10 transition active:scale-95">
+            <i class="fa-solid fa-mobile-screen text-purple-400"></i>
+            <span>边框(F)</span>
+          </button>
+          <button id="recordVideoBtn" class="py-1.5 px-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 text-[11px] font-bold flex items-center justify-center gap-1 border border-rose-500/40 transition active:scale-95">
+            <i class="fa-solid fa-circle text-rose-500 text-[9px]" id="recBtnIcon"></i>
+            <span id="recBtnText">内录导出</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. MICRO-PARTICLE DELICACY & SHADER INTENSITY SLIDERS -->
+      <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-300">
+            <i class="fa-solid fa-sliders text-pink-400 mr-1"></i>微粒细腻度与特效强度精调
+          </span>
+          <span class="text-[10px] text-emerald-400 font-mono-code">exp(-r²·14)柔光</span>
+        </div>
+
+        <!-- Slider 1: Micro-Particle Size (0.7px ultra-fine stardust to 3.5px soft bokeh) -->
+        <div>
+          <div class="flex justify-between text-[11px] mb-1">
+            <span class="text-slate-300">微粒细腻度 (粒径大小)</span>
+            <span id="valParticleSize" class="font-mono-code text-pink-300 font-bold">1.4 px (超细星尘)</span>
+          </div>
+          <input type="range" id="sliderParticleSize" min="0.7" max="3.5" step="0.1" value="1.4" class="w-full" />
+        </div>
+
+        <!-- Slider 2: Turbulence / Lensing / Shader Intensity -->
+        <div>
+          <div class="flex justify-between text-[11px] mb-1">
+            <span class="text-slate-300">特效张力 / 流体引力强度</span>
+            <span id="valTurbulence" class="font-mono-code text-amber-300 font-bold">1.2x</span>
+          </div>
+          <input type="range" id="sliderTurbulence" min="0.2" max="2.5" step="0.1" value="1.2" class="w-full" />
+        </div>
+
+        <!-- Slider 3: Transition Speed -->
+        <div>
+          <div class="flex justify-between text-[11px] mb-1">
+            <span class="text-slate-300">破壁转场丝滑度 (速度)</span>
+            <span id="valSpeed" class="font-mono-code text-cyan-300 font-bold">1.0x</span>
+          </div>
+          <input type="range" id="sliderSpeed" min="0.4" max="2.2" step="0.1" value="1.0" class="w-full" />
+        </div>
+      </div>
+
+      <!-- 3. Ultra-Fine Ambient Micro-Particles Overlay -->
+      <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-300">
+            <i class="fa-solid fa-sparkles text-amber-400 mr-1"></i>前景电影级柔焦微粒层
+          </span>
+        </div>
+        <div class="grid grid-cols-2 gap-1.5" id="ambientModeBtns">
+          <button data-amb="stardust" class="amb-btn active py-1.5 px-2.5 rounded-xl text-[11px] font-semibold bg-pink-500/25 border border-pink-500/50 text-white flex items-center gap-1.5">
+            <span>✨ 亚像素流金星尘</span>
+          </button>
+          <button data-amb="spores" class="amb-btn py-1.5 px-2.5 rounded-xl text-[11px] font-semibold bg-white/5 border border-white/10 text-slate-300 hover:text-white flex items-center gap-1.5">
+            <span>🫧 阿凡达灵光孢子</span>
+          </button>
+          <button data-amb="anamorphic" class="amb-btn py-1.5 px-2.5 rounded-xl text-[11px] font-semibold bg-white/5 border border-white/10 text-slate-300 hover:text-white flex items-center gap-1.5">
+            <span>🌈 变形宽银幕眩光</span>
+          </button>
+          <button data-amb="none" class="amb-btn py-1.5 px-2.5 rounded-xl text-[11px] font-semibold bg-white/5 border border-white/10 text-slate-300 hover:text-white flex items-center gap-1.5">
+            <span>🚫 纯净无前景微粒</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4. Cinema Post-FX & Sound -->
+      <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-300">
+            <i class="fa-solid fa-sliders-up text-cyan-400 mr-1"></i>电影感后期调色与音效
+          </span>
+          <button id="soundToggleBtn" class="px-2 py-0.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold flex items-center gap-1">
+            <i id="soundIcon" class="fa-solid fa-volume-high"></i>
+            <span id="soundText">音效开启</span>
+          </button>
+        </div>
+
+        <label class="flex items-center justify-between cursor-pointer py-0.5">
+          <span class="text-xs text-slate-300">重低音卡点呼吸推镜 (Beat Zoom)</span>
+          <input type="checkbox" id="fxBeatZoom" checked class="accent-pink-500 w-3.5 h-3.5 rounded cursor-pointer" />
+        </label>
+
+        <label class="flex items-center justify-between cursor-pointer py-0.5">
+          <span class="text-xs text-slate-300">胶片柔光晕染 (Film Halation & Bloom)</span>
+          <input type="checkbox" id="fxHalation" checked class="accent-pink-500 w-3.5 h-3.5 rounded cursor-pointer" />
+        </label>
+
+        <label class="flex items-center justify-between cursor-pointer py-0.5">
+          <span class="text-xs text-slate-300">电影后期 (冲击波折射·色散·暗角·胶片颗粒)</span>
+          <input type="checkbox" id="fxCinemaPost" checked class="accent-pink-500 w-3.5 h-3.5 rounded cursor-pointer" />
+        </label>
+
+        <label class="flex items-center justify-between cursor-pointer py-0.5">
+          <span class="text-xs text-slate-300">自动跟随场景切换推荐现实底图</span>
+          <input type="checkbox" id="fxAutoReality" checked class="accent-pink-500 w-3.5 h-3.5 rounded cursor-pointer" />
+        </label>
+
+        <button id="hidePanelsBtn" class="w-full mt-1 py-1.5 rounded-xl bg-white/10 hover:bg-pink-500/20 hover:border-pink-500/40 text-slate-200 text-xs font-semibold border border-white/10 transition flex items-center justify-center gap-1.5">
+          <i class="fa-solid fa-eye-slash text-pink-400"></i>
+          <span>纯净录屏隐藏面板 (按 H 键)</span>
+        </button>
+      </div>
+
+    </div>
+
+    <div class="pt-2 border-t border-white/10 text-[10px] text-slate-400 flex justify-between">
+      <span>快捷键: <kbd class="text-amber-300">Space</kbd>破壁 <kbd class="text-pink-300">A</kbd>导演 <kbd class="text-cyan-300">R</kbd>重置</span>
+      <span><kbd class="text-emerald-300">[</kbd> <kbd class="text-emerald-300">]</kbd> 切换24场景</span>
+    </div>
+  </aside>
+
+  <!-- Pure Recording Mode Floating Toast -->
+  <div id="pureToast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-opacity duration-500">
+    <div class="px-5 py-2 rounded-full bg-black/85 border border-pink-500/50 text-white text-xs font-medium shadow-2xl flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+      <span>纯净录屏模式 · 按 <kbd class="px-1.5 py-0.5 bg-white/15 rounded text-amber-300 font-mono-code">Space</kbd> 破壁 · 按 <kbd class="px-1.5 py-0.5 bg-white/15 rounded text-pink-300 font-mono-code">A</kbd> 自动导演 · 按 <kbd class="px-1.5 py-0.5 bg-white/15 rounded text-emerald-300 font-mono-code">[ / ]</kbd> 切场景 · 按 <kbd class="px-1.5 py-0.5 bg-white/15 rounded text-cyan-300 font-mono-code">H</kbd> 恢复面板</span>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       ULTIMATE ENGINE: 20 VFX SCENES + 5 REALITIES + GLSL + THREE.JS 3D
+       ===================================================================== -->
+  <script>
+    /********************************************************************
+     * 1. GLOBAL CONFIGURATION & STATE (720x1280 High-DPI 9:16 Stage)
+     ********************************************************************/
+    const STAGE_W = 720;
+    const STAGE_H = 1280;
+
+    const SCENE_NAMES = {
+      1: '01 · 星际穿越·8万微粒星尘流体',
+      2: '02 · 007/高奢·烈焰流金焚纸',
+      3: '03 · 奇异博士·切向火花传送门',
+      4: '04 · 诺兰大片·黑洞引力透镜',
+      5: '05 · 盗梦空间·3D时空折叠走廊',
+      6: '06 · A24/MV·液态水银亮度溶解',
+      7: '07 · Dior高定·八心八箭钻石棱镜',
+      8: '08 · 索尼高奢·微距流光磁流体',
+      9: '09 · 高定金缮·24K流金裂变',
+      10: '10 · 杜比影院·3D丝绸帷幕掀开',
+      11: '11 · 黑客帝国·3D激光点云扫描',
+      12: '12 · 西部世界·3D双螺旋丝带编织',
+      13: '13 · 王家卫·重庆森林抽帧霓虹',
+      14: '14 · 边缘行者·斯安威斯坦切片',
+      15: '15 · 赛博大片·光学流体像素拉丝',
+      16: '16 · 达芬奇手稿·素描破壁成真',
+      17: '17 · 寒夜窗前·真实水滴哈气擦窗',
+      18: '18 · 学霸摸鱼·X光流光透视镜',
+      19: '19 · 微距流光·高精数学矩阵化形',
+      20: '20 · 3D典藏·SSR全息镭射流光卡',
+      21: '21 · 情书翻页·3D圆柱卷页掀角',
+      22: '22 · 子弹时间·3D镜面玻璃爆碎',
+      23: '23 · 东方水墨·宣纸墨滴洇开',
+      24: '24 · 水月镜花·涟漪倒影'
+    };
+    const SCENE_COUNT = Object.keys(SCENE_NAMES).length;
+
+    // Climax timeline easing: fast impact start (easeOutCubic) blended with a soft landing (smootherstep)
+    function cinematicEase(t) {
+      const x = Math.max(0, Math.min(1, t));
+      const smoother = x * x * x * (x * (x * 6 - 15) + 10);
+      const outCubic = 1 - Math.pow(1 - x, 3);
+      return smoother * 0.5 + outCubic * 0.5;
+    }
+
+    // Frame-rate independent exponential decay (factor is defined per 1/60s frame)
+    function decayPerFrame(value, factor, dt) {
+      return value * Math.pow(factor, dt * 60);
+    }
+
+    let seedValue=12345;
+    function seedRandom(){seedValue=(Math.imul(seedValue,1664525)+1013904223)>>>0;return seedValue/4294967296;}
+    const state = {
+      currentScene: 1, // 1..SCENE_COUNT
+      realityType: 'exam', // 'exam' | 'code' | 'lockscreen' | 'davinci' | 'obsidian'
+      autoMatchReality: true,
+      isClimax: false,
+      climaxLinear: 0,   // raw linear timeline 0.0 -> 1.0
+      climaxProgress: 0, // 0.0 -> 1.0 smooth transition progress (cinematicEase(climaxLinear))
+      climaxTime: 0,
+      // Stage-space impact point captured at the climax trigger (drives shockwave / shatter origin)
+      climaxOrigin: { uvX: 0.5, uvY: 0.5 },
+      time: 0,
+      dt: 0.016,
+      usingCustomVideo: false,
+      presetIndex: 0, // 0..2 (3 Built-in Procedural Goddesses)
+      soundEnabled: true,
+      panelsHidden: false,
+      phoneBezel: true,
+
+      // Fine-tuning user parameters
+      particleSize: 1.4,   // 0.7px to 3.5px (ultra-fine Gaussian glow points)
+      turbulence: 1.2,     // 0.2x to 2.5x
+      transitionSpeed: 1.0,
+      ambientMode: 'stardust', // 'stardust' | 'spores' | 'anamorphic' | 'none'
+
+      fx: {
+        beatZoom: true,
+        halation: true,
+        cinemaPost: true
+      },
+
+      pointer: {
+        x: STAGE_W * 0.5,
+        y: STAGE_H * 0.5,
+        uvX: 0.5,
+        uvY: 0.5,
+        nx: 0,
+        ny: 0,
+        down: false
+      },
+
+      audio: {
+        beatPulse: 0,
+        shockwave: 0,
+        shockTime: -100, // state.time when the last climax shockwave was emitted
+        flashAlpha: 0
+      },
+
+      director: {
+        active: false,
+        elapsed: 0,
+        duration: 8.0,
+        triggeredClimax: false,
+        riserPlayed: false
+      }
+    };
+
+    // Master Output Canvas & Offscreen Buffers
+    const masterOutCanvas = document.getElementById('masterOutCanvas');
+    const outCtx = masterOutCanvas.getContext('2d');
+    const ambiCanvas = document.getElementById('ambiCanvas');
+    const ambiCtx = ambiCanvas.getContext('2d');
+    const userVideo = document.getElementById('userVideo');
+
+    // Offscreen 9:16 Beauty Video Canvas
+    const videoCanvas = document.createElement('canvas');
+    videoCanvas.width = STAGE_W;
+    videoCanvas.height = STAGE_H;
+    const videoCtx = videoCanvas.getContext('2d', { willReadFrequently: true });
+
+    // Offscreen 9:16 Reality Overlay Canvas
+    const realityCanvas = document.createElement('canvas');
+    realityCanvas.width = STAGE_W;
+    realityCanvas.height = STAGE_H;
+    const realityCtx = realityCanvas.getContext('2d');
+
+    // Persistent Mask Canvas for Scene 17 (Steam Window Wipe)
+    const wipeMaskCanvas = document.createElement('canvas');
+    wipeMaskCanvas.width = STAGE_W;
+    wipeMaskCanvas.height = STAGE_H;
+    const wipeMaskCtx = wipeMaskCanvas.getContext('2d');
+
+    // Echo Buffer Canvas for Scene 13 (Wong Kar-wai Step-Printing Motion Trail)
+    const echoCanvas = document.createElement('canvas');
+    echoCanvas.width = STAGE_W;
+    echoCanvas.height = STAGE_H;
+    const echoCtx = echoCanvas.getContext('2d');
+
+    // Low-res Sampling Canvas for Scene 19 (Micro-Matrix) & Ambilight
+    const sampleCanvas = document.createElement('canvas');
+    sampleCanvas.width = 72;
+    sampleCanvas.height = 128;
+    const sampleCtx = sampleCanvas.getContext('2d', { willReadFrequently: true });
+
+    // Quarter-res Halation Bloom Buffer (blur at 1/4 res is ~16x cheaper than full-res canvas blur)
+    const bloomCanvas = document.createElement('canvas');
+    bloomCanvas.width = STAGE_W / 4;
+    bloomCanvas.height = STAGE_H / 4;
+    const bloomCtx = bloomCanvas.getContext('2d');
+
+    // Quarter-res Ink Diffusion Mask for Scene 23 (Ink Wash)
+    const INK_MASK_SCALE = 0.25;
+    const inkMaskCanvas = document.createElement('canvas');
+    inkMaskCanvas.width = STAGE_W * INK_MASK_SCALE;
+    inkMaskCanvas.height = STAGE_H * INK_MASK_SCALE;
+    const inkMaskCtx = inkMaskCanvas.getContext('2d');
+
+    /********************************************************************
+     * 2. WEB AUDIO SYNTHESIZER (CINEMA RISER & SUB-BASS DROP)
+     ********************************************************************/
+    let audioCtx = null;
+    let audioMasterIn = null;        // Master bus input: every SFX + user video audio
+    let audioRecordDest = null;      // Post-limiter tap feeding the MediaRecorder audio track
+    let userVideoAudioSource = null; // MediaElementSource can only be created once per element
+    let noiseBufferCache = null;
+
+    function ensureAudio() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+
+          // Brick-wall limiter so stacked sub-bass + chord layers never clip
+          const limiter = audioCtx.createDynamicsCompressor();
+          limiter.threshold.value = -8;
+          limiter.knee.value = 6;
+          limiter.ratio.value = 12;
+          limiter.attack.value = 0.003;
+          limiter.release.value = 0.25;
+
+          audioMasterIn = audioCtx.createGain();
+          audioMasterIn.gain.value = 0.9;
+          audioMasterIn.connect(limiter);
+          limiter.connect(audioCtx.destination);
+
+          if (typeof audioCtx.createMediaStreamDestination === 'function') {
+            audioRecordDest = audioCtx.createMediaStreamDestination();
+            limiter.connect(audioRecordDest);
+          }
+          console.log('[Audio] AudioContext 已创建, sampleRate =', audioCtx.sampleRate);
+        } else {
+          console.warn('[Audio] 当前浏览器不支持 Web Audio，音效与录制音轨不可用');
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function getNoiseBuffer() {
+      if (noiseBufferCache) return noiseBufferCache;
+      const len = Math.floor(audioCtx.sampleRate * 1.2);
+      noiseBufferCache = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+      const data = noiseBufferCache.getChannelData(0);
+      for (let i = 0; i < len; i++) data[i] = seedRandom() * 2 - 1;
+      return noiseBufferCache;
+    }
+
+    function attachUserVideoAudio() {
+      ensureAudio();
+      if (!audioCtx || userVideoAudioSource) return;
+      try {
+        userVideoAudioSource = audioCtx.createMediaElementSource(userVideo);
+        userVideoAudioSource.connect(audioMasterIn);
+        console.log('[Audio] 本地视频音轨已接入主总线 (可被内录)');
+      } catch (err) {
+        console.warn('[Audio] 本地视频音轨接入失败，将直接由 <video> 播放:', err);
+      }
+    }
+
+    function playCinemaSFX(type) {
+      if (!state.soundEnabled) return;
+      ensureAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+
+      if (type === 'riser') {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(100, now);
+        osc.frequency.exponentialRampToValueAtTime(780, now + 0.9);
+        gain.gain.setValueAtTime(0.01, now);
+        gain.gain.linearRampToValueAtTime(0.16, now + 0.82);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.95);
+        osc.connect(gain);
+        gain.connect(audioMasterIn);
+        osc.start(now);
+        osc.stop(now + 0.96);
+      } else if (type === 'climax') {
+        // Cinema Sub-Bass Boom + Shimmering Ethereal Chord
+        const sub = audioCtx.createOscillator();
+        const subGain = audioCtx.createGain();
+        sub.type = 'sine';
+        sub.frequency.setValueAtTime(130, now);
+        sub.frequency.exponentialRampToValueAtTime(25, now + 0.95);
+        subGain.gain.setValueAtTime(0.85, now);
+        subGain.gain.exponentialRampToValueAtTime(0.001, now + 1.0);
+        sub.connect(subGain);
+        subGain.connect(audioMasterIn);
+        sub.start(now);
+        sub.stop(now + 1.05);
+
+        const freqs = [523.25, 659.25, 783.99, 1046.5, 1318.5, 1567.98, 2093.0];
+        freqs.forEach((f, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
+          osc.frequency.setValueAtTime(f, now + idx * 0.03);
+          osc.frequency.exponentialRampToValueAtTime(f * 1.015, now + 1.35);
+          gain.gain.setValueAtTime(0.1, now + idx * 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.0008, now + 1.4);
+          osc.connect(gain);
+          gain.connect(audioMasterIn);
+          osc.start(now + idx * 0.03);
+          osc.stop(now + 1.45);
+        });
+      } else if (type === 'shatter') {
+        // Glass burst: high-passed noise crack + scattered crystalline pings
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = getNoiseBuffer();
+        const hp = audioCtx.createBiquadFilter();
+        hp.type = 'highpass';
+        hp.frequency.value = 2600;
+        const ng = audioCtx.createGain();
+        ng.gain.setValueAtTime(0.55, now);
+        ng.gain.exponentialRampToValueAtTime(0.001, now + 0.85);
+        noise.connect(hp);
+        hp.connect(ng);
+        ng.connect(audioMasterIn);
+        noise.start(now);
+        noise.stop(now + 0.9);
+
+        for (let i = 0; i < 16; i++) {
+          const t0 = now + 0.02 + seedRandom() * 0.75;
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(2200 + seedRandom() * 4600, t0);
+          g.gain.setValueAtTime(0.06, t0);
+          g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.12 + seedRandom() * 0.25);
+          osc.connect(g);
+          g.connect(audioMasterIn);
+          osc.start(t0);
+          osc.stop(t0 + 0.4);
+        }
+      } else if (type === 'droplet') {
+        // Water drop "plip": fast downward pitch sweep
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1250 + seedRandom() * 300, now);
+        osc.frequency.exponentialRampToValueAtTime(320, now + 0.14);
+        g.gain.setValueAtTime(0.0001, now);
+        g.gain.exponentialRampToValueAtTime(0.22, now + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0008, now + 0.24);
+        osc.connect(g);
+        g.connect(audioMasterIn);
+        osc.start(now);
+        osc.stop(now + 0.26);
+      }
+    }
+
+    /********************************************************************
+     * 3. THREE BUILT-IN PROCEDURAL BEAUTY VIDEO CANVASES (720x1280)
+     ********************************************************************/
+    const musePresets = [
+      {
+        title: '已上传: baby_lumirae_Animee.mp4',
+        skyTop: '#16092b',
+        skyMid: '#9e2a63',
+        skyBot: '#ff926b',
+        halo: '#ffd166',
+        hair: '#160824',
+        hairRim: '#ff7597',
+        dress: '#fff0f3',
+        accent: '#ff2a85'
+      },
+      {
+        title: '内置: 2.赛博霓虹女神',
+        skyTop: '#030511',
+        skyMid: '#1b0d42',
+        skyBot: '#00d2ff',
+        halo: '#ff007f',
+        hair: '#090e26',
+        hairRim: '#00f2fe',
+        dress: '#ff2a85',
+        accent: '#00f2fe'
+      },
+      {
+        title: '内置: 3.敦煌流金女神',
+        skyTop: '#190b05',
+        skyMid: '#6e230b',
+        skyBot: '#f5af19',
+        halo: '#fff3b0',
+        hair: '#1c0e07',
+        hairRim: '#ffd700',
+        dress: '#ff4e50',
+        accent: '#ffbe55'
+      }
+    ];
+
+    function renderVideoSourceCanvas(t) {
+      const w = STAGE_W;
+      const h = STAGE_H;
+
+      if (document.getElementById('promo-sheet-6').complete && document.getElementById('promo-sheet-6').naturalWidth) {
+        const n=Math.floor(((t % 11.233333)+11.233333)%11.233333*30)%337;
+        const sheet=document.getElementById('promo-sheet-'+(Math.floor(n/60)+1));
+        const cell=n%60;
+        videoCtx.drawImage(sheet,(cell%10)*360,Math.floor(cell/10)*640,360,640,0,0,w,h);
+      } else if (state.usingCustomVideo && userVideo.readyState >= 2) {
+        const vw = userVideo.videoWidth || w;
+        const vh = userVideo.videoHeight || h;
+        const scale = Math.max(w / vw, h / vh);
+        const dw = vw * scale;
+        const dh = vh * scale;
+        const dx = (w - dw) / 2;
+        const dy = (h - dh) / 2;
+        videoCtx.fillStyle = '#000';
+        videoCtx.fillRect(0, 0, w, h);
+        videoCtx.drawImage(userVideo, dx, dy, dw, dh);
+      } else {
+        const p = musePresets[state.presetIndex];
+        const beat = state.audio.beatPulse;
+
+        // 1. Atmospheric 9:16 Gradient Sky
+        const grad = videoCtx.createLinearGradient(0, 0, 0, h);
+        grad.addColorStop(0, p.skyTop);
+        grad.addColorStop(0.55, p.skyMid);
+        grad.addColorStop(1, p.skyBot);
+        videoCtx.fillStyle = grad;
+        videoCtx.fillRect(0, 0, w, h);
+
+        // 2. Radiant Sacred Halo Behind Goddess
+        const sunX = w * 0.5;
+        const sunY = h * 0.42;
+        const sunR = w * (0.45 + beat * 0.05);
+        const sunGrad = videoCtx.createRadialGradient(sunX, sunY, sunR * 0.06, sunX, sunY, sunR * 1.45);
+        sunGrad.addColorStop(0, '#ffffff');
+        sunGrad.addColorStop(0.32, p.halo);
+        sunGrad.addColorStop(0.68, p.accent + '66');
+        sunGrad.addColorStop(1, 'transparent');
+        videoCtx.fillStyle = sunGrad;
+        videoCtx.beginPath();
+        videoCtx.arc(sunX, sunY, sunR * 1.45, 0, Math.PI * 2);
+        videoCtx.fill();
+
+        // Rotating Sacred Mandala Ring
+        videoCtx.save();
+        videoCtx.translate(sunX, sunY);
+        videoCtx.rotate(t * 0.24);
+        videoCtx.strokeStyle = p.halo + '66';
+        videoCtx.lineWidth = 2.2;
+        videoCtx.setLineDash([14, 10]);
+        videoCtx.beginPath();
+        videoCtx.arc(0, 0, sunR * 0.92, 0, Math.PI * 2);
+        videoCtx.stroke();
+        videoCtx.restore();
+
+        // 3. Shimmering Horizon Light Waves
+        for (let i = 0; i < 14; i++) {
+          const wy = h * 0.72 + i * 24;
+          const waveW = (180 + Math.sin(t * 3.1 + i * 1.1) * 85) * (1 + i * 0.06);
+          const wx = sunX - waveW / 2 + Math.cos(t * 2.0 + i) * 22;
+          videoCtx.fillStyle = `rgba(255, 245, 220, ${0.42 - i * 0.025})`;
+          videoCtx.beginPath();
+          videoCtx.roundRect(wx, wy, waveW, 5, 2.5);
+          videoCtx.fill();
+        }
+
+        // 4. Animated Goddess Close-Up Portrait (Scaled to 720x1280)
+        videoCtx.save();
+        videoCtx.scale(STAGE_W / 540, STAGE_H / 960);
+
+        const swayX = Math.sin(t * 1.8) * 15 + state.pointer.nx * 14;
+        const breatheY = Math.sin(t * 3.6) * 6 + state.pointer.ny * 10;
+        const cx = 270 + swayX;
+        const cy = 432 + breatheY;
+
+        // Flowing Celestial Ribbon
+        videoCtx.beginPath();
+        videoCtx.moveTo(cx - 115, cy + 115);
+        for (let step = 0; step <= 360; step += 18) {
+          const rx = cx - 115 + step;
+          const ry = cy + 115 + Math.sin(t * 4.6 - step * 0.025) * (34 + step * 0.1) - step * 0.24;
+          videoCtx.lineTo(rx, ry);
+        }
+        videoCtx.lineWidth = 28;
+        videoCtx.strokeStyle = p.accent + '88';
+        videoCtx.lineCap = 'round';
+        videoCtx.stroke();
+
+        // Silky Hair Strands in Wind
+        for (let i = 0; i < 18; i++) {
+          videoCtx.beginPath();
+          videoCtx.moveTo(cx, cy - 75);
+          const cpX = cx + 75 + Math.sin(t * 3.3 + i * 0.42) * 42;
+          const cpY = cy - 10 + i * 11;
+          const endX = cx + 182 + Math.cos(t * 2.8 + i * 0.35) * 62 + i * 4.5;
+          const endY = cy + 58 + i * 15 + Math.sin(t * 4.0 + i) * 18;
+          videoCtx.quadraticCurveTo(cpX, cpY, endX, endY);
+          videoCtx.lineWidth = 18 - Math.abs(i - 9) * 1.1;
+          videoCtx.strokeStyle = i % 3 === 0 ? p.hairRim : p.hair;
+          videoCtx.lineCap = 'round';
+          videoCtx.stroke();
+        }
+
+        // Neck & Shoulders
+        const skinGrad = videoCtx.createLinearGradient(cx - 70, cy - 80, cx + 70, cy + 280);
+        skinGrad.addColorStop(0, '#fff2ed');
+        skinGrad.addColorStop(0.5, '#ffd7e0');
+        skinGrad.addColorStop(1, '#f4a261');
+
+        videoCtx.fillStyle = skinGrad;
+        videoCtx.beginPath();
+        videoCtx.moveTo(cx - 23, cy + 15);
+        videoCtx.lineTo(cx + 23, cy + 15);
+        videoCtx.lineTo(cx + 31, cy + 95);
+        videoCtx.lineTo(cx - 31, cy + 95);
+        videoCtx.closePath();
+        videoCtx.fill();
+
+        videoCtx.beginPath();
+        videoCtx.moveTo(cx - 135, cy + 170);
+        videoCtx.quadraticCurveTo(cx - 85, cy + 82, cx, cy + 90);
+        videoCtx.quadraticCurveTo(cx + 85, cy + 82, cx + 135, cy + 170);
+        videoCtx.lineTo(cx + 165, 960);
+        videoCtx.lineTo(cx - 165, 960);
+        videoCtx.closePath();
+        videoCtx.fill();
+
+        // Couture Gown
+        const dressGrad = videoCtx.createLinearGradient(cx, cy + 135, cx, 960);
+        dressGrad.addColorStop(0, p.dress);
+        dressGrad.addColorStop(0.5, p.accent);
+        dressGrad.addColorStop(1, p.skyTop);
+        videoCtx.fillStyle = dressGrad;
+        videoCtx.beginPath();
+        videoCtx.moveTo(cx - 102, cy + 155);
+        videoCtx.quadraticCurveTo(cx - 45, cy + 122, cx, cy + 158);
+        videoCtx.quadraticCurveTo(cx + 45, cy + 122, cx + 102, cy + 155);
+        videoCtx.lineTo(cx + 155, 960);
+        videoCtx.lineTo(cx - 155, 960);
+        videoCtx.closePath();
+        videoCtx.fill();
+
+        // Head & Expressive Eyes
+        const headTilt = Math.sin(t * 1.8) * 0.055;
+        videoCtx.save();
+        videoCtx.translate(cx, cy - 42);
+        videoCtx.rotate(headTilt);
+
+        videoCtx.fillStyle = '#fff3ee';
+        videoCtx.beginPath();
+        videoCtx.moveTo(-64, -34);
+        videoCtx.quadraticCurveTo(-66, 46, 0, 72);
+        videoCtx.quadraticCurveTo(66, 46, 64, -34);
+        videoCtx.arc(0, -30, 64, 0, Math.PI, true);
+        videoCtx.closePath();
+        videoCtx.fill();
+
+        // Blush
+        videoCtx.fillStyle = 'rgba(255, 75, 130, 0.34)';
+        videoCtx.beginPath();
+        videoCtx.ellipse(-34, 16, 18, 9, 0, 0, Math.PI * 2);
+        videoCtx.ellipse(34, 16, 18, 9, 0, 0, Math.PI * 2);
+        videoCtx.fill();
+
+        // Eyes with Blink
+        const isBlink = ((t * 0.85) % 4.2) > 4.02;
+        [-28, 28].forEach((ex) => {
+          videoCtx.save();
+          videoCtx.translate(ex, -3);
+          if (isBlink) {
+            videoCtx.strokeStyle = '#331526';
+            videoCtx.lineWidth = 3.8;
+            videoCtx.beginPath();
+            videoCtx.arc(0, 3, 14, 0.1 * Math.PI, 0.9 * Math.PI);
+            videoCtx.stroke();
+          } else {
+            videoCtx.fillStyle = '#ffffff';
+            videoCtx.beginPath();
+            videoCtx.ellipse(0, 0, 15, 11.5, 0, 0, Math.PI * 2);
+            videoCtx.fill();
+
+            const irisGrad = videoCtx.createLinearGradient(0, -11, 0, 11);
+            irisGrad.addColorStop(0, '#3b0d3e');
+            irisGrad.addColorStop(1, p.halo);
+            videoCtx.fillStyle = irisGrad;
+            videoCtx.beginPath();
+            videoCtx.arc(0, 1, 9.5, 0, Math.PI * 2);
+            videoCtx.fill();
+
+            videoCtx.fillStyle = '#16061a';
+            videoCtx.beginPath();
+            videoCtx.arc(0, 1, 4.5, 0, Math.PI * 2);
+            videoCtx.fill();
+
+            // Catchlight
+            videoCtx.fillStyle = '#ffffff';
+            videoCtx.beginPath();
+            videoCtx.arc(-3.5, -3.5, 3.3, 0, Math.PI * 2);
+            videoCtx.arc(3.5, 3, 1.8, 0, Math.PI * 2);
+            videoCtx.fill();
+
+            videoCtx.strokeStyle = '#22091b';
+            videoCtx.lineWidth = 4.0;
+            videoCtx.beginPath();
+            videoCtx.arc(0, 1.5, 15, Math.PI * 1.12, Math.PI * 1.88);
+            videoCtx.stroke();
+          }
+          videoCtx.restore();
+        });
+
+        // Smile Lips
+        videoCtx.fillStyle = '#ff3877';
+        videoCtx.beginPath();
+        videoCtx.arc(0, 35, 9 + beat * 3.0, 0, Math.PI, false);
+        videoCtx.fill();
+
+        // Forehead Gem
+        videoCtx.fillStyle = p.halo;
+        videoCtx.beginPath();
+        videoCtx.moveTo(0, -32);
+        videoCtx.lineTo(5, -24);
+        videoCtx.lineTo(0, -16);
+        videoCtx.lineTo(-5, -24);
+        videoCtx.closePath();
+        videoCtx.fill();
+
+        // Hair Bangs
+        videoCtx.fillStyle = p.hair;
+        videoCtx.beginPath();
+        videoCtx.arc(0, -32, 68, Math.PI, Math.PI * 2);
+        videoCtx.quadraticCurveTo(74, 22, 58, 82);
+        videoCtx.quadraticCurveTo(50, -8, 25, -26);
+        videoCtx.quadraticCurveTo(8, 4, -6, -26);
+        videoCtx.quadraticCurveTo(-25, 6, -42, -22);
+        videoCtx.quadraticCurveTo(-55, 12, -60, 82);
+        videoCtx.quadraticCurveTo(-75, 22, -68, -32);
+        videoCtx.fill();
+
+        videoCtx.restore();
+        videoCtx.restore();
+      }
+
+      sampleCtx.drawImage(videoCanvas, 0, 0, sampleCanvas.width, sampleCanvas.height);
+      ambiCtx.drawImage(sampleCanvas, 0, 0, ambiCanvas.width, ambiCanvas.height);
+    }
+
+    /********************************************************************
+     * 4. FIVE SWITCHABLE "MUNDANE REALITY" FRONT LAYERS (720x1280)
+     *    A) exam: 2026高数期末绝密押题卷 (59分)
+     *    B) code: 凌晨03:42 崩溃代码终端 (999+ Errors)
+     *    C) lockscreen: 暴雨深夜催命锁屏 (28条未读)
+     *    D) davinci: 达芬奇黄金分割几何手稿
+     *    E) obsidian: 黑曜石自律戒律碑
+     ********************************************************************/
+    function renderRealityLayer(t) {
+      if(window.promoClean){const g=realityCtx.createLinearGradient(0,0,720,1280);g.addColorStop(0,'#13141b');g.addColorStop(.5,'#030306');g.addColorStop(1,'#24212b');realityCtx.fillStyle=g;realityCtx.fillRect(0,0,720,1280);return;}
+      const w = STAGE_W;
+      const h = STAGE_H;
+      const type = state.realityType;
+
+      realityCtx.save();
+      realityCtx.scale(w / 540, h / 960);
+
+      if (type === 'exam') {
+        // A) 2026 Calculus Exam Paper with Red 59 Grade & Coffee Ring
+        realityCtx.fillStyle = '#f4efe4';
+        realityCtx.fillRect(0, 0, 540, 960);
+
+        // Notebook lines
+        realityCtx.strokeStyle = 'rgba(148, 163, 184, 0.26)';
+        realityCtx.lineWidth = 1;
+        for (let y = 78; y < 960; y += 34) {
+          realityCtx.beginPath();
+          realityCtx.moveTo(26, y);
+          realityCtx.lineTo(514, y);
+          realityCtx.stroke();
+        }
+
+        // Coffee Cup Ring Stain
+        realityCtx.strokeStyle = 'rgba(133, 77, 14, 0.16)';
+        realityCtx.lineWidth = 6;
+        realityCtx.beginPath();
+        realityCtx.arc(430, 780, 62, 0, Math.PI * 2);
+        realityCtx.stroke();
+
+        realityCtx.fillStyle = '#0f172a';
+        realityCtx.font = '900 21px "Noto Serif SC", serif';
+        realityCtx.fillText('2026全国高等数学(上) 期末绝密压轴卷', 30, 58);
+
+        // Red "59分" Grade
+        realityCtx.save();
+        realityCtx.translate(415, 76);
+        realityCtx.rotate(-0.14);
+        realityCtx.fillStyle = '#dc2626';
+        realityCtx.font = 'italic 900 52px "Noto Serif SC", serif';
+        realityCtx.fillText('59', 0, 0);
+        realityCtx.font = 'bold 17px "Noto Serif SC", serif';
+        realityCtx.fillText('分(重修)', 60, -6);
+        realityCtx.strokeStyle = '#dc2626';
+        realityCtx.lineWidth = 3;
+        realityCtx.beginPath();
+        realityCtx.moveTo(-6, 10);
+        realityCtx.lineTo(106, 3);
+        realityCtx.moveTo(2, 18);
+        realityCtx.lineTo(98, 11);
+        realityCtx.stroke();
+        realityCtx.restore();
+
+        const lines = [
+          '一、多元微积分与场论压轴证明题 (满分 40 分)',
+          '1. 设 f(x) 在 [0, +∞) 连续可导，满足傅里叶卷积方程：',
+          '   ∫(0→x) t² · f(x - t) dt = e^(-x²) · sin(ωx) + ∬_D (∂P/∂x) dxdy',
+          '   求证：lim(n→∞) ∑(k=1..n) [ k / (n² + k²) ] = π / 4 · ln(2)',
+          '',
+          '2. 设 A 为 n 阶实对称正定矩阵，特征值 λ_1, λ_2, ..., λ_n：',
+          '   det(λI - AᵀA) = ∏(i=1..n) (λ - σ_i²) ≥ (Tr(A)/n)^n',
+          '   解：令雅可比行列式 J = ∂(x,y,z)/∂(r,θ,φ) = r²·sin(θ)',
+          '',
+          '3. 【斯托克斯公式与旋度场】计算空间曲线积分：',
+          '   ∮_Γ (y²dx + z²dy + x²dz) = ∬_Σ (∇ × F) · n dS',
+          '   当 t → ∞ 时，伴随算子 L*(u) = ∇²u + k²u = -δ(r - r_0)',
+          '',
+          '4. 泰勒余项估计：R_n(x) = f^(n+1)(ξ) / (n+1)! · (x - x_0)^(n+1)',
+          '   [凌晨 03:42 批注]：算了整整 14 张草稿纸，还是发散！',
+          '   >>> 移动鼠标实时互动，按 [Space] 触发电影级破壁 <<<'
+        ];
+        realityCtx.font = '600 13.8px "JetBrains Mono", "Noto Serif SC", monospace';
+        lines.forEach((ln, idx) => {
+          realityCtx.fillStyle = idx === 14 ? '#dc2626' : idx === 15 ? '#d97706' : '#1e293b';
+          realityCtx.fillText(ln, 30, 128 + idx * 46);
+        });
+      }
+
+      else if (type === 'code') {
+        // B) 03:42 AM Crash Terminal (999+ Errors)
+        realityCtx.fillStyle = '#060911';
+        realityCtx.fillRect(0, 0, 540, 960);
+
+        realityCtx.fillStyle = '#111827';
+        realityCtx.fillRect(0, 0, 540, 54);
+        ['#ef4444', '#f59e0b', '#10b981'].forEach((c, i) => {
+          realityCtx.fillStyle = c;
+          realityCtx.beginPath();
+          realityCtx.arc(24 + i * 20, 27, 6, 0, Math.PI * 2);
+          realityCtx.fill();
+        });
+        realityCtx.fillStyle = '#9ca3af';
+        realityCtx.font = 'bold 13px "JetBrains Mono", monospace';
+        realityCtx.fillText('overtime_deadline_03_42AM.cu — 999+ Fatal Errors', 94, 32);
+
+        const logs = [
+          '[FATAL] Segmentation fault (core dumped) at 0x00007fff8a2b',
+          '[ERROR] CUDA out of memory: Tried to allocate 24.00 GiB',
+          '[WARN]  Gradient norm is NaN at epoch 94821! Loss exploded.',
+          '  at Tensor::backward (autograd_engine.cpp:1492)',
+          '[CRITICAL] 距离早八组会汇报仅剩 4 小时 18 分钟...',
+          'int main() { while(alive) { study(); overtime(); } }',
+          '[SYSTEM] 精神疲惫度已达 99.9% · 急需破壁救赎！',
+          '>>> 移动鼠标或按 [Space] 撕裂枯燥现实 <<<'
+        ];
+        realityCtx.font = '13.5px "JetBrains Mono", monospace';
+        const scroll = Math.floor(t * 4);
+        for (let r = 0; r < 24; r++) {
+          const line = logs[(r + scroll) % logs.length];
+          realityCtx.fillStyle = line.includes('FATAL') || line.includes('ERROR') || line.includes('CRITICAL')
+            ? '#f87171'
+            : line.includes('>>>')
+            ? '#38bdf8'
+            : '#34d399';
+          realityCtx.fillText(line, 24, 92 + r * 35);
+        }
+      }
+
+      else if (type === 'lockscreen') {
+        // C) 03:42 AM Rainy Late-Night Urgent Lockscreen
+        const g = realityCtx.createLinearGradient(0, 0, 0, 960);
+        g.addColorStop(0, '#090d16');
+        g.addColorStop(0.5, '#111827');
+        g.addColorStop(1, '#1e1b4b');
+        realityCtx.fillStyle = g;
+        realityCtx.fillRect(0, 0, 540, 960);
+
+        // Procedural rain streaks on lockscreen
+        realityCtx.strokeStyle = 'rgba(148, 163, 184, 0.22)';
+        realityCtx.lineWidth = 1.5;
+        for (let i = 0; i < 40; i++) {
+          const rx = (i * 73 + Math.floor(t * 40)) % 540;
+          const ry = (i * 137 + Math.floor(t * 480)) % 960;
+          realityCtx.beginPath();
+          realityCtx.moveTo(rx, ry);
+          realityCtx.lineTo(rx - 4, ry + 32);
+          realityCtx.stroke();
+        }
+
+        // Giant Clock
+        realityCtx.fillStyle = '#f8fafc';
+        realityCtx.textAlign = 'center';
+        realityCtx.font = '200 86px "Inter", sans-serif';
+        realityCtx.fillText('03:42', 270, 175);
+        realityCtx.font = '500 15px "Inter", sans-serif';
+        realityCtx.fillStyle = '#94a3b8';
+        realityCtx.fillText('10月24日 星期三 · 暴雨预警 · 距离早八闹钟还有 3小时18分', 270, 210);
+
+        // Urgent Notification Cards
+        const notifs = [
+          { app: '微信 · 导师 (28条未读)', time: '现在', msg: '明早8点组会，你的实验数据跑出来了吗？速回！', color: '#ef4444' },
+          { app: '企业微信 · 甲方总监', time: '3分钟前', msg: '第19版方案还是差点感觉，今晚通宵改完明早看。', color: '#f59e0b' },
+          { app: '系统闹钟 · 绝望早八', time: '07:00', msg: '预计剩余睡眠时间不足 3 小时，心率偏高预警。', color: '#38bdf8' },
+          { app: '备忘录 · 深夜破防', time: '刚刚', msg: '好想逃离这一切……哪怕只有8秒钟的浪漫也好。', color: '#ec4899' }
+        ];
+        realityCtx.textAlign = 'left';
+        notifs.forEach((n, idx) => {
+          const ny = 270 + idx * 122;
+          realityCtx.fillStyle = 'rgba(30, 41, 59, 0.78)';
+          realityCtx.beginPath();
+          realityCtx.roundRect(32, ny, 476, 102, 18);
+          realityCtx.fill();
+          realityCtx.strokeStyle = 'rgba(255,255,255,0.1)';
+          realityCtx.stroke();
+
+          realityCtx.fillStyle = n.color;
+          realityCtx.font = 'bold 14px "Inter", sans-serif';
+          realityCtx.fillText(n.app, 52, ny + 32);
+          realityCtx.fillStyle = '#94a3b8';
+          realityCtx.font = '12px "Inter", sans-serif';
+          realityCtx.fillText(n.time, 445, ny + 32);
+
+          realityCtx.fillStyle = '#e2e8f0';
+          realityCtx.font = '500 14.5px "Inter", sans-serif';
+          realityCtx.fillText(n.msg, 52, ny + 68);
+        });
+      }
+
+      else if (type === 'davinci') {
+        // D) Da Vinci Golden Ratio Fibonacci Parchment Manuscript
+        realityCtx.fillStyle = '#ecdcc2';
+        realityCtx.fillRect(0, 0, 540, 960);
+
+        // Vintage vignette & sepia grid
+        realityCtx.strokeStyle = 'rgba(120, 82, 45, 0.22)';
+        realityCtx.lineWidth = 1;
+        for (let x = 30; x < 540; x += 45) {
+          realityCtx.beginPath();
+          realityCtx.moveTo(x, 0);
+          realityCtx.lineTo(x, 960);
+          realityCtx.stroke();
+        }
+        for (let y = 30; y < 960; y += 45) {
+          realityCtx.beginPath();
+          realityCtx.moveTo(0, y);
+          realityCtx.lineTo(540, y);
+          realityCtx.stroke();
+        }
+
+        // Vitruvian / Golden Ratio Compass Circles
+        realityCtx.strokeStyle = 'rgba(105, 65, 30, 0.55)';
+        realityCtx.lineWidth = 2;
+        realityCtx.beginPath();
+        realityCtx.arc(270, 440, 210, 0, Math.PI * 2);
+        realityCtx.stroke();
+        realityCtx.strokeRect(270 - 175, 440 - 175, 350, 350);
+
+        // Golden Spiral Curve
+        realityCtx.beginPath();
+        for (let a = 0; a < Math.PI * 4; a += 0.08) {
+          const r = 6 * Math.exp(0.306 * a);
+          if (r > 240) break;
+          const sx = 270 + Math.cos(a + t * 0.4) * r;
+          const sy = 440 + Math.sin(a + t * 0.4) * r;
+          if (a === 0) realityCtx.moveTo(sx, sy);
+          else realityCtx.lineTo(sx, sy);
+        }
+        realityCtx.stroke();
+
+        realityCtx.fillStyle = '#4a2c11';
+        realityCtx.font = 'bold 20px "Noto Serif SC", serif';
+        realityCtx.textAlign = 'center';
+        realityCtx.fillText('CODEX ATLANTICUS · 黄金分割比例手稿 φ = 1.6180339', 270, 90);
+        realityCtx.font = 'italic 15px "JetBrains Mono", serif';
+        realityCtx.fillText('Proportio Divina · 几何学无法丈量的心动瞬间', 270, 740);
+        realityCtx.fillText('>>> 划过羊皮手稿唤醒画中女神 (Space) <<<', 270, 790);
+      }
+
+      else if (type === 'obsidian') {
+        // E) Obsidian Self-Discipline Monolith Slate
+        const g = realityCtx.createLinearGradient(0, 0, 540, 960);
+        g.addColorStop(0, '#0a0b10');
+        g.addColorStop(0.5, '#131622');
+        g.addColorStop(1, '#08090d');
+        realityCtx.fillStyle = g;
+        realityCtx.fillRect(0, 0, 540, 960);
+
+        // Subtle stone border & geometric engraving
+        realityCtx.strokeStyle = 'rgba(212, 175, 55, 0.35)';
+        realityCtx.lineWidth = 2;
+        realityCtx.strokeRect(28, 36, 484, 888);
+        realityCtx.strokeRect(38, 46, 464, 868);
+
+        realityCtx.textAlign = 'center';
+        realityCtx.fillStyle = '#94a3b8';
+        realityCtx.font = '900 28px "Noto Serif SC", serif';
+        realityCtx.fillText('【 黑 曜 石 自 律 戒 律 碑 】', 270, 130);
+
+        const rules = [
+          '戒律壹 · 严禁分心，禁止对任何心动产生幻想',
+          '戒律贰 · 每日高数微积分与算法刷题 1000 道',
+          '戒律叁 · 封锁一切多巴胺娱乐，保持绝对理性',
+          '戒律肆 · 凌晨四点前不得合眼，GPA 必须 4.0',
+          '戒律伍 · 心如止水，磐石无转移'
+        ];
+        realityCtx.font = '700 17px "Noto Serif SC", serif';
+        rules.forEach((r, idx) => {
+          realityCtx.fillStyle = '#cbd5e1';
+          realityCtx.fillText(r, 270, 260 + idx * 96);
+          realityCtx.strokeStyle = 'rgba(255,255,255,0.06)';
+          realityCtx.beginPath();
+          realityCtx.moveTo(75, 295 + idx * 96);
+          realityCtx.lineTo(465, 295 + idx * 96);
+          realityCtx.stroke();
+        });
+
+        realityCtx.fillStyle = '#fbbf24';
+        realityCtx.font = 'bold 14px "JetBrains Mono", monospace';
+        realityCtx.fillText('WARNING: 检测到强烈的心动破壁能量 · 按 [Space] 震碎戒律碑', 270, 815);
+      }
+
+      realityCtx.restore();
+    }
+
+    /********************************************************************
+     * 5. THREE.JS & MULTI-MODE GLSL SHADER ENGINE (720x1280)
+     ********************************************************************/
+    const webglCanvas = document.createElement('canvas');
+    webglCanvas.width = STAGE_W;
+    webglCanvas.height = STAGE_H;
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas: webglCanvas,
+      antialias: true,
+      alpha: true,
+      preserveDrawingBuffer: true
+    });
+    renderer.setSize(STAGE_W, STAGE_H);
+    renderer.setPixelRatio(1);
+
+    webglCanvas.addEventListener('webglcontextlost', (e) => {
+      e.preventDefault();
+      console.error('[WebGL] 上下文丢失 (显存不足或驱动重置)，等待浏览器恢复...');
+    });
+    webglCanvas.addEventListener('webglcontextrestored', () => {
+      console.log('[WebGL] 上下文已恢复');
+    });
+
+    const camera3D = new THREE.PerspectiveCamera(45, STAGE_W / STAGE_H, 0.1, 100);
+    camera3D.position.set(0, 0, 12);
+    const orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+    const VIEW_H = 2 * Math.tan((45 * Math.PI) / 360) * 12;
+    const VIEW_W = VIEW_H * (STAGE_W / STAGE_H);
+
+    const texVideo = new THREE.CanvasTexture(videoCanvas);
+    texVideo.minFilter = THREE.LinearFilter;
+    texVideo.magFilter = THREE.LinearFilter;
+
+    const texReality = new THREE.CanvasTexture(realityCanvas);
+    texReality.minFilter = THREE.LinearFilter;
+    texReality.magFilter = THREE.LinearFilter;
+
+    const texInkMask = new THREE.CanvasTexture(inkMaskCanvas);
+    texInkMask.minFilter = THREE.LinearFilter;
+    texInkMask.magFilter = THREE.LinearFilter;
+
+    // Scene 24 ripple sources: (uvX, uvY[y-up], startTime, strength) ring buffer
+    const RIPPLE_SLOTS = 8;
+    const rippleUniformValues = Array.from({ length: RIPPLE_SLOTS }, () => new THREE.Vector4(0, 0, -100, 0));
+
+    // =================================================================
+    // A. SCENES 01 & 11: 76,800 (240x320) SUB-PIXEL GAUSSIAN MICRO-PARTICLES
+    //    - Mode 0: Scene 01 (Interstellar Curl Noise Stardust)
+    //    - Mode 1: Scene 11 (Matrix LiDAR Laser 3D Relief Scan)
+    // =================================================================
+    const particleScene = new THREE.Scene();
+    const P_COLS = 240;
+    const P_ROWS = 320;
+    const P_TOTAL = P_COLS * P_ROWS; // 76,800 ultra-fine Gaussian particles
+
+    const microParticleGeo = new THREE.BufferGeometry();
+    const pPositions = new Float32Array(P_TOTAL * 3);
+    const pUVs = new Float32Array(P_TOTAL * 2);
+    const pRandoms = new Float32Array(P_TOTAL * 3);
+
+    let pIdx = 0;
+    for (let r = 0; r < P_ROWS; r++) {
+      for (let c = 0; c < P_COLS; c++) {
+        const u = (c + 0.5) / P_COLS;
+        const v = (r + 0.5) / P_ROWS;
+        pUVs[pIdx * 2] = u;
+        pUVs[pIdx * 2 + 1] = v;
+        pPositions[pIdx * 3] = (u - 0.5) * VIEW_W;
+        pPositions[pIdx * 3 + 1] = (v - 0.5) * VIEW_H;
+        pPositions[pIdx * 3 + 2] = 0;
+        pRandoms[pIdx * 3] = seedRandom();
+        pRandoms[pIdx * 3 + 1] = seedRandom();
+        pRandoms[pIdx * 3 + 2] = seedRandom();
+        pIdx++;
+      }
+    }
+    microParticleGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
+    microParticleGeo.setAttribute('aUv', new THREE.BufferAttribute(pUVs, 2));
+    microParticleGeo.setAttribute('aRand', new THREE.BufferAttribute(pRandoms, 3));
+
+    const microParticleUniforms = {
+      uTexReality: { value: texReality },
+      uTexVideo: { value: texVideo },
+      uTime: { value: 0 },
+      uProgress: { value: 0 },
+      uMouse: { value: new THREE.Vector2(0, 0) },
+      uPointSize: { value: 1.4 },
+      uTurbulence: { value: 1.2 },
+      uBeat: { value: 0 },
+      uSubMode: { value: 0 } // 0 = Scene 1 Stardust, 1 = Scene 11 LiDAR Scan
+    };
+
+    const microParticleMat = new THREE.ShaderMaterial({
+      uniforms: microParticleUniforms,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.NormalBlending,
+      vertexShader: `
+        attribute vec2 aUv;
+        attribute vec3 aRand;
+        uniform sampler2D uTexReality;
+        uniform sampler2D uTexVideo;
+        uniform float uTime;
+        uniform float uProgress;
+        uniform vec2 uMouse;
+        uniform float uPointSize;
+        uniform float uTurbulence;
+        uniform float uBeat;
+        uniform int uSubMode;
+        varying vec4 vColor;
+
+        vec3 curlWave(vec3 p, float t) {
+          float x = sin(p.y * 2.6 + t * 2.2) + cos(p.z * 2.1 - t * 1.7);
+          float y = cos(p.x * 2.6 - t * 2.0) + sin(p.z * 2.3 + t * 1.9);
+          float z = sin(p.x * 2.2 + p.y * 2.2 + t * 2.5);
+          return vec3(x, y, z);
+        }
+
+        void main() {
+          vec4 colReal = texture2D(uTexReality, aUv);
+          vec4 colVid = texture2D(uTexVideo, aUv);
+          float luma = dot(colVid.rgb, vec3(0.299, 0.587, 0.114));
+
+          vec3 pos = position;
+          vec2 dMouse = position.xy - uMouse;
+          float mouseInf = smoothstep(1.9, 0.0, length(dMouse));
+
+          if (uSubMode == 0) {
+            // SCENE 01: INTERSTELLAR 80,000 STARDUST FLUID
+            float wave = clamp((uProgress * 1.5) - (1.0 - aUv.y) * 0.35 - aRand.x * 0.15, 0.0, 1.0);
+            float bell = sin(wave * 3.14159265);
+
+            vec3 flow = curlWave(pos * 0.85 + aRand * 2.5, uTime * 1.3) * uTurbulence;
+            pos += flow * (bell * 1.85 + mouseInf * 0.38);
+
+            float swirlAng = bell * 3.0 * (aRand.y - 0.5) + mouseInf * 1.4;
+            float s = sin(swirlAng), c = cos(swirlAng);
+            pos.xy = mat2(c, -s, s, c) * pos.xy;
+            pos.z += bell * (luma - 0.3) * 3.2 + mouseInf * 0.85;
+
+            vec3 stardustGold = vec3(1.0, 0.8, 0.4) + vec3(0.25, -0.15, 0.25) * sin(aRand.z * 6.28 + uTime * 4.0);
+            float colorMix = smoothstep(0.15, 0.82, wave + mouseInf * 0.75);
+            vec3 finalRgb = mix(colReal.rgb, colVid.rgb, colorMix);
+            finalRgb = mix(finalRgb, stardustGold * 1.38, bell * 0.68);
+            vColor = vec4(finalRgb, 1.0);
+
+            vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+            gl_Position = projectionMatrix * mvPosition;
+            float sizeBoost = 1.0 + bell * 0.85 + mouseInf * 0.55 + uBeat * 0.25;
+            gl_PointSize = clamp(uPointSize * sizeBoost * (13.0 / -mvPosition.z), 1.0, 9.0);
+          } else {
+            // SCENE 11: MATRIX 3D LIDAR LASER POINT-CLOUD HOLOGRAM
+            float scanLineY = mix(0.85 - mod(uTime * 0.32, 0.9), -0.15, uProgress);
+            float scanned = smoothstep(scanLineY - 0.06, scanLineY + 0.06, aUv.y);
+            float laserRim = smoothstep(0.05, 0.0, abs(aUv.y - scanLineY));
+
+            float hologramActive = sin(clamp(uProgress * 1.35, 0.0, 1.0) * 3.14159265);
+            float reliefDepth = (1.0 - uProgress * 0.85) * scanned * uTurbulence;
+
+            pos.z += (luma - 0.35) * 2.6 * reliefDepth + laserRim * 1.1;
+            // Subtle 3D orbital sway while in hologram state
+            float sway = sin(uTime * 1.6) * 0.28 * reliefDepth + (uMouse.x * 0.12 * (1.0 - uProgress));
+            float cs = cos(sway), sn = sin(sway);
+            pos.xz = mat2(cs, -sn, sn, cs) * pos.xz;
+
+            vec3 holoCol = mix(colVid.rgb, vec3(0.0, 0.95, 1.0) * (0.4 + luma * 0.9), (1.0 - uProgress) * 0.55);
+            vec3 baseCol = mix(colReal.rgb, holoCol, scanned);
+            baseCol += vec3(0.2, 1.0, 0.95) * laserRim * 1.8;
+            vColor = vec4(baseCol, 1.0);
+
+            vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+            gl_Position = projectionMatrix * mvPosition;
+            gl_PointSize = clamp(uPointSize * (1.1 + laserRim * 1.3) * (13.0 / -mvPosition.z), 1.0, 8.5);
+          }
+        }
+      `,
+      fragmentShader: `
+        varying vec4 vColor;
+        void main() {
+          vec2 pt = gl_PointCoord - vec2(0.5);
+          float r2 = dot(pt, pt);
+          if (r2 > 0.25) discard;
+          float alpha = exp(-r2 * 14.0);
+          gl_FragColor = vec4(vColor.rgb, alpha);
+        }
+      `
+    });
+
+    const microParticlePoints = new THREE.Points(microParticleGeo, microParticleMat);
+    particleScene.add(microParticlePoints);
+
+    // =================================================================
+    // B. MULTI-MODE FULLSCREEN GLSL SHADER QUAD
+    //    Supports Scenes: 02, 04, 06, 07, 08, 09, 14, 15, 16
+    // =================================================================
+    const shaderScene = new THREE.Scene();
+    const quadUniforms = {
+      uTexReality: { value: texReality },
+      uTexVideo: { value: texVideo },
+      uTime: { value: 0 },
+      uProgress: { value: 0 },
+      uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+      uMode: { value: 2 },
+      uTurbulence: { value: 1.2 },
+      uBeat: { value: 0 },
+      uOrigin: { value: new THREE.Vector2(0.5, 0.5) },
+      uInkMask: { value: texInkMask },
+      uRipples: { value: rippleUniformValues }
+    };
+
+    const quadMaterial = new THREE.ShaderMaterial({
+      uniforms: quadUniforms,
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        precision highp float;
+        varying vec2 vUv;
+        uniform sampler2D uTexReality;
+        uniform sampler2D uTexVideo;
+        uniform float uTime;
+        uniform float uProgress;
+        uniform vec2 uMouse;
+        uniform int uMode;
+        uniform float uTurbulence;
+        uniform float uBeat;
+        uniform vec2 uOrigin;
+        uniform sampler2D uInkMask;
+        uniform vec4 uRipples[${RIPPLE_SLOTS}];
+
+        float inBounds(vec2 q) {
+          return step(0.0, q.x) * step(q.x, 1.0) * step(0.0, q.y) * step(q.y, 1.0);
+        }
+
+        float hash(vec2 p) {
+          return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+        }
+        vec2 hash2(vec2 p) {
+          return fract(sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)))) * 43758.5453);
+        }
+        float noise(vec2 p) {
+          vec2 i = floor(p);
+          vec2 f = fract(p);
+          vec2 u = f * f * (3.0 - 2.0 * f);
+          return mix(
+            mix(hash(i + vec2(0.0, 0.0)), hash(i + vec2(1.0, 0.0)), u.x),
+            mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x),
+            u.y
+          );
+        }
+        float fbm(vec2 p) {
+          float v = 0.0;
+          float a = 0.5;
+          mat2 rot = mat2(0.8, 0.6, -0.6, 0.8);
+          for (int i = 0; i < 6; i++) {
+            v += a * noise(p);
+            p = rot * p * 2.04;
+            a *= 0.5;
+          }
+          return v;
+        }
+
+        void main() {
+          vec2 uv = vUv;
+          vec2 aspect = vec2(9.0 / 16.0, 1.0);
+          float dMouse = length((uv - uMouse) * aspect);
+
+          // ==========================================================
+          // MODE 2: 007 / LUXURY COMMERCIAL EMBER BURN & 24K MAGMA RIM
+          // ==========================================================
+          if (uMode == 2) {
+            float n = fbm(uv * 5.5 * uTurbulence + vec2(0.0, -uTime * 0.35));
+            float threshold = (uProgress * 1.65) + smoothstep(0.24, 0.0, dMouse) * 0.45;
+            float burnField = (1.0 - dMouse * 0.65) * 0.5 + n * 0.55;
+            float diff = burnField - (1.05 - threshold);
+
+            vec4 colReal = texture2D(uTexReality, uv);
+            vec2 heatOffset = vec2(sin(uv.y * 40.0 + uTime * 10.0), cos(uv.x * 40.0 + uTime * 8.0)) * 0.006 * smoothstep(0.15, 0.0, abs(diff));
+            vec4 colVid = texture2D(uTexVideo, clamp(uv + heatOffset, 0.0, 1.0));
+
+            if (diff > 0.09) {
+              gl_FragColor = colVid;
+            } else if (diff > 0.0) {
+              float rim = diff / 0.09;
+              vec3 emberCol = mix(vec3(1.0, 0.96, 0.65), vec3(1.0, 0.25, 0.02), rim);
+              gl_FragColor = vec4(mix(emberCol * 1.65, colVid.rgb, pow(rim, 1.5)), 1.0);
+            } else if (diff > -0.055) {
+              float charFactor = smoothstep(-0.055, 0.0, diff);
+              vec3 charCol = mix(colReal.rgb, vec3(0.05, 0.02, 0.01), charFactor * 0.92);
+              gl_FragColor = vec4(charCol, 1.0);
+            } else {
+              gl_FragColor = colReal;
+            }
+          }
+
+          // ==========================================================
+          // MODE 4: INTERSTELLAR GARGANTUA BLACK HOLE GRAVITATIONAL LENSING
+          // ==========================================================
+          else if (uMode == 4) {
+            vec2 center = mix(uMouse, vec2(0.5, 0.5), uProgress);
+            vec2 delta = (uv - center) * aspect;
+            float r = length(delta) + 0.0001;
+            float angle = atan(delta.y, delta.x);
+
+            float eventHorizon = mix(0.13, 1.35, pow(uProgress, 1.6));
+            float lensStrength = 0.045 * uTurbulence * (1.0 - uProgress * 0.9);
+
+            // Einstein ring gravitational deflection for Reality layer outside horizon
+            vec2 warpedRealUv = clamp(uv - (delta / r) * (lensStrength / (r + 0.04)), 0.0, 1.0);
+            vec3 colReal = texture2D(uTexReality, warpedRealUv).rgb;
+
+            // Inside / Around Event Horizon: Relativistic Swirl + Beauty Video
+            float swirl = (1.0 - uProgress) * 1.8 * smoothstep(eventHorizon * 1.8, 0.0, r);
+            vec2 rotDelta = mat2(cos(swirl), -sin(swirl), sin(swirl), cos(swirl)) * delta;
+            vec2 vidUv = clamp(center + rotDelta / aspect, 0.0, 1.0);
+            vec3 colVid = texture2D(uTexVideo, vidUv).rgb;
+
+            // Glowing Golden Relativistic Accretion Disk
+            float diskDist = abs(r - eventHorizon);
+            float doppler = 0.65 + 0.35 * sin(angle * 2.0 - uTime * 6.0);
+            float accretionGlow = exp(-diskDist * 36.0) * (1.2 - uProgress * 0.9) * doppler;
+            vec3 diskCol = mix(vec3(1.0, 0.45, 0.1), vec3(1.0, 0.92, 0.65), exp(-diskDist * 65.0));
+
+            float insideMask = smoothstep(eventHorizon + 0.03, eventHorizon - 0.02, r);
+            vec3 finalCol = mix(colReal, colVid, insideMask) + diskCol * accretionGlow * 1.75;
+            gl_FragColor = vec4(finalCol, 1.0);
+          }
+
+          // ==========================================================
+          // MODE 6: A24 / MV LIQUID MERCURY & LUMA MELT
+          // ==========================================================
+          else if (uMode == 6) {
+            vec2 q = vec2(fbm(uv * 3.5 + uTime * 0.25), fbm(uv * 3.5 + vec2(5.2, 1.3) - uTime * 0.2));
+            vec2 r = vec2(fbm(uv * 4.0 + 3.0 * q + vec2(1.7, 9.2)), fbm(uv * 4.0 + 3.0 * q + vec2(8.3, 2.8)));
+            float warp = fbm(uv * 3.0 + 2.5 * r * uTurbulence);
+
+            float hoverReveal = smoothstep(0.28, 0.0, dMouse);
+            float p = clamp(uProgress * 1.25 + hoverReveal * 0.42, 0.0, 1.0);
+
+            float displaceAmt = sin(p * 3.14159265) * 0.14 * uTurbulence;
+            vec2 dispUv = clamp(uv + (r - 0.5) * displaceAmt, 0.0, 1.0);
+
+            vec3 vidR = texture2D(uTexVideo, clamp(dispUv + vec2(0.008 * displaceAmt * 8.0, 0.0), 0.0, 1.0)).rgb;
+            vec3 vidG = texture2D(uTexVideo, dispUv).rgb;
+            vec3 vidB = texture2D(uTexVideo, clamp(dispUv - vec2(0.008 * displaceAmt * 8.0, 0.0), 0.0, 1.0)).rgb;
+            vec3 colVid = vec3(vidR.r, vidG.g, vidB.b);
+
+            vec3 colReal = texture2D(uTexReality, clamp(uv - (q - 0.5) * p * 0.22, 0.0, 1.0)).rgb;
+            float vidLuma = dot(colVid, vec3(0.299, 0.587, 0.114));
+            float mask = smoothstep(1.05 - p * 1.35, 0.85 - p * 1.35, warp * 0.65 + vidLuma * 0.45);
+
+            float edge = smoothstep(0.18, 0.0, abs(mask - 0.5)) * sin(p * 3.14159);
+            vec3 mercurySpecular = vec3(0.95, 0.88, 1.0) * edge * 1.45;
+            gl_FragColor = vec4(mix(colReal, colVid, mask) + mercurySpecular, 1.0);
+          }
+
+          // ==========================================================
+          // MODE 7: DIOR LUXURY 8-HEARTS DIAMOND KALEIDOSCOPE
+          // ==========================================================
+          else if (uMode == 7) {
+            float unfold = smoothstep(0.0, 0.92, uProgress);
+            vec2 centered = (uv - 0.5) * aspect;
+            float r = length(centered);
+            float a = atan(centered.y, centered.x);
+
+            float segments = 8.0;
+            float segAngle = 3.14159265 * 2.0 / segments;
+            float kAngle = mod(a + uTime * 0.45 + (uMouse.x - 0.5) * 3.0, segAngle);
+            kAngle = abs(kAngle - segAngle * 0.5);
+
+            vec2 kaleidoPos = vec2(cos(kAngle), sin(kAngle)) * r * (1.15 + 0.25 * sin(r * 12.0 - uTime * 3.0));
+            vec2 kaleidoUv = clamp(kaleidoPos / aspect + uMouse, 0.0, 1.0);
+
+            float facetEdge = abs(sin(a * segments * 0.5 + r * 10.0));
+            float disp = (1.0 - unfold) * 0.018 * uTurbulence;
+
+            vec2 finalUv = mix(kaleidoUv, uv, unfold);
+            float cR = texture2D(uTexVideo, clamp(finalUv + vec2(disp, 0.0), 0.0, 1.0)).r;
+            float cG = texture2D(uTexVideo, finalUv).g;
+            float cB = texture2D(uTexVideo, clamp(finalUv - vec2(disp, 0.0), 0.0, 1.0)).b;
+
+            vec3 crystalCol = vec3(cR, cG, cB);
+            crystalCol += vec3(1.0, 0.85, 0.58) * pow(facetEdge, 12.0) * 0.48 * (1.0 - unfold);
+            gl_FragColor = vec4(crystalCol, 1.0);
+          }
+
+          // ==========================================================
+          // MODE 8: SONY BRAVIA IRIDESCENT FERROFLUID MAGNETIC SPIKES
+          // ==========================================================
+          else if (uMode == 8) {
+            vec2 delta = (uv - uMouse) * aspect;
+            float r = length(delta);
+            float ang = atan(delta.y, delta.x);
+
+            // Magnetic ferrofluid spikes & concentric ripples
+            float spikes = sin(ang * 18.0 + uTime * 4.0) * cos(r * 38.0 - uTime * 7.0) * 0.035 * uTurbulence;
+            float magField = r + spikes + fbm(uv * 6.0 + uTime * 0.4) * 0.08;
+            float openRadius = 0.19 + pow(uProgress, 1.5) * 1.45;
+
+            // Thin-film peacock iridescence along ferrofluid boundary
+            float rimDist = abs(magField - openRadius);
+            float filmPhase = magField * 28.0 - uTime * 4.0;
+            vec3 iridescence = 0.5 + 0.5 * cos(filmPhase + vec3(0.0, 2.094, 4.188));
+            float ferroband = smoothstep(0.09, 0.0, rimDist) * (1.0 - uProgress * 0.85);
+
+            vec3 colReal = texture2D(uTexReality, uv).rgb;
+            vec2 rippleUv = clamp(uv + normalize(delta + 0.0001) * ferroband * 0.025, 0.0, 1.0);
+            vec3 colVid = texture2D(uTexVideo, rippleUv).rgb;
+
+            float reveal = smoothstep(openRadius + 0.02, openRadius - 0.02, magField);
+            vec3 base = mix(colReal, colVid, reveal);
+            // Glossy dark ferrofluid collar + peacock iridescence
+            base = mix(base, iridescence * 1.35, ferroband * 0.85);
+            gl_FragColor = vec4(base, 1.0);
+          }
+
+          // ==========================================================
+          // MODE 9: HAUTE COUTURE KINTSUGI 24K LIQUID GOLD VORONOI
+          // ==========================================================
+          else if (uMode == 9) {
+            vec2 st = uv * vec2(5.5, 9.5);
+            vec2 i_st = floor(st);
+            vec2 f_st = fract(st);
+
+            float m_dist1 = 8.0;
+            float m_dist2 = 8.0;
+            vec2 cellCenter = vec2(0.0);
+
+            for (int y = -1; y <= 1; y++) {
+              for (int x = -1; x <= 1; x++) {
+                vec2 neighbor = vec2(float(x), float(y));
+                vec2 pt = hash2(i_st + neighbor);
+                pt = 0.5 + 0.42 * sin(uTime * 0.6 + 6.2831 * pt);
+                vec2 diff = neighbor + pt - f_st;
+                float d = length(diff);
+                if (d < m_dist1) {
+                  m_dist2 = m_dist1;
+                  m_dist1 = d;
+                  cellCenter = i_st + neighbor + pt;
+                } else if (d < m_dist2) {
+                  m_dist2 = d;
+                }
+              }
+            }
+
+            float crackDist = m_dist2 - m_dist1;
+            float hoverGlow = smoothstep(0.35, 0.0, dMouse);
+            float crackWidth = (0.045 + uProgress * 0.45 + hoverGlow * 0.06) * uTurbulence;
+            float isCrack = smoothstep(crackWidth, crackWidth * 0.35, crackDist);
+
+            // 24K Molten Metallic Gold Shader inside cracks
+            float goldShimmer = 0.75 + 0.25 * sin(uv.x * 30.0 + uv.y * 40.0 + uTime * 6.0);
+            vec3 gold24K = vec3(1.0, 0.82, 0.28) * goldShimmer * 1.45;
+
+            // Cell plates drift apart during climax
+            vec2 cellShift = (hash2(cellCenter) - 0.5) * uProgress * 0.25;
+            vec3 colReal = texture2D(uTexReality, clamp(uv + cellShift, 0.0, 1.0)).rgb;
+            vec3 colVid = texture2D(uTexVideo, uv).rgb;
+
+            float plateFade = smoothstep(0.25, 0.88, uProgress);
+            vec3 cellColor = mix(colReal, colVid, plateFade);
+            vec3 finalCol = mix(cellColor, mix(gold24K, colVid, smoothstep(0.45, 0.95, uProgress)), isCrack);
+            gl_FragColor = vec4(finalCol, 1.0);
+          }
+
+          // ==========================================================
+          // MODE 14: CYBERPUNK EDGERUNNERS SANDEVISTAN TIME-SLICE
+          // ==========================================================
+          else if (uMode == 14) {
+            float slice = floor(uv.y * 55.0);
+            float rSlice = hash(vec2(slice, floor(uTime * 16.0)));
+            float sandActive = sin(clamp(uProgress * 1.3, 0.0, 1.0) * 3.14159265) + smoothstep(0.26, 0.0, dMouse) * (1.0 - uProgress);
+
+            float shear = (rSlice - 0.5) * 0.16 * sandActive * uTurbulence;
+            vec2 uvMain = clamp(vec2(uv.x + shear, uv.y), 0.0, 1.0);
+            vec2 uvCyan = clamp(vec2(uv.x + shear * 1.6 + 0.015 * sandActive, uv.y), 0.0, 1.0);
+            vec2 uvMag  = clamp(vec2(uv.x - shear * 1.6 - 0.015 * sandActive, uv.y), 0.0, 1.0);
+
+            vec3 colReal = texture2D(uTexReality, uvMain).rgb;
+            vec3 vMain = texture2D(uTexVideo, uvMain).rgb;
+            vec3 vCyan = texture2D(uTexVideo, uvCyan).rgb * vec3(0.1, 1.0, 0.95);
+            vec3 vMag  = texture2D(uTexVideo, uvMag).rgb * vec3(1.0, 0.1, 0.65);
+
+            vec3 sandevistanVid = mix(vMain, max(vMain, (vCyan + vMag) * 0.78), sandActive * 0.85);
+            float showVid = clamp(uProgress * 1.35 + smoothstep(0.24, 0.0, dMouse) * 0.85, 0.0, 1.0);
+            gl_FragColor = vec4(mix(colReal, sandevistanVid, showVid), 1.0);
+          }
+
+          // ==========================================================
+          // MODE 15: CYBERPUNK COMMERCIAL OPTICAL PIXEL STRETCH
+          // ==========================================================
+          else if (uMode == 15) {
+            float p = uProgress;
+            float distY = abs(uv.y - uMouse.y);
+            float stretchZone = smoothstep(0.28, 0.0, distY) * (1.0 - p);
+            float sweep = smoothstep(0.0, 0.88, p * 1.35 - (1.0 - uv.y) * 0.35);
+
+            vec2 sampleUv = uv;
+            if (stretchZone > 0.05 && p < 0.05) {
+              sampleUv.x = mix(uv.x, uMouse.x, stretchZone * 0.88);
+            }
+
+            float sliceId = floor(uv.y * 48.0);
+            float sliceRand = hash(vec2(sliceId, floor(uTime * 12.0)));
+            float glitchShift = (sliceRand - 0.5) * 0.22 * sin(sweep * 3.14159265) * uTurbulence;
+            vec2 vidUv = clamp(vec2(mix(uMouse.x, uv.x, sweep) + glitchShift, uv.y), 0.0, 1.0);
+
+            vec3 colReal = texture2D(uTexReality, sampleUv).rgb;
+            float vR = texture2D(uTexVideo, clamp(vidUv + vec2(0.012 * (1.0 - sweep), 0.0), 0.0, 1.0)).r;
+            float vG = texture2D(uTexVideo, vidUv).g;
+            float vB = texture2D(uTexVideo, clamp(vidUv - vec2(0.012 * (1.0 - sweep), 0.0), 0.0, 1.0)).b;
+            vec3 colVid = vec3(vR, vG, vB);
+
+            float showVid = max(sweep, stretchZone * 0.9);
+            gl_FragColor = vec4(mix(colReal, colVid, showVid), 1.0);
+          }
+
+          // ==========================================================
+          // MODE 16: DA VINCI SOBEL CROSS-HATCH SKETCH TO LIVING COLOR
+          // ==========================================================
+          else if (uMode == 16) {
+            vec2 texel = vec2(1.0 / 720.0, 1.0 / 1280.0) * 1.5;
+            vec3 c00 = texture2D(uTexVideo, uv + vec2(-texel.x, -texel.y)).rgb;
+            vec3 c10 = texture2D(uTexVideo, uv + vec2(0.0, -texel.y)).rgb;
+            vec3 c20 = texture2D(uTexVideo, uv + vec2(texel.x, -texel.y)).rgb;
+            vec3 c01 = texture2D(uTexVideo, uv + vec2(-texel.x, 0.0)).rgb;
+            vec3 c21 = texture2D(uTexVideo, uv + vec2(texel.x, 0.0)).rgb;
+            vec3 c02 = texture2D(uTexVideo, uv + vec2(-texel.x, texel.y)).rgb;
+            vec3 c12 = texture2D(uTexVideo, uv + vec2(0.0, texel.y)).rgb;
+            vec3 c22 = texture2D(uTexVideo, uv + vec2(texel.x, texel.y)).rgb;
+
+            vec3 gx = -c00 - 2.0 * c01 - c02 + c20 + 2.0 * c21 + c22;
+            vec3 gy = -c00 - 2.0 * c10 - c20 + c02 + 2.0 * c12 + c22;
+            float edge = length(gx) + length(gy);
+
+            vec3 colVid = texture2D(uTexVideo, uv).rgb;
+            vec3 colPaper = texture2D(uTexReality, uv).rgb;
+            float luma = dot(colVid, vec3(0.299, 0.587, 0.114));
+
+            // Diagonal pencil cross-hatching in shadow regions
+            float hatch1 = sin((uv.x + uv.y * 1.6) * 420.0) * 0.5 + 0.5;
+            float hatch2 = sin((uv.x - uv.y * 1.6) * 420.0) * 0.5 + 0.5;
+            float ink = clamp(edge * 1.65 * uTurbulence, 0.0, 1.0);
+            if (luma < 0.45) ink = max(ink, (1.0 - hatch1) * 0.55);
+            if (luma < 0.25) ink = max(ink, (1.0 - hatch2) * 0.75);
+
+            vec3 sepiaInk = vec3(0.22, 0.13, 0.06);
+            vec3 sketchCol = mix(colPaper, sepiaInk, ink * 0.88);
+
+            // Organic watercolor wash wave from cursor & climax
+            float n = fbm(uv * 5.0 + uTime * 0.2);
+            float washRadius = (uProgress * 1.65) + smoothstep(0.28, 0.0, dMouse) * 0.45;
+            float washMask = smoothstep(1.05 - washRadius, 0.88 - washRadius, (1.0 - dMouse * 0.6) * 0.6 + n * 0.45);
+            float goldRim = smoothstep(0.12, 0.0, abs(washMask - 0.5)) * (1.0 - uProgress * 0.8);
+
+            vec3 finalCol = mix(sketchCol, colVid, washMask) + vec3(1.0, 0.82, 0.35) * goldRim * 0.85;
+            gl_FragColor = vec4(finalCol, 1.0);
+          }
+
+          // ==========================================================
+          // MODE 21: LOVE-LETTER PAGE CURL · 3D CYLINDER PEEL
+          //   Paper wraps around a cylinder whose axis passes through m,
+          //   perpendicular to dir (pointing toward the lifted corner).
+          // ==========================================================
+          else if (uMode == 21) {
+            const float PI = 3.14159265;
+            vec2 p = uv * aspect;
+            vec2 corner = vec2(aspect.x, 0.0);
+            vec2 idleM = mix(corner, uMouse * aspect, 0.42) + vec2(-0.012, 0.016) * sin(uTime * 1.7);
+            vec2 m = mix(idleM, vec2(-0.45, 1.45), uProgress);
+            vec2 dir = normalize(corner - m + vec2(1e-4));
+            float R = mix(0.055, 0.16, uProgress) * (0.75 + 0.25 * uTurbulence);
+            float d = dot(p - m, dir);
+
+            // Revealed muse underneath, with soft contact shadow from the curl
+            vec3 col = texture2D(uTexVideo, uv).rgb;
+            if (d > 0.0) {
+              col *= 1.0 - 0.6 * exp(-max(d - R, 0.0) * 16.0) * (1.0 - uProgress * 0.5);
+            }
+
+            bool covered = false;
+            // 1) Backside of the rolled-over flap (topmost layer)
+            if (d < R) {
+              float sB = d >= 0.0 ? R * (PI - asin(d / R)) : PI * R - d;
+              vec2 uvB = (p + dir * (sB - d)) / aspect;
+              if (inBounds(uvB) > 0.5) {
+                float shade = d >= 0.0 ? sqrt(max(0.0, 1.0 - (d / R) * (d / R))) : 1.0;
+                vec3 backPaper = mix(texture2D(uTexReality, vec2(1.0 - uvB.x, uvB.y)).rgb, vec3(0.97, 0.95, 0.91), 0.8);
+                col = backPaper * (0.62 + 0.38 * shade) + vec3(1.0, 0.96, 0.88) * pow(shade, 18.0) * 0.22;
+                covered = true;
+              }
+            }
+            // 2) Front side climbing up the cylinder
+            if (!covered && d > 0.0 && d < R) {
+              float sF = R * asin(d / R);
+              vec2 uvF = (p + dir * (sF - d)) / aspect;
+              if (inBounds(uvF) > 0.5) {
+                float shade = sqrt(max(0.0, 1.0 - (d / R) * (d / R)));
+                col = texture2D(uTexReality, uvF).rgb * (0.45 + 0.55 * shade);
+                covered = true;
+              }
+            }
+            // 3) Flat, untouched page
+            if (!covered && d <= 0.0) {
+              col = texture2D(uTexReality, uv).rgb * (1.0 - 0.22 * exp(d * 26.0));
+            }
+            gl_FragColor = vec4(col, 1.0);
+          }
+
+          // ==========================================================
+          // MODE 23: EASTERN INK WASH · CAPILLARY BLEED ON RICE PAPER
+          // ==========================================================
+          else if (uMode == 23) {
+            vec2 warp = vec2(fbm(uv * 7.0 + uTime * 0.06), fbm(uv * 7.0 + vec2(3.1, 7.7) - uTime * 0.05)) - 0.5;
+            float paint = texture2D(uInkMask, clamp(uv + warp * 0.035 * uTurbulence, 0.0, 1.0)).r;
+            float n = fbm(uv * 4.0 + warp * 2.0);
+            vec2 cd = (uv - uOrigin) * aspect;
+            float bloom = uProgress * 1.9 - length(cd) * 1.5 + (n - 0.5) * 0.6;
+            float field = max(paint + (n - 0.5) * 0.28, bloom);
+
+            float reveal = smoothstep(0.52, 0.62, field);
+            float inkBody = smoothstep(0.2, 0.5, field);
+            float gran = noise(uv * vec2(420.0, 740.0));
+            float fibre = fbm(uv * vec2(60.0, 18.0));
+
+            vec3 paper = texture2D(uTexReality, uv).rgb * (0.94 + fibre * 0.1);
+            vec3 inkCol = mix(vec3(0.03, 0.035, 0.06), vec3(0.09, 0.11, 0.17), gran);
+            vec3 col = mix(paper, inkCol, inkBody * (1.0 - reveal) * 0.92);
+
+            vec3 vid = texture2D(uTexVideo, clamp(uv + warp * 0.012 * (1.0 - uProgress), 0.0, 1.0)).rgb;
+            float fresh = 1.0 - smoothstep(0.62, 0.95, field);
+            float vl = dot(vid, vec3(0.299, 0.587, 0.114));
+            vec3 wash = mix(vid, vec3(vl) * vec3(1.02, 0.98, 0.92), fresh * 0.55) * (0.92 + fibre * 0.1 * fresh);
+            col = mix(col, wash, reveal);
+
+            // Pigment pooling at the drying edge + vermilion seal-ink glint
+            float pool = smoothstep(0.08, 0.0, abs(field - 0.56)) * (1.0 - uProgress * 0.7);
+            col *= 1.0 - pool * 0.55;
+            col += vec3(0.85, 0.12, 0.1) * smoothstep(0.03, 0.0, abs(field - 0.6)) * 0.35 * (1.0 - uProgress);
+            gl_FragColor = vec4(col, 1.0);
+          }
+
+          // ==========================================================
+          // MODE 24: MOON-IN-WATER · MULTI-SOURCE RIPPLE INTERFERENCE
+          // ==========================================================
+          else if (uMode == 24) {
+            vec2 disp = vec2(0.0);
+            float height = 0.0;
+            float reveal = 0.0;
+            for (int i = 0; i < ${RIPPLE_SLOTS}; i++) {
+              vec4 rp = uRipples[i];
+              float age = uTime - rp.z;
+              if (age < 0.0 || age > 6.0 || rp.w <= 0.0) continue;
+              vec2 dv = (uv - rp.xy) * aspect;
+              float dist = length(dv) + 1e-4;
+              float front = age * 0.32;
+              float x = dist - front;
+              float env = exp(-x * x * 90.0) * exp(-age * 0.75) * rp.w;
+              height += sin(x * 95.0) * env;
+              disp += (dv / dist) * cos(x * 95.0) * env;
+              reveal += smoothstep(front, front - 0.14, dist) * exp(-age * 0.6) * rp.w;
+            }
+            float climaxR = uProgress * 1.45;
+            reveal = max(reveal, smoothstep(climaxR, climaxR - 0.22, length((uv - uOrigin) * aspect)));
+            reveal = clamp(reveal, 0.0, 1.0);
+
+            vec2 refr = disp * 0.018 * uTurbulence;
+            vec3 colReal = texture2D(uTexReality, clamp(uv + refr, 0.0, 1.0)).rgb;
+            vec2 reflUv = clamp(uv + refr * 2.2 + vec2(sin(uv.y * 60.0 + uTime * 2.0) * 0.002 * (1.0 - uProgress), 0.0), 0.0, 1.0);
+            vec3 colVid = texture2D(uTexVideo, reflUv).rgb;
+            vec3 water = mix(colVid, colVid * vec3(0.82, 0.95, 1.1), (1.0 - uProgress) * 0.6);
+            vec3 col = mix(colReal, water, reveal);
+
+            // Caustic glints on wave crests
+            col += vec3(0.9, 0.97, 1.0) * (pow(max(0.0, height), 3.0) * 1.6 + pow(max(0.0, disp.x * 0.3 - disp.y * 0.5), 2.0) * 0.5);
+            gl_FragColor = vec4(col, 1.0);
+          }
+        }
+      `
+    });
+
+    const fullScreenQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), quadMaterial);
+    shaderScene.add(fullScreenQuad);
+
+    // =================================================================
+    // C. SCENE 05: INCEPTION 3D FOLDING MIRROR DIMENSION CORRIDOR
+    // =================================================================
+    const inceptionScene = new THREE.Scene();
+    const inceptionGroup = new THREE.Group();
+    inceptionScene.add(inceptionGroup);
+
+    const inceptionPanels = [];
+    // Build 16 concentric 3D architectural panels (4 rings x 4 directions)
+    for (let ring = 0; ring < 4; ring++) {
+      const scale = 1.0 - ring * 0.2;
+      const w = VIEW_W * scale;
+      const h = VIEW_H * scale;
+      const thickness = VIEW_W * 0.22;
+
+      const dirs = [
+        { name: 'left',   pw: thickness, ph: h, px: -w * 0.5, py: 0, rotAxis: 'y', dirSign: -1 },
+        { name: 'right',  pw: thickness, ph: h, px:  w * 0.5, py: 0, rotAxis: 'y', dirSign:  1 },
+        { name: 'top',    pw: w, ph: thickness, px: 0, py:  h * 0.5, rotAxis: 'x', dirSign:  1 },
+        { name: 'bottom', pw: w, ph: thickness, px: 0, py: -h * 0.5, rotAxis: 'x', dirSign: -1 }
+      ];
+
+      dirs.forEach((d) => {
+        const geo = new THREE.PlaneGeometry(d.pw, d.ph, 1, 1);
+        // Map UVs to match screen position
+        const uvAttr = geo.attributes.uv;
+        for (let i = 0; i < uvAttr.count; i++) {
+          const vx = geo.attributes.position.getX(i) + d.px;
+          const vy = geo.attributes.position.getY(i) + d.py;
+          uvAttr.setXY(i, vx / VIEW_W + 0.5, vy / VIEW_H + 0.5);
+        }
+        const mat = new THREE.MeshBasicMaterial({
+          map: texReality,
+          side: THREE.DoubleSide
+        });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(d.px, d.py, -ring * 0.45);
+        inceptionGroup.add(mesh);
+        inceptionPanels.push({ mesh, ring, ...d });
+      });
+    }
+
+    // Center cap plate: seals the innermost hole so the muse stays hidden until the climax
+    const inceptionCap = (() => {
+      const capW = VIEW_W * 0.42;
+      const capH = VIEW_H * 0.42;
+      const geo = new THREE.PlaneGeometry(capW, capH, 1, 1);
+      const uvAttr = geo.attributes.uv;
+      for (let i = 0; i < uvAttr.count; i++) {
+        uvAttr.setXY(i, geo.attributes.position.getX(i) / VIEW_W + 0.5, geo.attributes.position.getY(i) / VIEW_H + 0.5);
+      }
+      const mat = new THREE.MeshBasicMaterial({ map: texReality, side: THREE.DoubleSide, transparent: true });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.set(0, 0, -4 * 0.45);
+      // Compensate perspective shrink so the cap lines up with the z=0 frame
+      mesh.scale.setScalar((12 + 4 * 0.45) / 12);
+      inceptionGroup.add(mesh);
+      return mesh;
+    })();
+
+    // =================================================================
+    // D. SCENE 10: DOLBY CINEMA 3D SILK CURTAIN CLOTH UNVEIL
+    // =================================================================
+    const silkScene = new THREE.Scene();
+    const silkUniforms = {
+      uTexReality: { value: texReality },
+      uTime: { value: 0 },
+      uProgress: { value: 0 },
+      uMouse: { value: new THREE.Vector2(0, 0) },
+      uTurbulence: { value: 1.2 }
+    };
+    const silkMat = new THREE.ShaderMaterial({
+      uniforms: silkUniforms,
+      side: THREE.DoubleSide,
+      transparent: true,
+      vertexShader: `
+        uniform float uTime;
+        uniform float uProgress;
+        uniform vec2 uMouse;
+        uniform float uTurbulence;
+        varying vec2 vUv;
+        varying float vWave;
+
+        void main() {
+          vUv = uv;
+          vec3 pos = position;
+
+          float dMouse = length(pos.xy - uMouse);
+          float mouseRipple = sin(dMouse * 5.0 - uTime * 6.0) * exp(-dMouse * 1.1) * 0.45 * uTurbulence;
+
+          // Billowing silk curtain waves
+          float clothWave = sin(uv.x * 6.0 + uTime * 2.5) * cos(uv.y * 4.5 - uTime * 2.0) * (0.18 + uProgress * 1.2) * uTurbulence;
+          pos.z += mouseRipple + clothWave;
+
+          // Sweep curtain upward and diagonally as climax progresses
+          float lift = pow(uProgress, 1.55) * 14.5 * (1.0 + (1.0 - uv.y) * 0.65);
+          pos.y += lift;
+          pos.x += sin(uv.y * 4.0 + uTime) * uProgress * 2.5;
+
+          vWave = clothWave + mouseRipple;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+        }
+      `,
+      fragmentShader: `
+        precision highp float;
+        varying vec2 vUv;
+        varying float vWave;
+        uniform sampler2D uTexReality;
+        uniform float uProgress;
+
+        void main() {
+          vec4 col = texture2D(uTexReality, vUv);
+          // Anisotropic satin silk specular sheen
+          float specular = pow(max(0.0, vWave * 2.2 + 0.35), 3.0) * 0.45;
+          vec3 silkCol = col.rgb + vec3(1.0, 0.9, 0.75) * specular;
+          float alpha = smoothstep(1.0, 0.78, uProgress);
+          gl_FragColor = vec4(silkCol, alpha);
+        }
+      `
+    });
+    const silkMesh = new THREE.Mesh(new THREE.PlaneGeometry(VIEW_W * 1.04, VIEW_H * 1.04, 56, 96), silkMat);
+    silkScene.add(silkMesh);
+
+    // =================================================================
+    // E. SCENE 12: WESTWORLD 3D DOUBLE-HELIX RIBBON WEAVE
+    // =================================================================
+    const ribbonScene = new THREE.Scene();
+    const RIBBON_COUNT = 42;
+    const ribbonMeshes = [];
+    const ribbonH = VIEW_H / RIBBON_COUNT;
+
+    for (let i = 0; i < RIBBON_COUNT; i++) {
+      const geo = new THREE.PlaneGeometry(VIEW_W, ribbonH * 0.96, 24, 1);
+      const vStart = i / RIBBON_COUNT;
+      const vEnd = (i + 1) / RIBBON_COUNT;
+      const uvAttr = geo.attributes.uv;
+      for (let j = 0; j < uvAttr.count; j++) {
+        const u = uvAttr.getX(j);
+        const v = uvAttr.getY(j) > 0.5 ? vEnd : vStart;
+        uvAttr.setXY(j, u, v);
+      }
+
+      const mat = new THREE.ShaderMaterial({
+        uniforms: {
+          uTexReality: { value: texReality },
+          uTexVideo: { value: texVideo },
+          uReveal: { value: 0 },
+          uGlow: { value: 0 }
+        },
+        side: THREE.DoubleSide,
+        vertexShader: `
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          precision highp float;
+          varying vec2 vUv;
+          uniform sampler2D uTexReality;
+          uniform sampler2D uTexVideo;
+          uniform float uReveal;
+          uniform float uGlow;
+
+          void main() {
+            vec4 cReal = texture2D(uTexReality, vUv);
+            vec4 cVid = texture2D(uTexVideo, vUv);
+            vec3 col = gl_FrontFacing ? mix(cReal.rgb, cVid.rgb, uReveal) : cVid.rgb;
+            col += vec3(0.0, 0.85, 1.0) * uGlow * 0.35;
+            gl_FragColor = vec4(col, 1.0);
+          }
+        `
+      });
+
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.y = (i + 0.5 - RIBBON_COUNT / 2) * ribbonH;
+      ribbonScene.add(mesh);
+      ribbonMeshes.push({ mesh, index: i, mat });
+    }
+
+    // =================================================================
+    // F. SCENE 20: 3D SSR HOLOGRAPHIC COLLECTOR CARD
+    // =================================================================
+    const cardScene = new THREE.Scene();
+    const cardUniforms = {
+      uTexVideo: { value: texVideo },
+      uTime: { value: 0 },
+      uTilt: { value: new THREE.Vector2(0, 0) },
+      uProgress: { value: 0 }
+    };
+    const cardMaterial = new THREE.ShaderMaterial({
+      uniforms: cardUniforms,
+      transparent: true,
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        precision highp float;
+        varying vec2 vUv;
+        uniform sampler2D uTexVideo;
+        uniform float uTime;
+        uniform vec2 uTilt;
+        uniform float uProgress;
+
+        void main() {
+          vec4 vid = texture2D(uTexVideo, vUv);
+          float sheenPos = (vUv.x + vUv.y) * 3.0 + uTilt.x * 4.0 + uTilt.y * 4.0 + uTime * 1.5;
+          vec3 rainbow = 0.5 + 0.5 * cos(sheenPos + vec3(0.0, 2.094, 4.188));
+          float foilMask = pow(max(0.0, sin(sheenPos * 1.5)), 4.0) * (1.0 - uProgress * 0.85);
+
+          vec2 b = smoothstep(vec2(0.0), vec2(0.035), vUv) * smoothstep(vec2(0.0), vec2(0.035), 1.0 - vUv);
+          float border = (1.0 - b.x * b.y) * (1.0 - uProgress);
+          vec3 goldBorder = vec3(1.0, 0.84, 0.42) * border * 1.35;
+
+          vec3 finalCol = vid.rgb + rainbow * foilMask * 0.42 + goldBorder;
+          gl_FragColor = vec4(finalCol, 1.0);
+        }
+      `
+    });
+    const ssrCardMesh = new THREE.Mesh(new THREE.PlaneGeometry(VIEW_W * 0.68, VIEW_H * 0.68, 24, 24), cardMaterial);
+    cardScene.add(ssrCardMesh);
+
+    // =================================================================
+    // G. SCENE 22: BULLET-TIME 3D MIRROR GLASS SHATTER (~600 SHARDS)
+    //    Single non-indexed BufferGeometry; all shard motion in the vertex shader.
+    // =================================================================
+    const shatterScene = new THREE.Scene();
+    const SHARD_COLS = 13;
+    const SHARD_ROWS = 23;
+
+    function buildShatterGeometry() {
+      // Jittered lattice shared by neighbouring cells => shards tile seamlessly at rest
+      const lattice = [];
+      for (let r = 0; r <= SHARD_ROWS; r++) {
+        for (let c = 0; c <= SHARD_COLS; c++) {
+          const interior = r > 0 && r < SHARD_ROWS && c > 0 && c < SHARD_COLS;
+          const u = (c + (interior ? (seedRandom() - 0.5) * 0.76 : 0)) / SHARD_COLS;
+          const v = (r + (interior ? (seedRandom() - 0.5) * 0.76 : 0)) / SHARD_ROWS;
+          lattice.push([u, v]);
+        }
+      }
+      const at = (c, r) => lattice[r * (SHARD_COLS + 1) + c];
+
+      const tris = [];
+      for (let r = 0; r < SHARD_ROWS; r++) {
+        for (let c = 0; c < SHARD_COLS; c++) {
+          const a = at(c, r), b = at(c + 1, r), cc = at(c + 1, r + 1), d = at(c, r + 1);
+          if (seedRandom() > 0.5) {
+            tris.push([a, b, cc], [a, cc, d]);
+          } else {
+            tris.push([a, b, d], [b, cc, d]);
+          }
+        }
+      }
+
+      const n = tris.length * 3;
+      const position = new Float32Array(n * 3);
+      const aUv = new Float32Array(n * 2);
+      const aCentroid = new Float32Array(n * 3);
+      const aRand = new Float32Array(n * 3);
+      const aBary = new Float32Array(n * 3);
+      const BARY = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+
+      tris.forEach((tri, ti) => {
+        const cu = (tri[0][0] + tri[1][0] + tri[2][0]) / 3;
+        const cv = (tri[0][1] + tri[1][1] + tri[2][1]) / 3;
+        const rnd = [seedRandom(), seedRandom(), seedRandom()];
+        tri.forEach(([u, v], k) => {
+          const vi = ti * 3 + k;
+          position[vi * 3] = (u - 0.5) * VIEW_W;
+          position[vi * 3 + 1] = (v - 0.5) * VIEW_H;
+          position[vi * 3 + 2] = 0;
+          aUv[vi * 2] = u;
+          aUv[vi * 2 + 1] = v;
+          aCentroid[vi * 3] = (cu - 0.5) * VIEW_W;
+          aCentroid[vi * 3 + 1] = (cv - 0.5) * VIEW_H;
+          aCentroid[vi * 3 + 2] = 0;
+          aRand.set(rnd, vi * 3);
+          aBary.set(BARY[k], vi * 3);
+        });
+      });
+
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(position, 3));
+      geo.setAttribute('aUv', new THREE.BufferAttribute(aUv, 2));
+      geo.setAttribute('aCentroid', new THREE.BufferAttribute(aCentroid, 3));
+      geo.setAttribute('aRand', new THREE.BufferAttribute(aRand, 3));
+      geo.setAttribute('aBary', new THREE.BufferAttribute(aBary, 3));
+      return geo;
+    }
+
+    const shatterUniforms = {
+      uTexReality: { value: texReality },
+      uTexVideo: { value: texVideo },
+      uTime: { value: 0 },
+      uProgress: { value: 0 },
+      uImpact: { value: new THREE.Vector2(0, 0) },
+      uMouse: { value: new THREE.Vector2(0, 0) },
+      uTurbulence: { value: 1.2 }
+    };
+
+    const shatterMaterial = new THREE.ShaderMaterial({
+      uniforms: shatterUniforms,
+      side: THREE.DoubleSide,
+      vertexShader: `
+        attribute vec2 aUv;
+        attribute vec3 aCentroid;
+        attribute vec3 aRand;
+        attribute vec3 aBary;
+        uniform float uProgress;
+        uniform float uTurbulence;
+        uniform vec2 uImpact;
+        uniform vec2 uMouse;
+        varying vec2 vUv;
+        varying vec3 vBary;
+        varying vec3 vNormal;
+        varying float vCrack;
+        varying float vLocal;
+
+        mat3 rotAxis(vec3 axis, float ang) {
+          float s = sin(ang), c = cos(ang), oc = 1.0 - c;
+          return mat3(
+            oc * axis.x * axis.x + c,          oc * axis.x * axis.y + axis.z * s, oc * axis.z * axis.x - axis.y * s,
+            oc * axis.x * axis.y - axis.z * s, oc * axis.y * axis.y + c,          oc * axis.y * axis.z + axis.x * s,
+            oc * axis.z * axis.x + axis.y * s, oc * axis.y * axis.z - axis.x * s, oc * axis.z * axis.z + c
+          );
+        }
+
+        void main() {
+          vUv = aUv;
+          vBary = aBary;
+
+          vec2 fromImpact = aCentroid.xy - uImpact;
+          float dist = length(fromImpact);
+          // Crack front propagates outward from the impact point
+          float delay = dist * 0.045 + aRand.x * 0.08;
+          float local = clamp((uProgress * 1.45 - delay) / 0.85, 0.0, 1.0);
+          // Bullet-time: violent burst, then a long slow-motion drift
+          float burst = 1.0 - pow(1.0 - local, 3.0);
+
+          float hover = smoothstep(2.2, 0.0, length(aCentroid.xy - uMouse)) * (1.0 - uProgress);
+          vec3 axis = normalize(aRand * 2.0 - 1.0 + vec3(0.001));
+          float ang = burst * (2.5 + aRand.y * 5.0) * uTurbulence + hover * 0.07 * (aRand.z - 0.5);
+          mat3 R = rotAxis(axis, ang);
+
+          vec2 outward = dist > 0.001 ? fromImpact / dist : vec2(0.0, 1.0);
+          vec3 offset = vec3(outward * (1.0 + aRand.z * 2.2) * burst * 2.6, burst * (2.5 + aRand.y * 4.5));
+          offset.y -= local * local * 2.2;
+          offset.z += hover * 0.14 * aRand.x;
+
+          vec3 world = aCentroid + R * (position - aCentroid) + offset;
+          vNormal = R * vec3(0.0, 0.0, 1.0);
+          vCrack = max(hover, smoothstep(0.0, 0.04, uProgress) * (1.0 - local));
+          vLocal = local;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(world, 1.0);
+        }
+      `,
+      fragmentShader: `
+        precision highp float;
+        uniform sampler2D uTexReality;
+        uniform sampler2D uTexVideo;
+        varying vec2 vUv;
+        varying vec3 vBary;
+        varying vec3 vNormal;
+        varying float vCrack;
+        varying float vLocal;
+
+        void main() {
+          float edge = min(min(vBary.x, vBary.y), vBary.z);
+          float line = 1.0 - smoothstep(0.0, 0.035, edge);
+          vec3 n = normalize(gl_FrontFacing ? vNormal : -vNormal);
+
+          // Front = mundane reality; backside = mirror reflecting the muse
+          vec3 col = gl_FrontFacing
+            ? texture2D(uTexReality, vUv).rgb
+            : texture2D(uTexVideo, vUv).rgb * vec3(0.82, 0.92, 1.06);
+
+          float flying = step(0.001, vLocal);
+          vec3 L = normalize(vec3(0.35, 0.55, 1.0));
+          float spec = pow(max(0.0, dot(reflect(-L, n), vec3(0.0, 0.0, 1.0))), 36.0);
+          col *= mix(1.0, 0.72 + 0.28 * abs(n.z), flying);
+          col += vec3(1.0, 0.98, 0.94) * spec * 1.1 * flying;
+          col += vec3(0.72, 0.92, 1.0) * line * (vCrack * 0.9 + vLocal * 0.55);
+          gl_FragColor = vec4(col, 1.0);
+        }
+      `
+    });
+    const shatterMesh = new THREE.Mesh(buildShatterGeometry(), shatterMaterial);
+    shatterMesh.frustumCulled = false;
+    shatterScene.add(shatterMesh);
+
+    // =================================================================
+    // H. GLOBAL CINEMA POST-FX PASS (applied to the final 9:16 composite)
+    //    Climax shockwave refraction ring + radial chromatic aberration
+    //    + vignette + animated film grain.
+    // =================================================================
+    const texComposite = new THREE.CanvasTexture(masterOutCanvas);
+    texComposite.minFilter = THREE.LinearFilter;
+    texComposite.magFilter = THREE.LinearFilter;
+
+    const postScene = new THREE.Scene();
+    const postUniforms = {
+      uTex: { value: texComposite },
+      uTime: { value: 0 },
+      uShockAmp: { value: 0 },
+      uShockAge: { value: 0 },
+      uShockOrigin: { value: new THREE.Vector2(0.5, 0.5) },
+      uAberration: { value: 0.0015 },
+      uGrain: { value: 0.045 },
+      uVignette: { value: 0.55 }
+    };
+    const postMaterial = new THREE.ShaderMaterial({
+      uniforms: postUniforms,
+      depthTest: false,
+      depthWrite: false,
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        precision highp float;
+        varying vec2 vUv;
+        uniform sampler2D uTex;
+        uniform float uTime;
+        uniform float uShockAmp;
+        uniform float uShockAge;
+        uniform vec2 uShockOrigin;
+        uniform float uAberration;
+        uniform float uGrain;
+        uniform float uVignette;
+
+        float hash(vec2 p) {
+          return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+        }
+
+        void main() {
+          vec2 aspect = vec2(9.0 / 16.0, 1.0);
+          vec2 uv = vUv;
+
+          // Expanding refraction ring from the climax impact point
+          vec2 d = (uv - uShockOrigin) * aspect;
+          float r = length(d) + 1e-4;
+          float front = uShockAge * 1.15;
+          float rx = (r - front) * 13.0;
+          float ring = exp(-rx * rx) * uShockAmp;
+          uv -= (d / r) / aspect * ring * 0.04;
+
+          vec2 cdir = uv - 0.5;
+          float ca = uAberration + ring * 0.014;
+          vec3 col;
+          col.r = texture2D(uTex, clamp(uv + cdir * ca, 0.0, 1.0)).r;
+          col.g = texture2D(uTex, clamp(uv, 0.0, 1.0)).g;
+          col.b = texture2D(uTex, clamp(uv - cdir * ca, 0.0, 1.0)).b;
+          col += vec3(1.0, 0.92, 0.82) * ring * 0.22;
+
+          float vig = smoothstep(1.2, 0.32, length((vUv - 0.5) * vec2(1.0, 1.3)));
+          col *= mix(1.0, vig, uVignette);
+
+          float g = hash(vUv * vec2(720.0, 1280.0) + fract(uTime * 37.0) * 113.0) - 0.5;
+          col += g * uGrain;
+          gl_FragColor = vec4(col, 1.0);
+        }
+      `
+    });
+    postScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), postMaterial));
+
+    function applyCinemaPostFX() {
+      const age = state.time - state.audio.shockTime;
+      const shockAmp = age >= 0 && age < 2.2 ? Math.pow(1 - age / 2.2, 2) : 0;
+
+      texComposite.needsUpdate = true;
+      postUniforms.uTime.value = state.time;
+      postUniforms.uShockAmp.value = shockAmp;
+      postUniforms.uShockAge.value = Math.max(0, age);
+      postUniforms.uShockOrigin.value.set(state.climaxOrigin.uvX, 1.0 - state.climaxOrigin.uvY);
+      postUniforms.uAberration.value = 0.0015 + state.audio.shockwave * 0.012 + state.audio.beatPulse * 0.0012 * (state.isClimax ? 1 : 0);
+
+      renderer.render(postScene, orthoCamera);
+      outCtx.save();
+      outCtx.globalCompositeOperation = 'copy';
+      outCtx.drawImage(webglCanvas, 0, 0, STAGE_W, STAGE_H);
+      outCtx.restore();
+    }
+
+    /********************************************************************
+     * 6. SPECIALIZED 2D & HYBRID CINEMA ENGINES (SCENES 03, 13, 17, 18, 19)
+     ********************************************************************/
+    // Scene 03 & 02: Tangential Doctor Strange Sparks
+    const portalSparks = [];
+    const MAX_PORTAL_SPARKS = 950;
+
+    function spawnPortalSparks(cx, cy, radius, count) {
+      for (let i = 0; i < count; i++) {
+        if (portalSparks.length >= MAX_PORTAL_SPARKS) portalSparks.shift();
+        const angle = seedRandom() * Math.PI * 2;
+        const px = cx + Math.cos(angle) * radius;
+        const py = cy + Math.sin(angle) * radius;
+        const tangentAngle = angle + Math.PI * 0.5 + (seedRandom() - 0.35) * 0.42;
+        const speed = 5.5 + seedRandom() * 11.5;
+        portalSparks.push({
+          x: px,
+          y: py,
+          prevX: px,
+          prevY: py,
+          vx: Math.cos(tangentAngle) * speed,
+          vy: Math.sin(tangentAngle) * speed,
+          life: 1.0,
+          decay: 0.016 + seedRandom() * 0.028,
+          width: 0.9 + seedRandom() * 1.5,
+          hue: 28 + seedRandom() * 24
+        });
+      }
+    }
+
+    function renderSparkParticlesOverlay() {
+      if (portalSparks.length === 0) return;
+      outCtx.save();
+      outCtx.globalCompositeOperation = 'lighter';
+      outCtx.lineCap = 'round';
+      const pScale = state.particleSize / 1.4;
+      const k = state.dt * 60;
+
+      for (let i = portalSparks.length - 1; i >= 0; i--) {
+        const s = portalSparks[i];
+        s.prevX = s.x;
+        s.prevY = s.y;
+        s.x += s.vx * k;
+        s.y += s.vy * k;
+        s.vy += 0.16 * k;
+        s.vx = decayPerFrame(s.vx, 0.985, state.dt);
+        s.life -= s.decay * k;
+
+        if (s.life <= 0) {
+          portalSparks.splice(i, 1);
+          continue;
+        }
+
+        outCtx.strokeStyle = `hsla(${s.hue}, 100%, 60%, ${s.life * 0.85})`;
+        outCtx.lineWidth = s.width * pScale * 1.45;
+        outCtx.beginPath();
+        outCtx.moveTo(s.prevX, s.prevY);
+        outCtx.lineTo(s.x, s.y);
+        outCtx.stroke();
+
+        outCtx.strokeStyle = `rgba(255, 255, 240, ${s.life})`;
+        outCtx.lineWidth = s.width * pScale * 0.55;
+        outCtx.beginPath();
+        outCtx.moveTo(s.prevX + (s.x - s.prevX) * 0.35, s.prevY + (s.y - s.prevY) * 0.35);
+        outCtx.lineTo(s.x, s.y);
+        outCtx.stroke();
+      }
+      outCtx.restore();
+    }
+
+    function renderScene3Portal() {
+      const w = STAGE_W;
+      const h = STAGE_H;
+
+      outCtx.drawImage(realityCanvas, 0, 0, w, h);
+
+      const cx = state.isClimax
+        ? w * 0.5 + (state.pointer.x - w * 0.5) * (1 - state.climaxProgress)
+        : state.pointer.x;
+      const cy = state.isClimax
+        ? h * 0.48 + (state.pointer.y - h * 0.48) * (1 - state.climaxProgress)
+        : state.pointer.y;
+
+      const baseRadius = 150 + Math.sin(state.time * 4) * 8;
+      const portalR = state.isClimax
+        ? baseRadius + Math.pow(state.climaxProgress, 1.8) * 920
+        : baseRadius;
+
+      // Clip Circular Portal & Draw High-Res Beauty Video Inside
+      outCtx.save();
+      outCtx.beginPath();
+      outCtx.arc(cx, cy, Math.max(8, portalR), 0, Math.PI * 2);
+      outCtx.clip();
+      outCtx.drawImage(videoCanvas, 0, 0, w, h);
+      outCtx.restore();
+
+      // Rotating Doctor Strange Sacred Geometry Mandala Ring
+      if (portalR < 860) {
+        outCtx.save();
+        outCtx.translate(cx, cy);
+        outCtx.rotate(state.time * 1.8);
+        outCtx.strokeStyle = 'rgba(255, 195, 85, 0.78)';
+        outCtx.lineWidth = 2.5;
+        outCtx.strokeRect(-portalR * 0.7, -portalR * 0.7, portalR * 1.4, portalR * 1.4);
+        outCtx.rotate(Math.PI / 4);
+        outCtx.strokeRect(-portalR * 0.7, -portalR * 0.7, portalR * 1.4, portalR * 1.4);
+        outCtx.restore();
+
+        outCtx.save();
+        outCtx.globalCompositeOperation = 'lighter';
+        const rimGrad = outCtx.createRadialGradient(cx, cy, Math.max(2, portalR - 22), cx, cy, portalR + 42);
+        rimGrad.addColorStop(0, 'transparent');
+        rimGrad.addColorStop(0.45, 'rgba(255, 140, 20, 0.85)');
+        rimGrad.addColorStop(0.55, 'rgba(255, 240, 180, 0.95)');
+        rimGrad.addColorStop(1, 'transparent');
+        outCtx.fillStyle = rimGrad;
+        outCtx.beginPath();
+        outCtx.arc(cx, cy, portalR + 42, 0, Math.PI * 2);
+        outCtx.fill();
+        outCtx.restore();
+
+        spawnPortalSparks(cx, cy, portalR, Math.round(42 * state.turbulence * state.dt * 60));
+      }
+
+      renderSparkParticlesOverlay();
+    }
+
+    function resetEchoBuffer() {
+      echoCtx.clearRect(0, 0, STAGE_W, STAGE_H);
+    }
+
+    // Scene 13: Wong Kar-wai Chungking Express Step-Printing & Neon Halation
+    function renderScene13WongKarWai() {
+      const w = STAGE_W;
+      const h = STAGE_H;
+      const p = state.climaxProgress;
+
+      // Step-printing low shutter lag effect onto echoCanvas
+      echoCtx.save();
+      echoCtx.globalAlpha = 0.22 + p * 0.65;
+      const jitterX = (1 - p) * Math.sin(state.time * 9) * 14 * state.turbulence;
+      const jitterY = (1 - p) * Math.cos(state.time * 7) * 8 * state.turbulence;
+      echoCtx.drawImage(videoCanvas, jitterX, jitterY, w, h);
+
+      // Blend ghosted reality layer before climax
+      if (p < 0.85) {
+        echoCtx.globalAlpha = (1 - p) * 0.28;
+        echoCtx.drawImage(realityCanvas, -jitterX * 0.6, 0, w, h);
+      }
+      echoCtx.restore();
+
+      outCtx.drawImage(echoCanvas, 0, 0, w, h);
+
+      // Wong Kar-wai Emerald & Warm Gold Split-Toning + Red Film Halation
+      outCtx.save();
+      outCtx.globalCompositeOperation = 'overlay';
+      const toneGrad = outCtx.createLinearGradient(0, 0, w, h);
+      toneGrad.addColorStop(0, `rgba(16, 185, 129, ${(1 - p * 0.5) * 0.42})`);
+      toneGrad.addColorStop(0.5, `rgba(245, 158, 11, ${(1 - p * 0.3) * 0.48})`);
+      toneGrad.addColorStop(1, `rgba(225, 29, 72, ${(1 - p * 0.4) * 0.45})`);
+      outCtx.fillStyle = toneGrad;
+      outCtx.fillRect(0, 0, w, h);
+      outCtx.restore();
+
+      // Iconic Wong Kar-wai Cinema Subtitle Bar
+      outCtx.save();
+      outCtx.fillStyle = 'rgba(0, 0, 0, 0.55)';
+      outCtx.fillRect(0, h - 148, w, 78);
+      outCtx.textAlign = 'center';
+      outCtx.fillStyle = '#fde047';
+      outCtx.font = 'bold 21px "Noto Serif SC", serif';
+      outCtx.fillText(
+        state.isClimax
+          ? '“那一刻，我们之间的距离只有 0.01 公分。”'
+          : '“凌晨三点四十二分，距离心动还有 0.01 公分。”',
+        w / 2,
+        h - 108
+      );
+      outCtx.fillStyle = '#fef08a';
+      outCtx.font = 'italic 13px "Inter", serif';
+      outCtx.fillText(
+        state.isClimax
+          ? 'At that moment, the distance between us was only 0.01 cm.'
+          : '03:42 AM. 0.01 cm away from falling in love.',
+        w / 2,
+        h - 84
+      );
+      outCtx.restore();
+    }
+
+    // Scene 17: Rainy Cold Window Steam Wipe
+    const windowDrops = Array.from({ length: 95 }, () => ({
+      x: seedRandom() * STAGE_W,
+      y: seedRandom() * STAGE_H,
+      r: 2.6 + seedRandom() * 5.2,
+      vy: 0.8 + seedRandom() * 2.2
+    }));
+
+    let wipeLastPoint = null;
+
+    function resetWipeMask() {
+      wipeMaskCtx.clearRect(0, 0, STAGE_W, STAGE_H);
+      wipeLastPoint = null;
+    }
+
+    function stampWipe(x, y, radius, alpha) {
+      const g = wipeMaskCtx.createRadialGradient(x, y, radius * 0.08, x, y, radius);
+      g.addColorStop(0, `rgba(255, 255, 255, ${alpha})`);
+      g.addColorStop(0.6, `rgba(255, 255, 255, ${alpha * 0.4})`);
+      g.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      wipeMaskCtx.fillStyle = g;
+      wipeMaskCtx.beginPath();
+      wipeMaskCtx.arc(x, y, radius, 0, Math.PI * 2);
+      wipeMaskCtx.fill();
+    }
+
+    function renderScene17SteamWindow() {
+      const w = STAGE_W;
+      const h = STAGE_H;
+      const k = state.dt * 60;
+
+      // Finger wipe: interpolate stamps along the stroke so fast swipes leave no gaps,
+      // and only wipe when the finger actually moves.
+      const brushR = 72;
+      const px = state.pointer.x;
+      const py = state.pointer.y;
+      if (wipeLastPoint) {
+        const dx = px - wipeLastPoint.x;
+        const dy = py - wipeLastPoint.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist > 0.5) {
+          const steps = Math.max(1, Math.ceil(dist / 14));
+          for (let i = 1; i <= steps; i++) {
+            stampWipe(wipeLastPoint.x + (dx * i) / steps, wipeLastPoint.y + (dy * i) / steps, brushR, 0.3);
+          }
+        }
+      }
+      wipeLastPoint = { x: px, y: py };
+
+      // Breath condensation slowly fogs the glass back up (paused once the climax starts)
+      if (!state.isClimax) {
+        wipeMaskCtx.save();
+        wipeMaskCtx.globalCompositeOperation = 'destination-out';
+        wipeMaskCtx.fillStyle = `rgba(0, 0, 0, ${Math.min(1, 0.0025 * k)})`;
+        wipeMaskCtx.fillRect(0, 0, w, h);
+        wipeMaskCtx.restore();
+      }
+
+      outCtx.save();
+      outCtx.filter = 'blur(22px) brightness(0.62) saturate(0.75)';
+      outCtx.drawImage(videoCanvas, 0, 0, w, h);
+      outCtx.restore();
+
+      outCtx.fillStyle = `rgba(210, 225, 242, ${0.42 * (1 - state.climaxProgress)})`;
+      outCtx.fillRect(0, 0, w, h);
+
+      if (!state.isClimax) {
+        outCtx.fillStyle = 'rgba(15, 23, 42, 0.48)';
+        outCtx.font = 'bold 26px "Noto Serif SC", serif';
+        outCtx.textAlign = 'center';
+        outCtx.fillText('凌晨寒夜 · 擦去车窗雾气看看窗外的她', w / 2, 155);
+      }
+
+      realityCtx.clearRect(0, 0, w, h);
+      realityCtx.drawImage(wipeMaskCanvas, 0, 0);
+
+      if (state.climaxProgress > 0) {
+        const sunR = state.climaxProgress * 1450;
+        const sg = realityCtx.createRadialGradient(w / 2, h / 2, sunR * 0.1, w / 2, h / 2, sunR);
+        sg.addColorStop(0, 'rgba(255,255,255,1)');
+        sg.addColorStop(0.7, 'rgba(255,255,255,0.9)');
+        sg.addColorStop(1, 'rgba(255,255,255,0)');
+        realityCtx.fillStyle = sg;
+        realityCtx.fillRect(0, 0, w, h);
+      }
+
+      realityCtx.globalCompositeOperation = 'source-in';
+      realityCtx.drawImage(videoCanvas, 0, 0, w, h);
+      realityCtx.globalCompositeOperation = 'source-over';
+      outCtx.drawImage(realityCanvas, 0, 0);
+
+      outCtx.save();
+      windowDrops.forEach((d) => {
+        d.y += d.vy * k;
+        if (d.y > h + 12) {
+          d.y = -12;
+          d.x = seedRandom() * w;
+        }
+        // Sliding drops clear a thin streak through the condensation
+        stampWipe(d.x, d.y, d.r * 1.1, 0.05 * k);
+        outCtx.fillStyle = 'rgba(255, 255, 255, 0.58)';
+        outCtx.beginPath();
+        outCtx.ellipse(d.x, d.y, d.r * 0.75, d.r * 1.15, 0, 0, Math.PI * 2);
+        outCtx.fill();
+
+        outCtx.fillStyle = 'rgba(15, 23, 42, 0.25)';
+        outCtx.beginPath();
+        outCtx.arc(d.x + 1, d.y + 1.5, d.r * 0.6, 0, Math.PI);
+        outCtx.fill();
+      });
+      outCtx.restore();
+    }
+
+    // Scene 18: Exam Optical X-Ray Magnifier
+    function renderScene18ExamXRay() {
+      const w = STAGE_W;
+      const h = STAGE_H;
+
+      outCtx.drawImage(realityCanvas, 0, 0, w, h);
+
+      const radius = state.isClimax
+        ? 145 + Math.pow(state.climaxProgress, 1.9) * 1350
+        : 145 + Math.sin(state.time * 4) * 8;
+
+      const cx = state.isClimax
+        ? w * 0.5 + (state.pointer.x - w * 0.5) * (1 - state.climaxProgress)
+        : state.pointer.x;
+      const cy = state.isClimax
+        ? h * 0.5 + (state.pointer.y - h * 0.5) * (1 - state.climaxProgress)
+        : state.pointer.y;
+
+      const lensPath = new Path2D();
+      const steps = 64;
+      for (let i = 0; i <= steps; i++) {
+        const ang = (i / steps) * Math.PI * 2;
+        const wobble = Math.sin(ang * 5 + state.time * 4) * 10 * state.turbulence;
+        const r = radius + wobble;
+        const px = cx + Math.cos(ang) * r;
+        const py = cy + Math.sin(ang) * r;
+        if (i === 0) lensPath.moveTo(px, py);
+        else lensPath.lineTo(px, py);
+      }
+      lensPath.closePath();
+
+      // Optical magnification around the lens center (relaxes to 1x as the lens fills the frame)
+      const mag = 1 + 0.32 * (1 - state.climaxProgress);
+      outCtx.save();
+      outCtx.clip(lensPath);
+      outCtx.translate(cx, cy);
+      outCtx.scale(mag, mag);
+      outCtx.translate(-cx, -cy);
+      outCtx.drawImage(videoCanvas, 0, 0, w, h);
+      outCtx.restore();
+
+      // Glass lens edge darkening + specular crescent
+      if (radius < 900) {
+        outCtx.save();
+        outCtx.clip(lensPath);
+        const lg = outCtx.createRadialGradient(cx, cy, radius * 0.62, cx, cy, radius * 1.05);
+        lg.addColorStop(0, 'rgba(0, 0, 0, 0)');
+        lg.addColorStop(1, 'rgba(20, 0, 30, 0.45)');
+        outCtx.fillStyle = lg;
+        outCtx.fillRect(cx - radius * 1.1, cy - radius * 1.1, radius * 2.2, radius * 2.2);
+        outCtx.globalCompositeOperation = 'lighter';
+        outCtx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+        outCtx.lineWidth = radius * 0.05;
+        outCtx.beginPath();
+        outCtx.arc(cx, cy, radius * 0.82, Math.PI * 1.05, Math.PI * 1.45);
+        outCtx.stroke();
+        outCtx.restore();
+      }
+
+      // Neon rim drawn last so the glow sits on top of the lens content
+      outCtx.save();
+      outCtx.shadowColor = '#ff2a85';
+      outCtx.shadowBlur = 32;
+      outCtx.strokeStyle = '#ffbe55';
+      outCtx.lineWidth = 4.0;
+      outCtx.stroke(lensPath);
+      outCtx.restore();
+    }
+
+    // Scene 19: High-Precision Mathematical Matrix Morph
+    function renderScene19MicroMatrix() {
+      const w = STAGE_W;
+      const h = STAGE_H;
+      const cols = sampleCanvas.width;  // 72
+      const rows = sampleCanvas.height; // 128
+      const cellW = w / cols;
+      const cellH = h / rows;
+
+      const img = sampleCtx.getImageData(0, 0, cols, rows).data;
+      const glyphs = ['.', '·', ':', '∫', '∑', 'π', '∞', '∂', '♥', '★'];
+
+      outCtx.fillStyle = '#05060b';
+      outCtx.fillRect(0, 0, w, h);
+
+      outCtx.font = `bold ${Math.max(8, Math.floor(cellH * 0.96))}px "JetBrains Mono", monospace`;
+      outCtx.textAlign = 'center';
+      outCtx.textBaseline = 'middle';
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const idx = (r * cols + c) * 4;
+          const cr = img[idx];
+          const cg = img[idx + 1];
+          const cb = img[idx + 2];
+          const luma = (0.299 * cr + 0.587 * cg + 0.114 * cb) / 255;
+
+          const px = (c + 0.5) * cellW;
+          const py = (r + 0.5) * cellH;
+          const gIdx = Math.min(glyphs.length - 1, Math.floor(luma * glyphs.length));
+          outCtx.fillStyle = `rgba(${Math.min(255, cr + 35)}, ${Math.min(255, cg + 35)}, ${Math.min(255, cb + 45)}, ${0.25 + luma * 0.75})`;
+          outCtx.fillText(glyphs[gIdx], px, py);
+        }
+      }
+
+      // Mouse clarity lens before climax
+      if (!state.isClimax) {
+        outCtx.save();
+        outCtx.beginPath();
+        outCtx.arc(state.pointer.x, state.pointer.y, 115, 0, Math.PI * 2);
+        outCtx.clip();
+        outCtx.drawImage(videoCanvas, 0, 0, w, h);
+        outCtx.restore();
+      }
+
+      if (state.climaxProgress > 0.01) {
+        outCtx.save();
+        outCtx.globalAlpha = state.climaxProgress;
+        outCtx.drawImage(videoCanvas, 0, 0, w, h);
+        outCtx.restore();
+      }
+    }
+
+    // Scene 23: Ink drops that keep bleeding outward after they land (capillary spread)
+    const inkDrops = [];
+    const MAX_INK_DROPS = 90;
+    let inkLastPoint = null;
+
+    function resetInkMask() {
+      inkMaskCtx.fillStyle = '#000';
+      inkMaskCtx.fillRect(0, 0, inkMaskCanvas.width, inkMaskCanvas.height);
+      inkDrops.length = 0;
+      inkLastPoint = null;
+      texInkMask.needsUpdate = true;
+    }
+
+    function spawnInkDrop(x, y, size) {
+      if (inkDrops.length >= MAX_INK_DROPS) inkDrops.shift();
+      inkDrops.push({ x, y, r: size, age: 0, life: 1.1 + seedRandom() * 0.9 });
+    }
+
+    function spawnInkSplash(x, y, size) {
+      spawnInkDrop(x, y, size);
+      const satellites = 1 + Math.floor(seedRandom() * 3);
+      for (let i = 0; i < satellites; i++) {
+        const a = seedRandom() * Math.PI * 2;
+        const d = size * (0.7 + seedRandom() * 0.9);
+        spawnInkDrop(x + Math.cos(a) * d, y + Math.sin(a) * d, size * (0.18 + seedRandom() * 0.3));
+      }
+    }
+
+    function updateInkMask() {
+      const p = state.pointer;
+      if (inkLastPoint) {
+        const dist = Math.hypot(p.x - inkLastPoint.x, p.y - inkLastPoint.y);
+        if (dist > 22) {
+          spawnInkSplash(p.x, p.y, (30 + seedRandom() * 26) * state.turbulence);
+          inkLastPoint = { x: p.x, y: p.y };
+        }
+      } else {
+        inkLastPoint = { x: p.x, y: p.y };
+      }
+
+      inkMaskCtx.save();
+      inkMaskCtx.globalCompositeOperation = 'lighter';
+      for (let i = inkDrops.length - 1; i >= 0; i--) {
+        const d = inkDrops[i];
+        d.age += state.dt;
+        const t = Math.min(1, d.age / d.life);
+        if (t >= 1) {
+          inkDrops.splice(i, 1);
+          continue;
+        }
+        const r = Math.max(0.5, d.r * (0.35 + 0.65 * Math.sqrt(t)) * INK_MASK_SCALE);
+        const x = d.x * INK_MASK_SCALE;
+        const y = d.y * INK_MASK_SCALE;
+        const a = 0.1 * (1 - t) * state.dt * 60;
+        const g = inkMaskCtx.createRadialGradient(x, y, 0, x, y, r);
+        g.addColorStop(0, `rgba(255, 255, 255, ${a})`);
+        g.addColorStop(0.7, `rgba(255, 255, 255, ${a * 0.6})`);
+        g.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        inkMaskCtx.fillStyle = g;
+        inkMaskCtx.beginPath();
+        inkMaskCtx.arc(x, y, r, 0, Math.PI * 2);
+        inkMaskCtx.fill();
+      }
+      inkMaskCtx.restore();
+      texInkMask.needsUpdate = true;
+    }
+
+    // Scene 24: Ripple ring buffer (uploaded as uRipples)
+    let rippleCursor = 0;
+    let rippleLastSpawn = { x: 0, y: 0, t: -100 };
+
+    function spawnRipple(stageX, stageY, strength) {
+      rippleUniformValues[rippleCursor].set(stageX / STAGE_W, 1.0 - stageY / STAGE_H, state.time, strength);
+      rippleCursor = (rippleCursor + 1) % RIPPLE_SLOTS;
+    }
+
+    function resetRipples() {
+      rippleUniformValues.forEach((v) => v.set(0, 0, -100, 0));
+      rippleCursor = 0;
+      rippleLastSpawn = { x: state.pointer.x, y: state.pointer.y, t: -100 };
+    }
+
+    function updateRipples() {
+      // Dragging across the pond leaves a trail of small ripples
+      const p = state.pointer;
+      const moved = Math.hypot(p.x - rippleLastSpawn.x, p.y - rippleLastSpawn.y);
+      if (moved > 70 && state.time - rippleLastSpawn.t > 0.16) {
+        spawnRipple(p.x, p.y, 0.5);
+        rippleLastSpawn = { x: p.x, y: p.y, t: state.time };
+      }
+    }
+
+    /********************************************************************
+     * 7. CINEMA FOREGROUND MICRO-ATMOSPHERE ENGINE
+     ********************************************************************/
+    const ambParticles = Array.from({ length: 145 }, () => ({
+      x: seedRandom() * STAGE_W,
+      y: seedRandom() * STAGE_H,
+      vx: (seedRandom() - 0.5) * 0.65,
+      vy: -0.4 - seedRandom() * 1.1,
+      size: 0.7 + seedRandom() * 1.9,
+      phase: seedRandom() * Math.PI * 2,
+      hue: seedRandom() > 0.5 ? 38 : 335
+    }));
+
+    // Pre-rendered glow sprites (gradients are built once instead of 145x per frame)
+    const glowSpriteCache = new Map();
+    function getGlowSprite(key, width, height, paint) {
+      let sprite = glowSpriteCache.get(key);
+      if (!sprite) {
+        sprite = document.createElement('canvas');
+        sprite.width = width;
+        sprite.height = height;
+        paint(sprite.getContext('2d'), width, height);
+        glowSpriteCache.set(key, sprite);
+      }
+      return sprite;
+    }
+
+    function radialSprite(key, stops) {
+      return getGlowSprite(key, 64, 64, (ctx, sw, sh) => {
+        const g = ctx.createRadialGradient(sw / 2, sh / 2, 0, sw / 2, sh / 2, sw / 2);
+        stops.forEach(([o, c]) => g.addColorStop(o, c));
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, sw, sh);
+      });
+    }
+
+    function streakSprite(key, color) {
+      return getGlowSprite(key, 128, 4, (ctx, sw, sh) => {
+        const g = ctx.createLinearGradient(0, 0, sw, 0);
+        g.addColorStop(0, 'rgba(0,0,0,0)');
+        g.addColorStop(0.5, color);
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, sw, sh);
+      });
+    }
+
+    function renderAmbientMicroParticles() {
+      const mode = state.ambientMode;
+      if (mode === 'none') return;
+
+      const w = STAGE_W;
+      const h = STAGE_H;
+      const sizeScale = state.particleSize / 1.4;
+      const k = state.dt * 60;
+
+      outCtx.save();
+      outCtx.globalCompositeOperation = 'lighter';
+
+      ambParticles.forEach((p, idx) => {
+        p.x += (p.vx + Math.sin(state.time * 1.8 + p.phase) * 0.28) * k;
+        p.y += p.vy * (1 + state.audio.beatPulse * 1.2) * k;
+
+        if (p.y < -20) p.y = h + 20;
+        if (p.y > h + 20) p.y = -20;
+        if (p.x < -20) p.x = w + 20;
+        if (p.x > w + 20) p.x = -20;
+
+        const twinkle = Math.max(0, 0.45 + 0.55 * Math.sin(state.time * 4.2 + p.phase));
+        if (twinkle <= 0.001) return;
+        const r = Math.max(0.6, p.size * sizeScale);
+        outCtx.globalAlpha = twinkle;
+
+        if (mode === 'stardust') {
+          const sprite = radialSprite(`stardust-${p.hue}`, [
+            [0, 'rgba(255, 250, 230, 0.9)'],
+            [0.35, `hsla(${p.hue}, 100%, 68%, 0.55)`],
+            [1, 'rgba(0,0,0,0)']
+          ]);
+          const R = r * 3.4;
+          outCtx.drawImage(sprite, p.x - R, p.y - R, R * 2, R * 2);
+        } else if (mode === 'spores') {
+          const sprite = radialSprite('spores', [
+            [0, 'rgba(220, 255, 255, 0.85)'],
+            [0.4, 'rgba(0, 242, 254, 0.45)'],
+            [0.75, 'rgba(168, 85, 247, 0.2)'],
+            [1, 'rgba(0,0,0,0)']
+          ]);
+          const R = r * 4.6;
+          outCtx.drawImage(sprite, p.x - R, p.y - R, R * 2, R * 2);
+        } else if (mode === 'anamorphic') {
+          if (idx % 3 === 0) {
+            const streakW = (32 + p.size * 26) * sizeScale;
+            const sprite = streakSprite(`streak-${p.hue}`, `hsla(${p.hue}, 100%, 75%, 0.42)`);
+            outCtx.drawImage(sprite, p.x - streakW, p.y - 1.3, streakW * 2, 2.6);
+          }
+        }
+      });
+
+      outCtx.restore();
+    }
+
+    // Film halation: thresholded quarter-res glow of the muse layer, screened back on top
+    function renderHalationBloom(strength) {
+      bloomCtx.save();
+      bloomCtx.globalCompositeOperation = 'copy';
+      bloomCtx.filter = 'contrast(1.7) saturate(1.35) blur(4px)';
+      bloomCtx.drawImage(videoCanvas, 0, 0, bloomCanvas.width, bloomCanvas.height);
+      bloomCtx.restore();
+
+      outCtx.save();
+      outCtx.globalCompositeOperation = 'screen';
+      outCtx.globalAlpha = strength;
+      outCtx.imageSmoothingEnabled = true;
+      outCtx.imageSmoothingQuality = 'high';
+      outCtx.drawImage(bloomCanvas, 0, 0, STAGE_W, STAGE_H);
+      outCtx.restore();
+    }
+
+    /********************************************************************
+     * 8. MASTER 20-SCENE COMPOSITOR (720x1280 60FPS)
+     *    -> Scene Registry: each scene = { render, alwaysHalation?, onReset?, onClimax?, onPointerDown? }
+     *       Adding a new scene only needs SCENE_NAMES + one SCENE_REGISTRY entry + a sidebar card.
+     ********************************************************************/
+
+    // -----------------------------------------------------------------
+    // SCENES 01 & 11: 76,800 SUB-PIXEL GAUSSIAN MICRO-PARTICLES
+    // -----------------------------------------------------------------
+    function renderSceneMicroParticles() {
+      const w = STAGE_W;
+      const h = STAGE_H;
+      const sc = state.currentScene;
+
+      if (state.climaxProgress > 0.65) {
+        outCtx.save();
+        outCtx.globalAlpha = (state.climaxProgress - 0.65) / 0.35;
+        outCtx.drawImage(videoCanvas, 0, 0, w, h);
+        outCtx.restore();
+      }
+
+      // Scene 01: resting particles alone only cover ~30% of the pixels (reality looked dim & dotted),
+      // so lay a solid reality base underneath that dissolves as soon as the stardust takes off.
+      if (sc === 1) {
+        const baseAlpha = 1 - Math.min(1, state.climaxProgress / 0.22);
+        if (baseAlpha > 0.01) {
+          outCtx.save();
+          outCtx.globalAlpha = baseAlpha;
+          outCtx.drawImage(realityCanvas, 0, 0, w, h);
+          const hx = state.pointer.x;
+          const hy = state.pointer.y;
+          const hole = outCtx.createRadialGradient(hx, hy, 0, hx, hy, 230);
+          hole.addColorStop(0, 'rgba(3, 3, 6, 0.88)');
+          hole.addColorStop(1, 'rgba(3, 3, 6, 0)');
+          outCtx.fillStyle = hole;
+          outCtx.fillRect(hx - 230, hy - 230, 460, 460);
+          outCtx.restore();
+        }
+      }
+
+      microParticleUniforms.uSubMode.value = sc === 1 ? 0 : 1;
+      microParticleUniforms.uTime.value = state.time;
+      microParticleUniforms.uProgress.value = state.climaxProgress;
+      microParticleUniforms.uMouse.value.set(
+        state.pointer.nx * VIEW_W * 0.5,
+        -state.pointer.ny * VIEW_H * 0.5
+      );
+      microParticleUniforms.uPointSize.value = state.particleSize;
+      microParticleUniforms.uTurbulence.value = state.turbulence;
+      microParticleUniforms.uBeat.value = state.audio.beatPulse;
+
+      renderer.render(particleScene, camera3D);
+      outCtx.drawImage(webglCanvas, 0, 0, w, h);
+    }
+
+    // -----------------------------------------------------------------
+    // SCENES 02, 04, 06, 07, 08, 09, 14, 15, 16 (+21, 23, 24): GLSL SHADER ENGINE
+    // -----------------------------------------------------------------
+    function renderSceneQuadShader() {
+      quadUniforms.uMode.value = state.currentScene;
+      quadUniforms.uTime.value = state.time;
+      quadUniforms.uProgress.value = state.climaxProgress;
+      quadUniforms.uMouse.value.set(state.pointer.uvX, 1.0 - state.pointer.uvY);
+      quadUniforms.uOrigin.value.set(state.climaxOrigin.uvX, 1.0 - state.climaxOrigin.uvY);
+      quadUniforms.uTurbulence.value = state.turbulence;
+      quadUniforms.uBeat.value = state.audio.beatPulse;
+
+      renderer.render(shaderScene, orthoCamera);
+      outCtx.drawImage(webglCanvas, 0, 0, STAGE_W, STAGE_H);
+    }
+
+    function renderScene02EmberBurn() {
+      renderSceneQuadShader();
+      if (state.climaxProgress < 0.92) {
+        spawnPortalSparks(
+          state.pointer.x,
+          state.pointer.y,
+          38 + state.climaxProgress * 260,
+          Math.max(1, Math.round(7 * state.dt * 60))
+        );
+        renderSparkParticlesOverlay();
+      }
+    }
+
+    // -----------------------------------------------------------------
+    // SCENE 05: INCEPTION 3D FOLDING MIRROR DIMENSION CORRIDOR
+    // -----------------------------------------------------------------
+    function renderScene05Inception() {
+      // Draw Beauty Video at the horizon center
+      outCtx.drawImage(videoCanvas, 0, 0, STAGE_W, STAGE_H);
+
+      const p = state.climaxProgress;
+      inceptionGroup.rotation.y = state.pointer.nx * 0.26 * (1 - p);
+      inceptionGroup.rotation.x = state.pointer.ny * 0.22 * (1 - p);
+      inceptionGroup.position.z = p * 9.5;
+
+      inceptionPanels.forEach((panel) => {
+        const foldAngle = (0.18 + p * 1.45) * panel.dirSign * state.turbulence;
+        if (panel.rotAxis === 'y') panel.mesh.rotation.y = foldAngle;
+        else panel.mesh.rotation.x = foldAngle;
+      });
+
+      // Center cap spins away and shrinks into the vanishing point
+      const capOpacity = 1 - Math.min(1, p / 0.35);
+      inceptionCap.visible = capOpacity > 0.01;
+      inceptionCap.material.opacity = capOpacity;
+      inceptionCap.rotation.z = p * 2.4;
+      inceptionCap.scale.setScalar(Math.max(0.001, ((12 + 4 * 0.45) / 12) * (1 - p * 0.85)));
+
+      renderer.render(inceptionScene, camera3D);
+      outCtx.drawImage(webglCanvas, 0, 0, STAGE_W, STAGE_H);
+    }
+
+    // -----------------------------------------------------------------
+    // SCENE 10: DOLBY CINEMA 3D SILK CURTAIN UNVEIL
+    // -----------------------------------------------------------------
+    function renderScene10Silk() {
+      outCtx.drawImage(videoCanvas, 0, 0, STAGE_W, STAGE_H);
+
+      silkUniforms.uTime.value = state.time;
+      silkUniforms.uProgress.value = state.climaxProgress;
+      silkUniforms.uMouse.value.set(state.pointer.nx * VIEW_W * 0.5, -state.pointer.ny * VIEW_H * 0.5);
+      silkUniforms.uTurbulence.value = state.turbulence;
+
+      renderer.render(silkScene, camera3D);
+      outCtx.drawImage(webglCanvas, 0, 0, STAGE_W, STAGE_H);
+    }
+
+    // -----------------------------------------------------------------
+    // SCENE 12: WESTWORLD 3D DOUBLE-HELIX RIBBON WEAVE
+    // -----------------------------------------------------------------
+    function renderScene12Ribbons() {
+      outCtx.fillStyle = '#04060c';
+      outCtx.fillRect(0, 0, STAGE_W, STAGE_H);
+
+      const p = state.climaxProgress;
+      ribbonMeshes.forEach((r) => {
+        const normY = r.index / RIBBON_COUNT;
+        const wave = Math.sin(normY * Math.PI * 3.5 + state.time * 2.8 + state.pointer.nx * 2.0);
+        r.mesh.rotation.y = wave * 1.65 * (1 - p) * state.turbulence;
+        r.mesh.position.z = Math.cos(normY * Math.PI * 3.5 + state.time * 2.8) * 1.2 * (1 - p);
+        r.mat.uniforms.uReveal.value = p;
+        r.mat.uniforms.uGlow.value = Math.abs(wave) * (1 - p);
+      });
+
+      renderer.render(ribbonScene, camera3D);
+      outCtx.drawImage(webglCanvas, 0, 0, STAGE_W, STAGE_H);
+    }
+
+    // -----------------------------------------------------------------
+    // SCENE 20: 3D SSR HOLOGRAPHIC COLLECTOR CARD
+    // -----------------------------------------------------------------
+    function renderScene20SSRCard() {
+      outCtx.save();
+      outCtx.filter = 'blur(28px) brightness(0.46)';
+      outCtx.drawImage(videoCanvas, 0, 0, STAGE_W, STAGE_H);
+      outCtx.restore();
+
+      const p = state.climaxProgress;
+      ssrCardMesh.rotation.y = state.pointer.nx * 0.42 * (1 - p) + Math.sin(state.time * 2) * 0.08 * (1 - p);
+      ssrCardMesh.rotation.x = state.pointer.ny * 0.32 * (1 - p);
+      const scale = 1.0 + p * 0.48;
+      ssrCardMesh.scale.set(scale, scale, 1);
+
+      cardUniforms.uTime.value = state.time;
+      cardUniforms.uTilt.value.set(state.pointer.nx, state.pointer.ny);
+      cardUniforms.uProgress.value = p;
+
+      renderer.render(cardScene, camera3D);
+      outCtx.drawImage(webglCanvas, 0, 0, STAGE_W, STAGE_H);
+    }
+
+    // -----------------------------------------------------------------
+    // SCENE 22: BULLET-TIME 3D MIRROR GLASS SHATTER
+    // -----------------------------------------------------------------
+    function renderScene22Shatter() {
+      const p = state.climaxProgress;
+
+      // Muse behind the glass with a slow dolly-in as the shards clear
+      const zoom = 1.06 - 0.06 * p;
+      outCtx.save();
+      outCtx.translate(STAGE_W / 2, STAGE_H / 2);
+      outCtx.scale(zoom, zoom);
+      outCtx.translate(-STAGE_W / 2, -STAGE_H / 2);
+      outCtx.drawImage(videoCanvas, 0, 0, STAGE_W, STAGE_H);
+      outCtx.restore();
+
+      shatterUniforms.uTime.value = state.time;
+      shatterUniforms.uProgress.value = p;
+      shatterUniforms.uTurbulence.value = state.turbulence;
+      shatterUniforms.uImpact.value.set(
+        (state.climaxOrigin.uvX - 0.5) * VIEW_W,
+        (0.5 - state.climaxOrigin.uvY) * VIEW_H
+      );
+      shatterUniforms.uMouse.value.set(state.pointer.nx * VIEW_W * 0.5, -state.pointer.ny * VIEW_H * 0.5);
+
+      renderer.render(shatterScene, camera3D);
+      outCtx.drawImage(webglCanvas, 0, 0, STAGE_W, STAGE_H);
+    }
+
+    // -----------------------------------------------------------------
+    // SCENE 23: EASTERN INK WASH  /  SCENE 24: MOON-IN-WATER RIPPLES
+    // -----------------------------------------------------------------
+    function renderScene23InkWash() {
+      updateInkMask();
+      renderSceneQuadShader();
+    }
+
+    function renderScene24Ripples() {
+      updateRipples();
+      renderSceneQuadShader();
+    }
+
+    const SCENE_REGISTRY = {
+      1: { render: renderSceneMicroParticles },
+      2: { render: renderScene02EmberBurn },
+      3: { render: renderScene3Portal },
+      4: { render: renderSceneQuadShader },
+      5: { render: renderScene05Inception },
+      6: { render: renderSceneQuadShader },
+      7: { render: renderSceneQuadShader, alwaysHalation: true },
+      8: { render: renderSceneQuadShader },
+      9: { render: renderSceneQuadShader },
+      10: { render: renderScene10Silk },
+      11: { render: renderSceneMicroParticles },
+      12: { render: renderScene12Ribbons },
+      13: { render: renderScene13WongKarWai, alwaysHalation: true, onReset: resetEchoBuffer },
+      14: { render: renderSceneQuadShader },
+      15: { render: renderSceneQuadShader },
+      16: { render: renderSceneQuadShader },
+      17: { render: renderScene17SteamWindow, onReset: resetWipeMask },
+      18: { render: renderScene18ExamXRay },
+      19: { render: renderScene19MicroMatrix },
+      20: { render: renderScene20SSRCard, alwaysHalation: true },
+      21: { render: renderSceneQuadShader },
+      22: {
+        render: renderScene22Shatter,
+        onClimax: () => playCinemaSFX('shatter')
+      },
+      23: {
+        render: renderScene23InkWash,
+        onReset: resetInkMask,
+        onClimax: () => spawnInkSplash(state.pointer.x, state.pointer.y, 90 * state.turbulence)
+      },
+      24: {
+        render: renderScene24Ripples,
+        onReset: resetRipples,
+        onPointerDown: () => {
+          spawnRipple(state.pointer.x, state.pointer.y, 1.0);
+          playCinemaSFX('droplet');
+        },
+        onClimax: () => spawnRipple(state.pointer.x, state.pointer.y, 1.6)
+      }
+    };
+
+    function getSceneDef(sc) {
+      return SCENE_REGISTRY[sc] || null;
+    }
+
+    (function validateSceneRegistry() {
+      for (let i = 1; i <= SCENE_COUNT; i++) {
+        if (!SCENE_REGISTRY[i] || typeof SCENE_REGISTRY[i].render !== 'function') {
+          console.error(`[Scene] 场景 ${i} 未在 SCENE_REGISTRY 中注册渲染器`);
+        }
+        if (!document.querySelector(`.scene-card[data-scene="${i}"]`)) {
+          console.warn(`[Scene] 场景 ${i} 缺少左侧场景卡片`);
+        }
+      }
+    })();
+
+    const missingSceneWarned = new Set();
+
+    function renderMasterStage(dt) {
+      const w = STAGE_W;
+      const h = STAGE_H;
+
+      if (state.isClimax) {
+        state.climaxTime += dt * state.transitionSpeed;
+        state.climaxLinear = Math.min(1.0, state.climaxLinear + dt * 0.68 * state.transitionSpeed);
+      } else {
+        state.climaxTime = 0;
+        state.climaxLinear = Math.max(0.0, state.climaxLinear - dt * 1.8);
+      }
+      state.climaxProgress = cinematicEase(state.climaxLinear);
+
+      renderVideoSourceCanvas(state.time);
+      renderRealityLayer(state.time);
+      texVideo.needsUpdate = true;
+      texReality.needsUpdate = true;
+
+      outCtx.save();
+      outCtx.fillStyle = '#030306';
+      outCtx.fillRect(0, 0, w, h);
+
+      // Beat-Reactive Camera Zoom & Shockwave Shake
+      if (state.isClimax && state.fx.beatZoom) {
+        const zoom = 1 + state.audio.beatPulse * 0.042 + state.audio.shockwave * 0.065;
+        const sx = (seedRandom() - 0.5) * state.audio.shockwave * 16;
+        const sy = (seedRandom() - 0.5) * state.audio.shockwave * 16;
+        outCtx.translate(w / 2 + sx, h / 2 + sy);
+        outCtx.scale(zoom, zoom);
+        outCtx.translate(-w / 2, -h / 2);
+      }
+
+      const sc = state.currentScene;
+      const sceneDef = getSceneDef(sc);
+      if (sceneDef) {
+        sceneDef.render();
+      } else if (!missingSceneWarned.has(sc)) {
+        missingSceneWarned.add(sc);
+        console.error(`[Scene] 无法渲染场景 ${sc}: 未注册`);
+      }
+      outCtx.restore();
+
+      // -----------------------------------------------------------------
+      // FILM HALATION BLOOM & FOREGROUND MICRO-PARTICLES
+      // -----------------------------------------------------------------
+      if (state.fx.halation && (state.isClimax || (sceneDef && sceneDef.alwaysHalation))) {
+        renderHalationBloom(0.3 + state.audio.beatPulse * 0.16);
+      }
+
+      renderAmbientMicroParticles();
+
+      if (state.audio.flashAlpha > 0.01) {
+        outCtx.fillStyle = `rgba(255, 248, 238, ${state.audio.flashAlpha})`;
+        outCtx.fillRect(0, 0, w, h);
+      }
+
+      if (state.fx.cinemaPost) applyCinemaPostFX();
+    }
+
+    /********************************************************************
+     * 9. DIRECTOR CONTROLS, 8-SECOND AUTO-DIRECTOR & WEBM VIDEO RECORDER
+     ********************************************************************/
+    function triggerClimax() {
+      if (state.isClimax) return;
+      state.isClimax = true;
+      state.climaxTime = 0;
+      state.climaxOrigin.uvX = state.pointer.uvX;
+      state.climaxOrigin.uvY = state.pointer.uvY;
+      state.audio.shockwave = 1.0;
+      state.audio.shockTime = state.time;
+      state.audio.flashAlpha = 0.78;
+      playCinemaSFX('climax');
+
+      const sceneDef = getSceneDef(state.currentScene);
+      if (sceneDef && sceneDef.onClimax) sceneDef.onClimax();
+
+      const badge = document.getElementById('sceneStatusBadge');
+      badge.textContent = '状态: 破壁高潮中!';
+      badge.className = 'text-[10px] font-mono-code px-2 py-0.5 rounded bg-pink-500/30 text-pink-300 border border-pink-500/50';
+      document.getElementById('climaxBtnLabel').textContent = '已触发高潮 · 按 R 重置现实';
+    }
+
+    function resetScene() {
+      state.isClimax = false;
+      state.climaxTime = 0;
+      state.climaxLinear = 0;
+      state.climaxProgress = 0;
+      state.audio.shockwave = 0;
+      state.audio.shockTime = -100;
+      state.audio.flashAlpha = 0;
+      portalSparks.length = 0;
+
+      const sceneDef = getSceneDef(state.currentScene);
+      if (sceneDef && sceneDef.onReset) sceneDef.onReset();
+
+      const badge = document.getElementById('sceneStatusBadge');
+      badge.textContent = '状态: 现实铺垫态';
+      badge.className = 'text-[10px] font-mono-code px-2 py-0.5 rounded bg-slate-800 text-slate-300';
+      document.getElementById('climaxBtnLabel').textContent = '触发电影级破壁高潮 (Space)';
+    }
+
+    function setRealityType(rType) {
+      state.realityType = rType;
+      document.querySelectorAll('.reality-btn').forEach((b) => {
+        b.classList.toggle('active', b.dataset.reality === rType);
+      });
+    }
+
+    function selectScene(num) {
+      const clamped = ((num - 1 + SCENE_COUNT) % SCENE_COUNT) + 1;
+      state.currentScene = clamped;
+
+      let activeCard = null;
+      document.querySelectorAll('.scene-card').forEach((card) => {
+        const isMatch = Number(card.dataset.scene) === clamped;
+        card.classList.toggle('active', isMatch);
+        if (isMatch) activeCard = card;
+      });
+
+      if (activeCard) {
+        activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        if (state.autoMatchReality && activeCard.dataset.defaultReality) {
+          setRealityType(activeCard.dataset.defaultReality);
+        }
+      }
+
+      document.getElementById('stageSceneTitle').textContent = SCENE_NAMES[clamped];
+      document.getElementById('currentSceneIndicator').textContent =
+        `${String(clamped).padStart(2, '0')} / ${String(SCENE_COUNT).padStart(2, '0')}`;
+      resetScene();
+
+      // Switching scenes mid-run restarts the 8s script so the climax is never skipped
+      if (state.director.active) {
+        state.director.elapsed = 0;
+        state.director.triggeredClimax = false;
+        state.director.riserPlayed = false;
+      }
+    }
+
+    // 8-Second Auto-Director Script
+    function toggleAutoDirector() {
+      const btn = document.getElementById('autoDirectorBtn');
+      const label = document.getElementById('autoDirectorLabel');
+      const hud = document.getElementById('directorHud');
+
+      if (state.director.active) {
+        state.director.active = false;
+        btn.classList.remove('running');
+        label.textContent = '一键自动导演 8秒大片运镜 (A)';
+        hud.style.opacity = '0';
+        return;
+      }
+
+      resetScene();
+      state.director.active = true;
+      state.director.elapsed = 0;
+      state.director.triggeredClimax = false;
+      state.director.riserPlayed = false;
+      btn.classList.add('running');
+      label.textContent = '自动导演运镜中 (点击停止)';
+      hud.style.opacity = '1';
+    }
+
+    function updateAutoDirector(dt) {
+      if (!state.director.active) return;
+      state.director.elapsed += dt;
+      const t = state.director.elapsed;
+      const dur = state.director.duration;
+
+      document.getElementById('directorProgressBar').style.width = `${Math.min(100, (t / dur) * 100)}%`;
+      document.getElementById('directorTimeText').textContent = `${t.toFixed(1)}s / ${dur.toFixed(1)}s`;
+      const phaseEl = document.getElementById('directorPhaseText');
+
+      if (t < 2.6) {
+        phaseEl.innerHTML = '<i class="fa-solid fa-hourglass-half"></i> 0-2.6s：枯燥现实互动铺垫...';
+        const px = STAGE_W * (0.5 + Math.cos(t * 2.5) * 0.28);
+        const py = STAGE_H * (0.48 + Math.sin(t * 3.2) * 0.22);
+        setStagePointer(px, py);
+      } else if (t < 3.5) {
+        if (!state.director.riserPlayed) {
+          state.director.riserPlayed = true;
+          playCinemaSFX('riser');
+        }
+        phaseEl.innerHTML = '<i class="fa-solid fa-bolt text-pink-400"></i> 2.6-3.5s：次元裂缝能量蓄力...';
+        setStagePointer(STAGE_W * 0.5, STAGE_H * 0.48);
+      } else if (t < 8.0) {
+        if (!state.director.triggeredClimax) {
+          state.director.triggeredClimax = true;
+          triggerClimax();
+        }
+        phaseEl.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i> 3.5-8.0s：电影级破壁反转 & 卡点！';
+      } else {
+        toggleAutoDirector();
+      }
+    }
+
+    // Built-in 9:16 WebM Video Recorder
+    let mediaRecorder = null;
+    let recordedChunks = [];
+    let isRecordingVideo = false;
+
+    const RECORDER_MIME_CANDIDATES = [
+      'video/webm;codecs=vp9,opus',
+      'video/webm;codecs=vp8,opus',
+      'video/webm;codecs=vp9',
+      'video/webm',
+      'video/mp4'
+    ];
+
+    function pickRecorderMimeType() {
+      if (typeof MediaRecorder.isTypeSupported !== 'function') return '';
+      return RECORDER_MIME_CANDIDATES.find((m) => MediaRecorder.isTypeSupported(m)) || '';
+    }
+
+    function setRecordButtonState(recording) {
+      document.getElementById('recBtnText').textContent = recording ? '停止导出' : '内录导出';
+      document.getElementById('recBtnIcon').className = recording
+        ? 'fa-solid fa-square text-emerald-400 text-[9px] animate-ping'
+        : 'fa-solid fa-circle text-rose-500 text-[9px]';
+    }
+
+    function toggleVideoRecording() {
+      if (isRecordingVideo && mediaRecorder) {
+        mediaRecorder.stop();
+        isRecordingVideo = false;
+        setRecordButtonState(false);
+        return;
+      }
+
+      if (typeof window.MediaRecorder === 'undefined' || typeof masterOutCanvas.captureStream !== 'function') {
+        console.error('[Recorder] 当前浏览器不支持 MediaRecorder / captureStream，无法内录');
+        return;
+      }
+
+      // Video from the final composite canvas + SFX/user-video audio from the master bus
+      ensureAudio();
+      const stream = masterOutCanvas.captureStream(60);
+      if (audioRecordDest) {
+        audioRecordDest.stream.getAudioTracks().forEach((track) => stream.addTrack(track));
+      }
+
+      const mimeType = pickRecorderMimeType();
+      try {
+        mediaRecorder = mimeType
+          ? new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 12000000 })
+          : new MediaRecorder(stream);
+      } catch (err) {
+        console.error('[Recorder] 创建 MediaRecorder 失败:', err);
+        stream.getVideoTracks().forEach((t) => t.stop());
+        return;
+      }
+      recordedChunks = [];
+
+      mediaRecorder.ondataavailable = (ev) => {
+        if (ev.data && ev.data.size > 0) recordedChunks.push(ev.data);
+      };
+      mediaRecorder.onerror = (ev) => {
+        console.error('[Recorder] 录制出错:', ev.error || ev);
+      };
+      mediaRecorder.onstop = () => {
+        // Only stop our own canvas track; the audio track belongs to the shared master bus
+        stream.getVideoTracks().forEach((t) => t.stop());
+        const type = mediaRecorder.mimeType || mimeType || 'video/webm';
+        const ext = type.includes('mp4') ? 'mp4' : 'webm';
+        const blob = new Blob(recordedChunks, { type });
+        console.log(`[Recorder] 录制完成: ${(blob.size / 1048576).toFixed(2)} MB, ${type}`);
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `9x16_Ultimate_VFX_Scene${state.currentScene}_${Date.now()}.${ext}`;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+      };
+
+      mediaRecorder.start(1000);
+      isRecordingVideo = true;
+      setRecordButtonState(true);
+      console.log('[Recorder] 开始录制, mimeType =', mimeType || '(浏览器默认)', ', 音轨 =', audioRecordDest ? '有' : '无');
+    }
+
+    /********************************************************************
+     * 10. EVENT LISTENERS & UI BINDINGS
+     ********************************************************************/
+    function setStagePointer(x, y) {
+      state.pointer.x = Math.max(0, Math.min(STAGE_W, x));
+      state.pointer.y = Math.max(0, Math.min(STAGE_H, y));
+      state.pointer.uvX = state.pointer.x / STAGE_W;
+      state.pointer.uvY = state.pointer.y / STAGE_H;
+      state.pointer.nx = (state.pointer.uvX - 0.5) * 2;
+      state.pointer.ny = (state.pointer.uvY - 0.5) * 2;
+    }
+
+    const stageWrapper = document.getElementById('stageWrapper');
+    stageWrapper.addEventListener('pointermove', (e) => {
+      const rect = masterOutCanvas.getBoundingClientRect();
+      setStagePointer(
+        ((e.clientX - rect.left) / rect.width) * STAGE_W,
+        ((e.clientY - rect.top) / rect.height) * STAGE_H
+      );
+    });
+    stageWrapper.addEventListener('pointerdown', (e) => {
+      state.pointer.down = true;
+      const rect = masterOutCanvas.getBoundingClientRect();
+      setStagePointer(
+        ((e.clientX - rect.left) / rect.width) * STAGE_W,
+        ((e.clientY - rect.top) / rect.height) * STAGE_H
+      );
+      const sceneDef = getSceneDef(state.currentScene);
+      if (sceneDef && sceneDef.onPointerDown) sceneDef.onPointerDown();
+    });
+    window.addEventListener('pointerup', () => (state.pointer.down = false));
+
+    // Scene Cards & Prev/Next Buttons
+    document.querySelectorAll('.scene-card').forEach((btn) => {
+      btn.addEventListener('click', () => selectScene(Number(btn.dataset.scene)));
+    });
+    document.getElementById('prevSceneBtn').addEventListener('click', () => selectScene(state.currentScene - 1));
+    document.getElementById('nextSceneBtn').addEventListener('click', () => selectScene(state.currentScene + 1));
+
+    // 5 Switchable Reality Buttons
+    document.querySelectorAll('.reality-btn').forEach((btn) => {
+      btn.addEventListener('click', () => setRealityType(btn.dataset.reality));
+    });
+
+    // Category Filter Tabs
+    const CATEGORY_LABELS = { all: '全部', movie: '电影', luxury: '高奢', cyber: '赛博', viral: '破壁', creative: '创意' };
+    (function refreshCategoryCounts() {
+      const cards = Array.from(document.querySelectorAll('.scene-card'));
+      document.querySelectorAll('.cat-tab').forEach((tab) => {
+        const cat = tab.dataset.cat;
+        const n = cat === 'all' ? cards.length : cards.filter((c) => c.dataset.cat === cat).length;
+        tab.textContent = `${CATEGORY_LABELS[cat] || cat}(${n})`;
+      });
+    })();
+
+    document.querySelectorAll('.cat-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const cat = tab.dataset.cat;
+        document.querySelectorAll('.cat-tab').forEach((t) => {
+          t.className = t === tab
+            ? 'cat-tab flex-1 py-1 rounded-lg bg-pink-500/30 text-pink-200 font-bold border border-pink-500/40'
+            : 'cat-tab flex-1 py-1 rounded-lg bg-white/5 text-slate-400 hover:text-white';
+        });
+        document.querySelectorAll('.scene-card').forEach((card) => {
+          card.style.display = (cat === 'all' || card.dataset.cat === cat) ? 'flex' : 'none';
+        });
+      });
+    });
+
+    // Sliders
+    document.getElementById('sliderParticleSize').addEventListener('input', (e) => {
+      const v = parseFloat(e.target.value);
+      state.particleSize = v;
+      const desc = v <= 1.1 ? '极细微尘' : v <= 2.0 ? '超细星尘' : '柔焦光斑';
+      document.getElementById('valParticleSize').textContent = `${v.toFixed(1)} px (${desc})`;
+    });
+
+    document.getElementById('sliderTurbulence').addEventListener('input', (e) => {
+      const v = parseFloat(e.target.value);
+      state.turbulence = v;
+      document.getElementById('valTurbulence').textContent = `${v.toFixed(1)}x`;
+    });
+
+    document.getElementById('sliderSpeed').addEventListener('input', (e) => {
+      const v = parseFloat(e.target.value);
+      state.transitionSpeed = v;
+      document.getElementById('valSpeed').textContent = `${v.toFixed(1)}x`;
+    });
+
+    // Ambient Mode Buttons
+    document.querySelectorAll('.amb-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        state.ambientMode = btn.dataset.amb;
+        document.querySelectorAll('.amb-btn').forEach((b) => {
+          const active = b.dataset.amb === state.ambientMode;
+          b.className = active
+            ? 'amb-btn active py-1.5 px-2.5 rounded-xl text-[11px] font-semibold bg-pink-500/25 border border-pink-500/50 text-white flex items-center gap-1.5'
+            : 'amb-btn py-1.5 px-2.5 rounded-xl text-[11px] font-semibold bg-white/5 border border-white/10 text-slate-300 hover:text-white flex items-center gap-1.5';
+        });
+      });
+    });
+
+    // Local Video Upload & Drag-and-Drop
+    let currentVideoObjectUrl = null;
+
+    function loadLocalVideo(file) {
+      if (!file || !file.type.startsWith('video/')) {
+        console.warn('[Video] 非视频文件，已忽略:', file ? `${file.name} (${file.type || '未知类型'})` : null);
+        return;
+      }
+      if (currentVideoObjectUrl) URL.revokeObjectURL(currentVideoObjectUrl);
+      const url = URL.createObjectURL(file);
+      currentVideoObjectUrl = url;
+
+      attachUserVideoAudio();
+      userVideo.src = url;
+      userVideo.muted = !state.soundEnabled;
+      userVideo.play().then(() => {
+        state.usingCustomVideo = true;
+        console.log(`[Video] 已载入本地视频: ${file.name} (${userVideo.videoWidth}x${userVideo.videoHeight})`);
+        const shortName = file.name.length > 12 ? file.name.slice(0, 12) + '...' : file.name;
+        const badge = document.getElementById('sourceBadge');
+        badge.textContent = `本地: ${shortName}`;
+        badge.className = 'text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-medium';
+      }).catch((err) => {
+        state.usingCustomVideo = false;
+        console.error(`[Video] 本地视频播放失败 (可能是编码不受支持): ${file.name}`, err);
+      });
+    }
+
+    document.getElementById('uploadBtn').addEventListener('click', () => {
+      document.getElementById('videoFileInput').click();
+    });
+    document.getElementById('videoFileInput').addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) loadLocalVideo(e.target.files[0]);
+    });
+
+    window.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      document.getElementById('dropOverlay').style.opacity = '1';
+    });
+    window.addEventListener('dragleave', (e) => {
+      if (e.relatedTarget === null) document.getElementById('dropOverlay').style.opacity = '0';
+    });
+    window.addEventListener('drop', (e) => {
+      e.preventDefault();
+      document.getElementById('dropOverlay').style.opacity = '0';
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        loadLocalVideo(e.dataTransfer.files[0]);
+      }
+    });
+
+    // Cycle Built-In Goddess Presets
+    document.getElementById('presetBtn').addEventListener('click', () => {
+      state.usingCustomVideo = false;
+      userVideo.pause();
+      state.presetIndex = (state.presetIndex + 1) % musePresets.length;
+      const badge = document.getElementById('sourceBadge');
+      badge.textContent = musePresets[state.presetIndex].title;
+      badge.className = 'text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-medium';
+    });
+
+    // Action Buttons
+    document.getElementById('climaxBtn').addEventListener('click', triggerClimax);
+    document.getElementById('autoDirectorBtn').addEventListener('click', toggleAutoDirector);
+    document.getElementById('resetBtn').addEventListener('click', resetScene);
+    document.getElementById('recordVideoBtn').addEventListener('click', toggleVideoRecording);
+
+    function togglePhoneBezel() {
+      state.phoneBezel = !state.phoneBezel;
+      stageWrapper.className = state.phoneBezel
+        ? 'phone-bezel bg-black relative select-none cursor-crosshair'
+        : 'frameless-bezel bg-black relative select-none cursor-crosshair';
+      document.getElementById('phoneNotch').style.display = state.phoneBezel ? 'flex' : 'none';
+    }
+    document.getElementById('bezelToggleBtn').addEventListener('click', togglePhoneBezel);
+
+    function togglePurePanels() {
+      state.panelsHidden = !state.panelsHidden;
+      document.getElementById('leftPanel').classList.toggle('panel-hidden-left', state.panelsHidden);
+      document.getElementById('rightPanel').classList.toggle('panel-hidden-right', state.panelsHidden);
+      document.getElementById('stageBadge').style.opacity = state.panelsHidden ? '0' : '1';
+      if (state.panelsHidden) {
+        const toast = document.getElementById('pureToast');
+        toast.style.opacity = '1';
+        setTimeout(() => (toast.style.opacity = '0'), 2800);
+      }
+    }
+    document.getElementById('hidePanelsBtn').addEventListener('click', togglePurePanels);
+
+    document.getElementById('soundToggleBtn').addEventListener('click', () => {
+      state.soundEnabled = !state.soundEnabled;
+      userVideo.muted = !state.soundEnabled;
+      document.getElementById('soundIcon').className = state.soundEnabled
+        ? 'fa-solid fa-volume-high'
+        : 'fa-solid fa-volume-xmark';
+      document.getElementById('soundText').textContent = state.soundEnabled ? '音效开启' : '静音模式';
+    });
+
+    document.getElementById('fxBeatZoom').addEventListener('change', (e) => (state.fx.beatZoom = e.target.checked));
+    document.getElementById('fxHalation').addEventListener('change', (e) => (state.fx.halation = e.target.checked));
+    document.getElementById('fxCinemaPost').addEventListener('change', (e) => (state.fx.cinemaPost = e.target.checked));
+    document.getElementById('fxAutoReality').addEventListener('change', (e) => (state.autoMatchReality = e.target.checked));
+
+    // Global Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      // Leave browser shortcuts (Ctrl+R, Cmd+F ...) alone; ignore auto-repeat for toggle keys
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.repeat && e.key !== '[' && e.key !== ']') {
+        if (e.code === 'Space') e.preventDefault();
+        return;
+      }
+      if (e.code === 'Space') {
+        e.preventDefault();
+        triggerClimax();
+      } else if (e.key === 'a' || e.key === 'A') {
+        toggleAutoDirector();
+      } else if (e.key === 'r' || e.key === 'R') {
+        resetScene();
+      } else if (e.key === 'h' || e.key === 'H') {
+        togglePurePanels();
+      } else if (e.key === 'f' || e.key === 'F') {
+        togglePhoneBezel();
+      } else if (e.key === '[') {
+        selectScene(state.currentScene - 1);
+      } else if (e.key === ']') {
+        selectScene(state.currentScene + 1);
+      }
+    });
+
+    /********************************************************************
+     * 11. 60FPS MAIN LOOP
+     ********************************************************************/
+    let lastTime = 0;
+
+    function animateLoop(now) {
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
+      state.dt = dt;
+      state.time += dt;
+
+      // 128 BPM Rhythmic Pulse Envelope
+      const beatPhase = (state.time * (128 / 60)) % 1;
+      const kick = Math.pow(Math.max(0, 1 - beatPhase * 3.0), 2.2);
+      state.audio.beatPulse += (kick - state.audio.beatPulse) * (1 - Math.pow(0.7, dt * 60));
+      state.audio.shockwave = decayPerFrame(state.audio.shockwave, 0.88, dt);
+      state.audio.flashAlpha = decayPerFrame(state.audio.flashAlpha, 0.85, dt);
+
+      // A single failing frame must not kill the render loop
+      try {
+        updateAutoDirector(dt);
+        renderMasterStage(dt);
+      } catch (err) {
+        const key = String(err && err.message);
+        if (!loopErrorsLogged.has(key)) {
+          loopErrorsLogged.add(key);
+          console.error(`[Loop] 场景 ${state.currentScene} 渲染异常:`, err);
+        }
+      }
+
+      
+    }
+    const loopErrorsLogged = new Set();
+
+    window.productFrame = function(scene,t,progress) {
+      seedValue=12345;
+      state.usingCustomVideo=true;state.currentScene=scene;state.realityType=scene===11?'code':scene===9?'obsidian':'exam';
+      state.time=t;state.dt=0;state.isClimax=true;state.climaxLinear=progress;state.climaxTime=progress*2;
+      state.audio.beatPulse=0;state.audio.shockwave=0;state.audio.flashAlpha=0;
+      state.fx.beatZoom=false;state.fx.halation=false;
+      renderMasterStage(0);return masterOutCanvas;
+    };
+    window.onload = function () {
+      ambiCanvas.width = 160;
+      ambiCanvas.height = 90;
+      resetInkMask();
+      console.log(`[Init] 9:16 特效工坊启动: ${SCENE_COUNT} 个场景已注册`);
+      
+    };
+  </script>
+</body>
+</html>
