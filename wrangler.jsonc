@@ -10,6 +10,6 @@
     "not_found_handling": "single-page-application"
   },
   "routes": [
-    { "pattern": "me.297782.xyz", "custom_domain": true, "zone_name": "297782.xyz" }
+    { "pattern": "me.297782.xyz/*", "zone_name": "297782.xyz" }
   ]
 }

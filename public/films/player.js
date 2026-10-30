@@ -1,7 +1,7 @@
 (() => {
   const film = document.getElementById('film');
   const audio = document.getElementById('om-sound');
-  const timeline = window.__timelines?.film;
+  const timeline = window.__timelines?.[film?.dataset.compositionId] || window.__timelines?.film;
   if (!timeline || !audio || !film) return;
   const duration = timeline.duration();
   if (!Number.isFinite(duration) || duration <= 0) {

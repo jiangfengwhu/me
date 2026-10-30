@@ -365,132 +365,150 @@ export const BOOKS = [
     "praise": []
   },
   {
-    "id": "agent-learning-workshop",
-    "films": [{ "title": "Agent 的每一步，都看得见", "src": "/films/agent-film/index.html", "poster": "/films/agent-film/poster.svg", "duration": 26, "orientation": "landscape" }],
+    "id": "little-traveler",
+    "films": [
+      {
+        "title": "把故事，翻成立体",
+        "src": "/films/little-traveler-film/index.html",
+        "poster": "/films/little-traveler-film/poster.png",
+        "duration": 32,
+        "orientation": "landscape"
+      }
+    ],
     "volume": "VOL. VI",
-    "edition": "LEARNING EDITION · 2026",
-    "title": "Agent 学习工坊",
-    "subtitle": "从一次工具调用开始，理解 Agent 如何工作",
-    "spineTitle": "Agent 学习工坊 — 实验、构建与复盘",
-    "category": "AGENT LEARNING",
-    "liveUrl": "https://teaching-agent.297782.xyz/",
-    "coverImage": "/assets/covers/cover-agent.svg",
+    "edition": "PAPER ART EDITION · 2026",
+    "title": "星星上的小旅人",
+    "subtitle": "翻开一页，遇见一个小宇宙",
+    "spineTitle": "星星上的小旅人 — 互动纸艺立体书",
+    "category": "INTERACTIVE POP-UP STORYBOOK",
+    "liveUrl": "/apps/little-traveler/",
+    "coverImage": "/assets/covers/cover-origami.png",
     "dimensions": {
       "width": 22,
       "height": 28.6,
       "thickness": 2.9
     },
     "palette": {
-      "coverBg": "#153b52",
-      "coverSecondary": "#83d3e9",
-      "spineBg": "#102c3e",
-      "spineText": "#e3f7fd",
-      "foilColor": "#83d3e9",
-      "pageEdge": "#e7f1f4",
-      "accentHex": "#52c7e8",
-      "detailBg": "#0c2b35"
+      "coverBg": "#67432c",
+      "coverSecondary": "#d9b677",
+      "spineBg": "#785a32",
+      "spineText": "#fff4dd",
+      "foilColor": "#d9b677",
+      "pageEdge": "#f7ebd9",
+      "accentHex": "#d9b677",
+      "detailBg": "#292015"
     },
-    "productDescription": "边实验，边理解 AI Agent。观察模型如何规划、调用工具和处理上下文，再从运行轨迹里复盘每一步，把概念变成可操作的工程经验。",
+    "productDescription": "翻开一本纸艺立体书，走进五个星际小故事。纸景沿着书脊收拢、展开，拉动机关、转动视角，发现藏在每一页里的小惊喜。",
     "productFeatures": [
-      "Plan 与 Agent 模式对照实验",
-      "工具调用、MCP、Skill 与人工确认",
-      "运行轨迹、上下文和会话恢复"
+      "五个跨页与连续折叠、展开动画",
+      "风车、纸鹤、齿轮与点灯机关",
+      "自由调整观看角度"
     ],
-    "primaryStack": "React",
+    "primaryStack": "Three.js",
     "techStack": [
-      "React",
-      "TypeScript",
-      "Agent Runtime"
+      "Three.js",
+      "WebGL",
+      "Paper Mechanics"
     ],
     "metrics": [
       {
-        "label": "WORKFLOW",
-        "value": "Plan → Act"
+        "label": "CHAPTERS",
+        "value": "5 pop-up spreads"
       },
       {
-        "label": "FOCUS",
-        "value": "Learn by doing"
+        "label": "EXPERIENCE",
+        "value": "Fold · Turn · Explore"
       }
     ],
     "legacyIds": [
+      "agent-learning-workshop",
       "vibe-container-workbench"
     ],
     "author": "JIANG FENG",
     "year": "2026",
     "repoUrl": "https://github.com/jiangfengwhu",
-    "tagline": "边实验，边理解 AI Agent。观察模型如何规划、调用工具和处理上下文，再从运行轨迹里复盘每一步，把概念变成可操作的工程经验。",
+    "tagline": "翻开一本纸艺立体书，走进五个星际小故事。纸景沿着书脊收拢、展开，拉动机关、转动视角，发现藏在每一页里的小惊喜。",
     "synopsis": [
-      "边实验，边理解 AI Agent。观察模型如何规划、调用工具和处理上下文，再从运行轨迹里复盘每一步，把概念变成可操作的工程经验。"
+      "翻开一本纸艺立体书，走进五个星际小故事。纸景沿着书脊收拢、展开，拉动机关、转动视角，发现藏在每一页里的小惊喜。"
     ],
     "highlights": [
-      "Plan 与 Agent 模式对照实验",
-      "工具调用、MCP、Skill 与人工确认",
-      "运行轨迹、上下文和会话恢复"
+      "五个跨页与连续折叠、展开动画",
+      "风车、纸鹤、齿轮与点灯机关",
+      "自由调整观看角度"
     ],
     "praise": []
   },
   {
-    "id": "interview-handbook",
-    "films": [{ "title": "把答案，练成自己的", "src": "/films/interview-film/index.html", "poster": "/films/interview-film/poster.svg", "duration": 22, "orientation": "landscape" }],
+    "id": "clack-typewriter",
+    "films": [
+      {
+        "title": "每一声敲击，落在纸上",
+        "src": "/films/clack-launch-film/index.html",
+        "poster": "/films/clack-launch-film/poster.png",
+        "duration": 30,
+        "orientation": "landscape"
+      }
+    ],
     "volume": "VOL. VII",
-    "edition": "PRACTICE EDITION · 2026",
-    "title": "面试题库",
-    "subtitle": "把知识点，变成能解释也能动手的答案",
-    "spineTitle": "面试题库 — 前端知识与交互式练习",
-    "category": "INTERVIEW PRACTICE",
-    "liveUrl": "https://interview.297782.xyz/",
-    "coverImage": "/assets/covers/cover-interview.svg",
+    "edition": "MECHANICAL EDITION · 2026",
+    "title": "CLACK 打字机",
+    "subtitle": "每一声敲击，落在纸上",
+    "spineTitle": "CLACK — 3D 机械打字机记事本",
+    "category": "3D TYPEWRITER",
+    "liveUrl": "/apps/clack/",
+    "coverImage": "/assets/covers/cover-clack.png",
     "dimensions": {
       "width": 21.5,
       "height": 28.2,
       "thickness": 2.6
     },
     "palette": {
-      "coverBg": "#512743",
-      "coverSecondary": "#ecc0e1",
-      "spineBg": "#3a1c30",
-      "spineText": "#ffedf8",
-      "foilColor": "#ecc0e1",
-      "pageEdge": "#f4eaf1",
-      "accentHex": "#ed93ce",
-      "detailBg": "#32152b"
+      "coverBg": "#24262b",
+      "coverSecondary": "#e7e7e5",
+      "spineBg": "#24262b",
+      "spineText": "#fbf9f3",
+      "foilColor": "#d95338",
+      "pageEdge": "#fbf9f3",
+      "accentHex": "#d95338",
+      "detailBg": "#202225"
     },
-    "productDescription": "围绕前端与工程实践整理面试知识。把防抖节流、异步并发、流式渲染和网络问题拆开来看，用示例与流程图把原理讲清楚。",
+    "productDescription": "在浏览器里，重新感受机械打字的节奏。黑色烤漆机身、下压的键帽、字杆与色带随敲击联动；支持中英文输入，让文字一字一字落在纸上。",
     "productFeatures": [
-      "前端与工程知识复习",
-      "代码示例、流程图与交互练习",
-      "从原理到场景的系统梳理"
+      "真实 3D 键帽、字杆、色带与字车联动",
+      "中文拼音输入与逐键反馈",
+      "回车、卷纸与手稿卡片"
     ],
-    "primaryStack": "React",
+    "primaryStack": "Three.js",
     "techStack": [
-      "React",
-      "JavaScript",
-      "Mermaid"
+      "Three.js",
+      "Canvas",
+      "Web Audio API"
     ],
     "metrics": [
       {
-        "label": "METHOD",
-        "value": "Read · Try · Explain"
+        "label": "INPUT",
+        "value": "Chinese · English"
       },
       {
-        "label": "FOCUS",
-        "value": "Frontend engineering"
+        "label": "FEEL",
+        "value": "Keys · Ink · Paper"
       }
     ],
     "legacyIds": [
+      "interview-handbook",
       "comfy-llm-shotty-anthology"
     ],
     "author": "JIANG FENG",
     "year": "2026",
     "repoUrl": "https://github.com/jiangfengwhu",
-    "tagline": "围绕前端与工程实践整理面试知识。把防抖节流、异步并发、流式渲染和网络问题拆开来看，用示例与流程图把原理讲清楚。",
+    "tagline": "在浏览器里，重新感受机械打字的节奏。黑色烤漆机身、下压的键帽、字杆与色带随敲击联动；支持中英文输入，让文字一字一字落在纸上。",
     "synopsis": [
-      "围绕前端与工程实践整理面试知识。把防抖节流、异步并发、流式渲染和网络问题拆开来看，用示例与流程图把原理讲清楚。"
+      "在浏览器里，重新感受机械打字的节奏。黑色烤漆机身、下压的键帽、字杆与色带随敲击联动；支持中英文输入，让文字一字一字落在纸上。"
     ],
     "highlights": [
-      "前端与工程知识复习",
-      "代码示例、流程图与交互练习",
-      "从原理到场景的系统梳理"
+      "真实 3D 键帽、字杆、色带与字车联动",
+      "中文拼音输入与逐键反馈",
+      "回车、卷纸与手稿卡片"
     ],
     "praise": []
   }

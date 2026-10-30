@@ -1,0 +1,3301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><script>let filmSeed=7103;Math.random=()=>{filmSeed=(filmSeed*16807)%2147483647;return filmSeed/2147483647;};</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>星星上的小旅人 · 纸艺立体书（五个跨页）</title>
+  <script src="../vendor/tailwind.js"></script>
+  <script src="../vendor/three.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #241409;
+      font-family: 'Noto Serif SC', 'Songti SC', serif;
+      color: #f7ebd9;
+    }
+    #webgl-container {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+    canvas#three-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+    }
+    canvas#three-canvas.pointer-interactive {
+      cursor: pointer;
+    }
+    canvas#three-canvas.dragging-mech {
+      cursor: grabbing;
+    }
+    /* Vignette & Warm Atmospheric Overlay */
+    .vignette-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      background: radial-gradient(ellipse at 50% 52%, rgba(0,0,0,0) 52%, rgba(15, 7, 2, 0.65) 100%);
+    }
+    /* Top Header */
+    .top-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 54px;
+      background: linear-gradient(180deg, rgba(22, 11, 4, 0.88) 0%, rgba(28, 14, 6, 0.62) 85%, rgba(28, 14, 6, 0) 100%);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      pointer-events: none;
+    }
+    .top-header > * {
+      pointer-events: auto;
+    }
+    /* Center Spread Title Banner */
+    .spread-title-banner {
+      position: fixed;
+      top: 52px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      pointer-events: none;
+      text-align: center;
+    }
+    .spread-title-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: #f5e3c3;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85), 0 0 20px rgba(255, 205, 120, 0.25);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    /* Bottom HUD */
+    .bottom-hud {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      pointer-events: none;
+      width: 92%;
+      max-width: 540px;
+    }
+    .hud-pill {
+      pointer-events: auto;
+      background: rgba(24, 13, 6, 0.78);
+      border: 1px solid rgba(212, 175, 122, 0.32);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #f3e2c7;
+      padding: 7px 22px;
+      border-radius: 9999px;
+      font-size: 0.86rem;
+      letter-spacing: 0.06em;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .nav-row {
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .nav-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(26, 14, 7, 0.82);
+      border: 1px solid rgba(212, 175, 122, 0.38);
+      color: #f3e2c7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.45);
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: rgba(65, 38, 19, 0.92);
+      border-color: rgba(245, 208, 144, 0.75);
+      transform: scale(1.07);
+    }
+    .nav-btn:active:not(:disabled) {
+      transform: scale(0.95);
+    }
+    .nav-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .page-indicator {
+      background: rgba(26, 14, 7, 0.82);
+      border: 1px solid rgba(212, 175, 122, 0.35);
+      padding: 6px 22px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      color: #ebd5b3;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.45);
+    }
+    .icon-btn {
+      height: 36px;
+      padding: 0 12px;
+      border-radius: 8px;
+      background: rgba(38, 21, 10, 0.82);
+      border: 1px solid rgba(212, 175, 122, 0.38);
+      color: #f3e2c7;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    }
+    .icon-btn:hover {
+      background: rgba(72, 41, 20, 0.95);
+      border-color: rgba(245, 208, 144, 0.75);
+    }
+    /* Custom Scrollbar for Modals */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(20, 10, 4, 0.4);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(196, 154, 98, 0.45);
+      border-radius: 3px;
+    }
+    .checkerboard-bg {
+      background-image:
+        linear-gradient(45deg, #2a2420 25%, transparent 25%),
+        linear-gradient(-45deg, #2a2420 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #2a2420 75%),
+        linear-gradient(-45deg, transparent 75%, #2a2420 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+      background-color: #1c1714;
+    }
+    canvas#three-canvas { touch-action:none; }
+    .view-tools {position:fixed;right:22px;top:78px;z-index:15;font:12px/1.5 Inter,'Microsoft YaHei',sans-serif;color:#ead9bd;}
+    .view-tools summary {cursor:pointer;list-style:none;padding:9px 15px;background:#22170ed9;border:1px solid #ad8b5c66;border-radius:6px;text-align:right;}
+    .view-panel {margin-top:6px;padding:17px;width:242px;background:#22170eed;border:1px solid #ad8b5c66;border-radius:6px;backdrop-filter:blur(12px);}
+    .view-panel label {display:block;margin:10px 0;}
+    .view-panel label span {display:flex;justify-content:space-between;}
+    .view-panel input[type=range] {width:100%;accent-color:#d9b677;cursor:pointer;}
+    .view-panel button {border:1px solid #b89c7155;border-radius:4px;background:#ffffff08;padding:6px 10px;cursor:pointer;color:inherit;font:inherit;}
+    .view-panel button:hover {background:#b89c7125;}
+    .view-presets {display:flex;gap:6px;flex-wrap:wrap;margin:12px 0;}
+    .view-note {font-size:10px;color:#bca98e;margin-top:12px;}
+    :focus-visible {outline:2px solid #f2d293;outline-offset:4px;}
+    .vignette-overlay {background:radial-gradient(ellipse at 50% 48%,transparent 46%,rgba(27,13,5,.46) 100%);}
+    #asset-status {position:fixed;left:20px;bottom:24px;z-index:5;font:10px Inter,'Microsoft YaHei',sans-serif;color:#dac5a4;opacity:.8;pointer-events:none;}
+    @media(max-width:650px){.view-tools{right:12px;top:100px}.view-panel{width:215px}.top-header{padding:0 12px}.bottom-hud{bottom:16px}.hud-pill{font-size:10px}#asset-status{display:none}.view-tools summary{font-size:11px}.spread-title-banner{top:64px}}
+    @media(max-width:650px){.top-header h1{white-space:nowrap;font-size:15px;letter-spacing:0}.top-header>div:first-child>span{display:none}.top-header .icon-btn{padding:8px 10px;min-width:36px}.top-header>div:last-child{gap:5px}}
+
+  @font-face{font-family:Book;src:url('fonts/LXGWWenKai-500.woff')}body{font-family:Book,serif}.top-header,.spread-title-banner,.bottom-hud,.view-tools,#asset-status,.vignette-overlay{display:none!important}</style>
+</head>
+<body>
+
+  <!-- 3D WebGL Viewport -->
+  <div id="webgl-container">
+    <canvas id="three-canvas"></canvas>
+  </div>
+  <div class="vignette-overlay"></div>
+
+  <!-- Top Bar (1:1 Reference Layout) -->
+  <header class="top-header">
+    <div class="flex items-baseline gap-3">
+      <h1 class="text-lg sm:text-xl font-bold tracking-wider text-[#f7e7c8] drop-shadow">星星上的小旅人</h1>
+      <span class="text-xs sm:text-sm text-[#bfa888] tracking-wide">纸艺立体书 · 五个跨页</span>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button id="btn-analysis" class="icon-btn" title="查看视频动画拆解与实现原理">
+        <span>📐</span>
+        <span class="hidden sm:inline">原理剖析</span>
+      </button>
+      <button id="btn-workshop" class="icon-btn" title="AI生图与自动抠图白边工坊">
+        <span>🎨</span>
+        <span class="hidden sm:inline">AI抠图工坊</span>
+      </button>
+      <button id="btn-audio" class="icon-btn" title="背景八音盒与环境音效开关">
+        <span id="audio-icon">🔊</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Current Spread Title -->
+  <div class="spread-title-banner">
+    <div id="spread-title" class="spread-title-text">我的小星球</div>
+  </div>
+
+  <!-- Bottom Interactive HUD & Page Controls -->
+  <div class="bottom-hud">
+    <div id="hud-instruction" class="hud-pill">
+      拉动书页前缘的纸舌头点亮小星球 · 点点小狐狸和花
+    </div>
+    <div class="nav-row">
+      <button id="btn-prev" class="nav-btn" aria-label="上一页">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <div id="page-counter" class="page-indicator">第 1/5 页</div>
+      <button id="btn-next" class="nav-btn" aria-label="下一页">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <details class="view-tools" id="view-tools">
+    <summary>视角与光照 ↗</summary>
+    <div class="view-panel">
+      <label><span>水平角度 <output id="yaw-value">14°</output></span><input id="view-yaw" aria-label="水平角度" type="range" min="-65" max="65" value="14"></label>
+      <label><span>俯视角度 <output id="pitch-value">31°</output></span><input id="view-pitch" aria-label="俯视角度" type="range" min="16" max="75" value="31"></label>
+      <label><span>画面缩放 <output id="zoom-value">100%</output></span><input id="view-zoom" aria-label="画面缩放" type="range" min="65" max="140" value="100"></label>
+      <div class="view-presets"><button data-view="reference">原片视角</button><button data-view="front">正面</button><button data-view="top">俯视</button></div>
+      <label><span>主光强度 <output id="light-value">100%</output></span><input id="view-light" aria-label="主光强度" type="range" min="45" max="150" value="100"></label>
+      <label><span>翻页时长 <output id="speed-value">1.35 秒</output></span><input id="view-speed" aria-label="翻页时长" type="range" min="70" max="230" value="100"></label>
+      <label><span>翻页进度 <output id="progress-value">拖动慢看</output></span><input id="turn-progress" aria-label="翻页进度" type="range" min="0" max="100" value="100"></label>
+      <div class="view-presets"><button id="resume-turn">继续翻页</button><button id="reset-view">重置视角</button></div>
+      <div class="view-note">拖动空白处旋转 · 滚轮缩放<br>双指缩放 · ← → 翻页 · 双击复位</div>
+    </div>
+  </details>
+  <div id="asset-status" role="status">绘本素材载入中</div>
+
+  <!-- Modal 1: Technical Breakdown of the Video's Animation Effects -->
+  <div id="modal-analysis" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+    <div class="bg-[#23140b] border border-[#7c5836] rounded-2xl max-w-3xl w-full max-h-[86vh] flex flex-col shadow-2xl overflow-hidden text-[#f3e2c7]">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-[#523720] bg-[#1a0e07]">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📐</span>
+          <h2 class="text-base sm:text-lg font-bold tracking-wider">《星星上的小旅人》视频动画核心实现原理拆解</h2>
+        </div>
+        <button id="close-analysis" class="text-[#c8ad88] hover:text-white px-2 py-1 text-lg">✕</button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-5 text-sm leading-relaxed font-sans">
+        <div class="bg-[#2e1b0f] border border-[#5c3d24] rounded-xl p-4">
+          <h3 class="font-bold text-[#fbd695] text-base mb-2">1. 为什么视频里的纸片既有绘本手绘感，又有真实的立体阴影？</h3>
+          <p class="text-[#e2cbb0]">
+            视频并非使用复杂的百万面3D雕模，而是采用 <strong>“2.5D 多层纸艺插片（Cardboard Cutout Planes）+ AlphaTest 深度阴影投射”</strong>：
+          </p>
+          <ul class="list-disc list-inside mt-2 space-y-1 text-[#d4b998]">
+            <li><strong>生图与抠图加白边管线</strong>：先由生图模型或手绘生成纯色背景的水彩/彩铅插画元素，通过 Flood-Fill / 色差容差抠除背景，再对 Alpha 通道进行 <strong>形态学膨胀（Morphological Dilation）</strong> 生成一圈 8~12px 的奶油色刀模裁切白边（Die-cut White Margin）。</li>
+            <li><strong>真实纸片投影</strong>：在 Three.js 中，为透明贴图开启 <code class="text-[#fbd695] bg-black/30 px-1 rounded">alphaTest: 0.4</code> 并配置 <code class="text-[#fbd695] bg-black/30 px-1 rounded">customDepthMaterial</code>，使主平行光（PCFSoftShadowMap）按照纸片真实的镂空轮廓在后方背景板和木桌上投射出斜向阴影。</li>
+          </ul>
+        </div>
+
+        <div class="bg-[#2e1b0f] border border-[#5c3d24] rounded-xl p-4">
+          <h3 class="font-bold text-[#fbd695] text-base mb-2">2. 翻页时的“立起”与“折平”折纸运动学（Pop-up Kinematics）</h3>
+          <p class="text-[#e2cbb0]">
+            立体书翻页时，所有立体插片都不是凭空缩放出现的，而是遵循真实的 <strong>底部折痕枢轴联动（Hinge Pivot Folding）</strong>：
+          </p>
+          <ul class="list-disc list-inside mt-2 space-y-1 text-[#d4b998]">
+            <li>将每个插片 Mesh 的几何体原点（Pivot）平移到底部折痕处（<code class="text-[#fbd695] bg-black/30 px-1 rounded">geometry.translate(0, height/2, 0)</code>）。</li>
+            <li>当书页合上时（<code class="text-[#fbd695] bg-black/30 px-1 rounded">openProgress: 1 → 0</code>），插片绕底部 X 轴从直立状态（<code class="text-[#fbd695] bg-black/30 px-1 rounded">rotation.x ≈ -0.08</code>）折叠贴平至书页表面（<code class="text-[#fbd695] bg-black/30 px-1 rounded">rotation.x = -Math.PI / 2</code>）；当新跨页翻开时，伴随带阻尼的弹性缓动从平躺状态立起展开。</li>
+          </ul>
+        </div>
+
+        <div class="bg-[#2e1b0f] border border-[#5c3d24] rounded-xl p-4">
+          <h3 class="font-bold text-[#fbd695] text-base mb-2">3. 五大跨页的纸艺机械机关（Paper Engineering Linkages）</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2 text-xs text-[#d4b998]">
+            <div class="bg-black/25 p-3 rounded-lg border border-white/10">
+              <div class="font-bold text-[#f7e0b6] mb-1">第1页《我的小星球》· 纵向拉条点灯</div>
+              拖拽右页前缘纸舌头（<code class="text-[#fbd695]">t ∈ [0,1]</code>），联动提升小屋窗户与灯花的自发光强度与 PointLight 亮度，并加速风车旋转。
+            </div>
+            <div class="bg-black/25 p-3 rounded-lg border border-white/10">
+              <div class="font-bold text-[#f7e0b6] mb-1">第2页《纸鹤风筝》· 弧线连杆起飞</div>
+              拉动纸舌头时，纸鹤沿抛物弧线向右上角弯月爬升并微倾机身，前后多层祥云沿 X 轴产生反向视差舒展。
+            </div>
+            <div class="bg-black/25 p-3 rounded-lg border border-white/10">
+              <div class="font-bold text-[#f7e0b6] mb-1">第3页《钟表星》· 齿轮比咬合传动</div>
+              右下角主转盘旋转角度 <code class="text-[#fbd695]">θ</code>，按齿数比（<code class="text-[#fbd695]">-θ*1.6, θ*0.8, -θ*2.2</code>）驱动钟楼齿轮组正反转咬合及指针走动。
+            </div>
+            <div class="bg-black/25 p-3 rounded-lg border border-white/10">
+              <div class="font-bold text-[#f7e0b6] mb-1">第4页《沙丘日落》& 第5页《回家》</div>
+              第4页横向滑块通过正余弦弧线交替控制太阳落山与月亮升起并插值天空色彩；第5页拉条驱动多层花瓣绕花托向外盛开并释放粒子。
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: AI Illustration Generator + Auto Background Removal + Die-Cut White Margin Workshop -->
+  <div id="modal-workshop" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+    <div class="bg-[#23140b] border border-[#7c5836] rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden text-[#f3e2c7]">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-[#523720] bg-[#1a0e07]">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🎨</span>
+          <h2 class="text-base sm:text-lg font-bold tracking-wider">AI生图与自动抠图加白边工坊（实时替换3D立体书图层）</h2>
+        </div>
+        <button id="close-workshop" class="text-[#c8ad88] hover:text-white px-2 py-1 text-lg">✕</button>
+      </div>
+
+      <div class="p-5 overflow-y-auto grid grid-cols-1 lg:grid-cols-12 gap-5 font-sans text-sm">
+        <!-- Left Controls -->
+        <div class="lg:col-span-5 space-y-4">
+          <div>
+            <label class="block text-xs text-[#cbb08c] mb-1 font-medium">1. 选择要替换的立体书纸艺图层</label>
+            <select id="ws-target-layer" class="w-full bg-[#160c06] border border-[#69482a] rounded-lg px-3 py-2 text-[#f5e3c3] text-sm focus:outline-none focus:border-[#e6b86a]">
+              <option value="traveler">小旅人（主角立牌）</option>
+              <option value="fox">小狐狸（可互动伙伴）</option>
+              <option value="cottage">青苔山丘小屋（第1/2/5页）</option>
+              <option value="crane">乘风纸鹤（第2页主立牌）</option>
+              <option value="clockmaker">老钟表匠（第3页角色）</option>
+              <option value="lanternFlower">魔法灯花（第1/5页发光花朵）</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs text-[#cbb08c] mb-1 font-medium">2. 输入 素材描述（可上传图片替换）</label>
+            <textarea id="ws-prompt" rows="3" class="w-full bg-[#160c06] border border-[#69482a] rounded-lg p-2.5 text-[#f5e3c3] text-xs leading-relaxed focus:outline-none focus:border-[#e6b86a]">A cute storybook little prince traveler wearing a green coat and flowing yellow scarf, warm colored pencil and watercolor illustration, isolated on a solid pure white background, no shadow</textarea>
+            <div class="flex gap-2 mt-2">
+              <button id="btn-ai-generate" class="flex-1 bg-gradient-to-r from-[#b8732a] to-[#d6933c] hover:from-[#ca8234] hover:to-[#e5a349] text-[#1a0d04] font-bold py-2 px-3 rounded-lg text-xs transition shadow">
+                载入生成素材
+              </button>
+              <label class="bg-[#382112] hover:bg-[#4c2e19] border border-[#7c5836] text-[#f3e2c7] py-2 px-3 rounded-lg text-xs cursor-pointer transition text-center">
+                📂 上传本地图
+                <input id="ws-upload" type="file" accept="image/*" class="hidden" />
+              </label>
+            </div>
+            <div id="ws-status" class="text-xs text-[#eab666] mt-1.5 min-h-[18px]"></div>
+          </div>
+
+          <div class="bg-[#190e07] border border-[#4d331d] rounded-xl p-3.5 space-y-3">
+            <div class="text-xs font-bold text-[#fbd695]">3. 自动抠图（Matting）与刀模白边参数</div>
+            <div>
+              <div class="flex justify-between text-xs text-[#cbb08c] mb-1">
+                <span>背景色差抠图容差 (Tolerance)</span>
+                <span id="val-tolerance">38</span>
+              </div>
+              <input id="rng-tolerance" type="range" min="8" max="95" value="38" class="w-full accent-[#d6933c]" />
+            </div>
+            <div>
+              <div class="flex justify-between text-xs text-[#cbb08c] mb-1">
+                <span>纸艺刀模白边宽度 (Die-Cut Margin)</span>
+                <span id="val-margin">11 px</span>
+              </div>
+              <input id="rng-margin" type="range" min="0" max="24" value="11" class="w-full accent-[#d6933c]" />
+            </div>
+            <div class="flex gap-2 pt-1">
+              <button id="btn-apply-to-book" class="w-full bg-[#3f6b4e] hover:bg-[#4e8360] text-white font-bold py-2 px-4 rounded-lg text-xs transition shadow">
+                ✅ 将处理后的纸艺插片应用到 3D 立体书
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right 3-Stage Visual Pipeline Preview -->
+        <div class="lg:col-span-7 flex flex-col justify-between bg-[#160c06] border border-[#4d331d] rounded-xl p-4">
+          <div class="text-xs text-[#cbb08c] mb-2 flex items-center justify-between">
+            <span>实时纸艺抠图管线预览（原图 ➔ 泛洪去背景 ➔ 膨胀生成刀模白边与纸纹）</span>
+            <button id="btn-reset-procedural" class="text-[#eab666] hover:underline text-xs">恢复内置绘本贴图</button>
+          </div>
+          <div class="grid grid-cols-3 gap-3 my-auto">
+            <div class="flex flex-col items-center">
+              <div class="w-full aspect-square rounded-lg border border-[#523720] overflow-hidden bg-white flex items-center justify-center">
+                <canvas id="cv-stage-raw" width="256" height="256" class="w-full h-full object-contain"></canvas>
+              </div>
+              <span class="text-[11px] text-[#bfa888] mt-1.5">① 原始纯色背景图</span>
+            </div>
+            <div class="flex flex-col items-center">
+              <div class="w-full aspect-square rounded-lg border border-[#523720] overflow-hidden checkerboard-bg flex items-center justify-center">
+                <canvas id="cv-stage-matted" width="256" height="256" class="w-full h-full object-contain"></canvas>
+              </div>
+              <span class="text-[11px] text-[#bfa888] mt-1.5">② 自动泛洪抠除背景</span>
+            </div>
+            <div class="flex flex-col items-center">
+              <div class="w-full aspect-square rounded-lg border border-[#d6933c] overflow-hidden checkerboard-bg flex items-center justify-center shadow-inner">
+                <canvas id="cv-stage-diecut" width="256" height="256" class="w-full h-full object-contain"></canvas>
+              </div>
+              <span class="text-[11px] text-[#fbd695] font-medium mt-1.5">③ 膨胀刀模白边成品</span>
+            </div>
+          </div>
+          <div class="text-[11px] text-[#9e8466] mt-3 leading-normal">
+            💡 提示：本管线采用四角采样 + 边缘泛洪（Flood-Fill）+ 颜色欧氏距离羽化抠除纯色背景，随后对前景 Alpha 掩码执行圆盘形态学膨胀（Morphological Disk Dilation），生成带奶油纸纹与微立体切边的立体书插片。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /********************************************************************
+     * 1. WEB AUDIO SYNTHESIZER (Music Box, Flute, Clock Tick, Birdsong, Page Flip)
+     ********************************************************************/
+    class StorybookAudio {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+        this.bgmTimer = null;
+        this.noteIdx = 0;
+        // Gentle pentatonic/lullaby melody inspired by Little Prince
+        this.melody = [
+          { f: 523.25, d: 0.45 }, { f: 659.25, d: 0.45 }, { f: 783.99, d: 0.6 }, { f: 659.25, d: 0.45 },
+          { f: 880.00, d: 0.7 },  { f: 783.99, d: 0.5 },  { f: 659.25, d: 0.6 }, { f: 587.33, d: 0.8 },
+          { f: 493.88, d: 0.45 }, { f: 587.33, d: 0.45 }, { f: 783.99, d: 0.6 }, { f: 659.25, d: 0.5 },
+          { f: 523.25, d: 0.9 },  { f: 0, d: 0.4 }
+        ];
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+        if (!this.bgmTimer) {
+          this.startMusicBoxLoop();
+        }
+      }
+
+      toggle() {
+        this.init();
+        this.enabled = !this.enabled;
+        return this.enabled;
+      }
+
+      startMusicBoxLoop() {
+        const step = () => {
+          if (this.enabled && this.ctx && this.ctx.state === 'running') {
+            const note = this.melody[this.noteIdx % this.melody.length];
+            if (note.f > 0) {
+              this.playMusicBoxNote(note.f, 0.045);
+              // Occasional low harmony
+              if (this.noteIdx % 4 === 0) {
+                this.playMusicBoxNote(note.f * 0.5, 0.025);
+              }
+            }
+            this.noteIdx++;
+          }
+          this.bgmTimer = setTimeout(step, 620);
+        };
+        this.bgmTimer = setTimeout(step, 500);
+      }
+
+      playMusicBoxNote(freq, gainVal = 0.06) {
+        if (!this.enabled || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const over = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+        over.type = 'triangle';
+        over.frequency.setValueAtTime(freq * 2, now);
+
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.linearRampToValueAtTime(gainVal, now + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.45);
+
+        const overGain = this.ctx.createGain();
+        overGain.gain.setValueAtTime(gainVal * 0.25, now);
+        overGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+
+        osc.connect(gain);
+        over.connect(overGain);
+        overGain.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(now);
+        over.start(now);
+        osc.stop(now + 1.5);
+        over.stop(now + 0.4);
+      }
+
+      playPageTurn() {
+        if (!this.enabled) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const bufferSize = this.ctx.sampleRate * 0.38;
+        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          const env = Math.sin((i / bufferSize) * Math.PI);
+          data[i] = (Math.random() * 2 - 1) * env * 0.14;
+        }
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(900, now);
+        filter.frequency.exponentialRampToValueAtTime(2200, now + 0.22);
+        filter.Q.value = 1.8;
+
+        noise.connect(filter);
+        filter.connect(this.ctx.destination);
+        noise.start(now);
+      }
+
+      playSparkleChime(baseFreq = 587.33) {
+        if (!this.enabled) return;
+        this.init();
+        const ratios = [1, 1.25, 1.5, 2];
+        ratios.forEach((r, idx) => {
+          setTimeout(() => this.playMusicBoxNote(baseFreq * r, 0.075), idx * 75);
+        });
+      }
+
+      playFluteNote(freq = 659.25) {
+        if (!this.enabled) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.03, now + 0.25);
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.07, now + 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.75);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.8);
+      }
+
+      playClockTick() {
+        if (!this.enabled) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(1450, now);
+        osc.frequency.exponentialRampToValueAtTime(420, now + 0.025);
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.035);
+      }
+
+      playBirdChirp() {
+        if (!this.enabled) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1750, now);
+        osc.frequency.exponentialRampToValueAtTime(2650, now + 0.09);
+        osc.frequency.exponentialRampToValueAtTime(2100, now + 0.16);
+        osc.frequency.exponentialRampToValueAtTime(2950, now + 0.26);
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.055, now + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.32);
+      }
+    }
+
+    const audio = new StorybookAudio();
+
+    /********************************************************************
+     * 2. PAPER ART MATTING & DIE-CUT WHITE BORDER PIPELINE
+     *    (Raw Solid-BG Illustration -> Flood-Fill Matting -> Morphological Die-Cut Margin)
+     ********************************************************************/
+    class PaperArtPipeline {
+      /**
+       * Removes solid background via corner color sampling + flood-fill / chroma tolerance
+       * and applies a dilated cream-white paper die-cut border with subtle paper grain.
+       */
+      static processCutout(rawCanvas, options = {}) {
+        const tolerance = options.tolerance ?? 38;
+        const margin = options.margin ?? 11;
+        const w = rawCanvas.width;
+        const h = rawCanvas.height;
+
+        const rawCtx = rawCanvas.getContext('2d');
+        const srcData = rawCtx.getImageData(0, 0, w, h);
+        const data = srcData.data;
+
+        // 1. Sample background color from the 4 corners
+        const corners = [
+          0,
+          (w - 1) * 4,
+          (h - 1) * w * 4,
+          ((h - 1) * w + (w - 1)) * 4
+        ];
+        let bgR = 0, bgG = 0, bgB = 0;
+        corners.forEach(idx => {
+          bgR += data[idx];
+          bgG += data[idx + 1];
+          bgB += data[idx + 2];
+        });
+        bgR /= 4; bgG /= 4; bgB /= 4;
+
+        // 2. Flood-fill from outer border to mark background pixels accurately
+        //    so internal white/light details inside the character are preserved!
+        const visited = new Uint8Array(w * h);
+        const isBg = new Uint8Array(w * h);
+        const queue = new Int32Array(w * h);
+        let qHead = 0, qTail = 0;
+
+        const colorDist = (idx4) => {
+          const dr = data[idx4] - bgR;
+          const dg = data[idx4 + 1] - bgG;
+          const db = data[idx4 + 2] - bgB;
+          return Math.sqrt(dr * dr + dg * dg + db * db);
+        };
+
+        const pushIfBg = (x, y) => {
+          if (x < 0 || x >= w || y < 0 || y >= h) return;
+          const p = y * w + x;
+          if (visited[p]) return;
+          visited[p] = 1;
+          const idx4 = p * 4;
+          if (data[idx4 + 3] < 20 || colorDist(idx4) <= tolerance * 1.75) {
+            isBg[p] = 1;
+            queue[qTail++] = p;
+          }
+        };
+
+        for (let x = 0; x < w; x++) {
+          pushIfBg(x, 0);
+          pushIfBg(x, h - 1);
+        }
+        for (let y = 0; y < h; y++) {
+          pushIfBg(0, y);
+          pushIfBg(w - 1, y);
+        }
+
+        while (qHead < qTail) {
+          const p = queue[qHead++];
+          const x = p % w;
+          const y = (p / w) | 0;
+          pushIfBg(x + 1, y);
+          pushIfBg(x - 1, y);
+          pushIfBg(x, y + 1);
+          pushIfBg(x, y - 1);
+        }
+
+        // Create matted canvas
+        const mattedCanvas = document.createElement('canvas');
+        mattedCanvas.width = w;
+        mattedCanvas.height = h;
+        const mattedCtx = mattedCanvas.getContext('2d');
+        const mattedImg = mattedCtx.createImageData(w, h);
+        const mData = mattedImg.data;
+
+        const fgMask = new Uint8Array(w * h);
+        for (let p = 0; p < w * h; p++) {
+          const i4 = p * 4;
+          if (isBg[p]) {
+            mData[i4] = 0;
+            mData[i4 + 1] = 0;
+            mData[i4 + 2] = 0;
+            mData[i4 + 3] = 0;
+          } else {
+            // Soft feathering near background boundary
+            mData[i4] = data[i4];
+            mData[i4 + 1] = data[i4 + 1];
+            mData[i4 + 2] = data[i4 + 2];
+            mData[i4 + 3] = data[i4 + 3];
+            if (data[i4 + 3] > 60) fgMask[p] = 1;
+          }
+        }
+        mattedCtx.putImageData(mattedImg, 0, 0);
+
+        // 3. Morphological Dilation for Die-Cut White Paper Border
+        const diecutCanvas = document.createElement('canvas');
+        diecutCanvas.width = w;
+        diecutCanvas.height = h;
+        const dcCtx = diecutCanvas.getContext('2d');
+
+        if (margin > 0) {
+          const dilated = new Uint8Array(w * h);
+          const r = margin;
+          const r2 = r * r;
+          const offsets = [];
+          for (let dy = -r; dy <= r; dy++) {
+            for (let dx = -r; dx <= r; dx++) {
+              if (dx * dx + dy * dy <= r2) {
+                offsets.push(dx, dy);
+              }
+            }
+          }
+
+          for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+              const p = y * w + x;
+              if (!fgMask[p]) continue;
+              // Only dilate boundary foreground pixels for speed
+              if (
+                x > 0 && x < w - 1 && y > 0 && y < h - 1 &&
+                fgMask[p - 1] && fgMask[p + 1] && fgMask[p - w] && fgMask[p + w]
+              ) {
+                dilated[p] = 1;
+                continue;
+              }
+              for (let k = 0; k < offsets.length; k += 2) {
+                const nx = x + offsets[k];
+                const ny = y + offsets[k + 1];
+                if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+                  dilated[ny * w + nx] = 1;
+                }
+              }
+            }
+          }
+
+          const borderImg = dcCtx.createImageData(w, h);
+          const bData = borderImg.data;
+          for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+              const p = y * w + x;
+              if (!dilated[p]) continue;
+              const i4 = p * 4;
+              // Subtle warm cream paper texture + bottom/right edge thickness bevel
+              const grain = ((Math.sin(x * 12.9898 + y * 78.233) * 43758.5453) % 1) * 6;
+              const isBottomOrRightEdge =
+                (y + 2 < h && !dilated[(y + 2) * w + x]) ||
+                (x + 2 < w && !dilated[y * w + (x + 2)]);
+
+              if (isBottomOrRightEdge) {
+                // Warm cardboard edge thickness
+                bData[i4]     = 205;
+                bData[i4 + 1] = 188;
+                bData[i4 + 2] = 162;
+                bData[i4 + 3] = 255;
+              } else {
+                bData[i4]     = Math.min(255, 251 + grain);
+                bData[i4 + 1] = Math.min(255, 245 + grain);
+                bData[i4 + 2] = Math.min(255, 233 + grain);
+                bData[i4 + 3] = 255;
+              }
+            }
+          }
+          dcCtx.putImageData(borderImg, 0, 0);
+        }
+
+        // Composite the matted illustration on top of the cream die-cut border
+        dcCtx.drawImage(mattedCanvas, 0, 0);
+
+        return { rawCanvas, mattedCanvas, diecutCanvas };
+      }
+
+      /**
+       * Helper: Draw colored-pencil / watercolor storybook style shapes onto a pure white canvas
+       * and run through the real Matting + Die-Cut Border pipeline.
+       */
+      static createIllustratedCutout(drawFn, width = 320, height = 320, margin = 10) {
+        const raw = document.createElement('canvas');
+        raw.width = width;
+        raw.height = height;
+        const ctx = raw.getContext('2d');
+        // Solid pure white background for matting pipeline
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, width, height);
+
+        drawFn(ctx, width, height);
+
+        // Add subtle colored-pencil paper grain over the painted regions
+        const img = ctx.getImageData(0, 0, width, height);
+        const d = img.data;
+        for (let i = 0; i < d.length; i += 4) {
+          if (d[i] < 250 || d[i + 1] < 250 || d[i + 2] < 250) {
+            const n = (Math.random() - 0.5) * 14;
+            d[i]     = Math.max(0, Math.min(255, d[i] + n));
+            d[i + 1] = Math.max(0, Math.min(255, d[i + 1] + n));
+            d[i + 2] = Math.max(0, Math.min(255, d[i + 2] + n));
+          }
+        }
+        ctx.putImageData(img, 0, 0);
+
+        return PaperArtPipeline.processCutout(raw, { tolerance: 22, margin });
+      }
+    }
+
+    /********************************************************************
+     * 3. STORYBOOK ILLUSTRATION GENERATORS FOR ALL CUTOUT ASSETS
+     ********************************************************************/
+    const AssetLibrary = {
+      processed: {},
+      textures: {},
+
+      initAll() {
+        // 1. Little Traveler (Standing)
+        this.register('traveler', (ctx, w, h) => {
+          ctx.save();
+          ctx.translate(w * 0.5, h * 0.54);
+          // Boots
+          ctx.fillStyle = '#5c3a21';
+          ctx.beginPath();
+          ctx.roundRect(-26, 68, 18, 36, 7);
+          ctx.roundRect(8, 68, 18, 36, 7);
+          ctx.fill();
+          // Trousers
+          ctx.fillStyle = '#d8c39e';
+          ctx.fillRect(-22, 35, 14, 38);
+          ctx.fillRect(8, 35, 14, 38);
+          // Green Overcoat (A-line storybook coat)
+          const coatGrad = ctx.createLinearGradient(0, -35, 0, 52);
+          coatGrad.addColorStop(0, '#5a8f59');
+          coatGrad.addColorStop(1, '#3b693c');
+          ctx.fillStyle = coatGrad;
+          ctx.beginPath();
+          ctx.moveTo(-18, -32);
+          ctx.lineTo(18, -32);
+          ctx.lineTo(42, 48);
+          ctx.quadraticCurveTo(0, 58, -42, 48);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = '#2d4f2e';
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
+
+          // Golden Scarf flowing to the right
+          const scarfGrad = ctx.createLinearGradient(-20, -35, 85, -5);
+          scarfGrad.addColorStop(0, '#f7c948');
+          scarfGrad.addColorStop(1, '#e09624');
+          ctx.fillStyle = scarfGrad;
+          ctx.beginPath();
+          ctx.moveTo(-22, -26);
+          ctx.quadraticCurveTo(25, -38, 86, -16);
+          ctx.quadraticCurveTo(92, -2, 74, 4);
+          ctx.quadraticCurveTo(25, -14, -20, -12);
+          ctx.closePath();
+          ctx.fill();
+          // Neck scarf wrap
+          ctx.beginPath();
+          ctx.roundRect(-24, -36, 48, 18, 9);
+          ctx.fill();
+
+          // Head & rosy cheeks
+          ctx.fillStyle = '#fce0c5';
+          ctx.beginPath();
+          ctx.arc(0, -64, 28, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = 'rgba(235, 125, 105, 0.45)';
+          ctx.beginPath();
+          ctx.arc(-13, -58, 6, 0, Math.PI * 2);
+          ctx.arc(13, -58, 6, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Eyes
+          ctx.fillStyle = '#362312';
+          ctx.beginPath();
+          ctx.arc(-9, -65, 2.8, 0, Math.PI * 2);
+          ctx.arc(9, -65, 2.8, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Fluffy Golden Hair
+          const hairGrad = ctx.createRadialGradient(-8, -82, 5, 0, -72, 42);
+          hairGrad.addColorStop(0, '#fae078');
+          hairGrad.addColorStop(1, '#d99b2e');
+          ctx.fillStyle = hairGrad;
+          ctx.beginPath();
+          ctx.arc(0, -75, 30, Math.PI * 0.95, Math.PI * 2.08);
+          ctx.quadraticCurveTo(38, -68, 26, -54);
+          ctx.quadraticCurveTo(10, -76, -8, -72);
+          ctx.quadraticCurveTo(-26, -68, -32, -55);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }, 280, 320, 11);
+
+        // 2. Little Fox (Interactive Companion)
+        this.register('fox', (ctx, w, h) => {
+          ctx.save();
+          ctx.translate(w * 0.48, h * 0.58);
+          // Fluffy Tail
+          const tailGrad = ctx.createLinearGradient(10, 20, 85, -25);
+          tailGrad.addColorStop(0, '#d96b2b');
+          tailGrad.addColorStop(0.7, '#e8833a');
+          tailGrad.addColorStop(0.72, '#fbf5ea');
+          tailGrad.addColorStop(1, '#fbf5ea');
+          ctx.fillStyle = tailGrad;
+          ctx.beginPath();
+          ctx.moveTo(12, 32);
+          ctx.quadraticCurveTo(68, 38, 86, -18);
+          ctx.quadraticCurveTo(52, -32, 14, 14);
+          ctx.closePath();
+          ctx.fill();
+
+          // Body
+          ctx.fillStyle = '#e0722e';
+          ctx.beginPath();
+          ctx.ellipse(0, 18, 26, 32, -0.1, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Cream chest fur
+          ctx.fillStyle = '#fbf5ea';
+          ctx.beginPath();
+          ctx.ellipse(-4, 14, 14, 20, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Head
+          ctx.fillStyle = '#e57a35';
+          ctx.beginPath();
+          ctx.moveTo(-36, -18);
+          ctx.quadraticCurveTo(0, -48, 32, -18);
+          ctx.quadraticCurveTo(4, 8, -36, -18);
+          ctx.fill();
+
+          // Ears
+          ctx.fillStyle = '#d46222';
+          ctx.beginPath();
+          ctx.moveTo(-28, -22); ctx.lineTo(-38, -66); ctx.lineTo(-8, -34); ctx.closePath();
+          ctx.moveTo(22, -22);  ctx.lineTo(34, -66);  ctx.lineTo(6, -34);  ctx.closePath();
+          ctx.fill();
+          ctx.fillStyle = '#f7dfbe';
+          ctx.beginPath();
+          ctx.moveTo(-24, -26); ctx.lineTo(-32, -55); ctx.lineTo(-12, -34); ctx.closePath();
+          ctx.moveTo(19, -26);  ctx.lineTo(28, -55);  ctx.lineTo(9, -34);   ctx.closePath();
+          ctx.fill();
+
+          //Cheeks & Eyes
+          ctx.fillStyle = '#fbf5ea';
+          ctx.beginPath();
+          ctx.moveTo(-34, -18);
+          ctx.quadraticCurveTo(-4, 4, 30, -18);
+          ctx.quadraticCurveTo(-2, -6, -34, -18);
+          ctx.fill();
+
+          ctx.fillStyle = '#2b190d';
+          ctx.beginPath();
+          ctx.arc(-13, -22, 3, 0, Math.PI * 2);
+          ctx.arc(11, -22, 3, 0, Math.PI * 2);
+          ctx.arc(-2, -11, 3.8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }, 256, 256, 11);
+
+        // 3. Mossy Hobbit Hill Cottage
+        this.register('cottage', (ctx, w, h) => {
+          ctx.save();
+          ctx.translate(w * 0.5, h * 0.56);
+          // Tiered mossy hill dome
+          const hillGrad = ctx.createRadialGradient(-20, -40, 20, 0, 10, 145);
+          hillGrad.addColorStop(0, '#6c9c56');
+          hillGrad.addColorStop(0.6, '#48763b');
+          hillGrad.addColorStop(1, '#2f5227');
+          ctx.fillStyle = hillGrad;
+          ctx.beginPath();
+          ctx.moveTo(-135, 85);
+          ctx.bezierCurveTo(-130, -75, -60, -115, 0, -115);
+          ctx.bezierCurveTo(65, -115, 130, -70, 135, 85);
+          ctx.closePath();
+          ctx.fill();
+
+          // Decorative grass & stone arches
+          ctx.strokeStyle = '#8ab86e';
+          ctx.lineWidth = 4;
+          for (let r = -75; r <= 45; r += 38) {
+            ctx.beginPath();
+            ctx.arc(0, r + 40, 88 - Math.abs(r) * 0.4, Math.PI * 1.15, Math.PI * 1.85);
+            ctx.stroke();
+          }
+
+          // Chimney on top left
+          ctx.fillStyle = '#8c583a';
+          ctx.fillRect(-58, -122, 22, 35);
+          ctx.fillStyle = '#a86e4c';
+          ctx.fillRect(-62, -126, 30, 8);
+
+          // Upper Round Window (Warm Glow)
+          ctx.fillStyle = '#59371e';
+          ctx.beginPath();
+          ctx.arc(0, -32, 32, 0, Math.PI * 2);
+          ctx.fill();
+          const winGrad = ctx.createRadialGradient(0, -32, 3, 0, -32, 26);
+          winGrad.addColorStop(0, '#fff7cc');
+          winGrad.addColorStop(0.6, '#f6be4f');
+          winGrad.addColorStop(1, '#d47f22');
+          ctx.fillStyle = winGrad;
+          ctx.beginPath();
+          ctx.arc(0, -32, 25, 0, Math.PI * 2);
+          ctx.fill();
+          // Window crossbars
+          ctx.strokeStyle = '#59371e';
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(-25, -32); ctx.lineTo(25, -32);
+          ctx.moveTo(0, -57);   ctx.lineTo(0, -7);
+          ctx.stroke();
+
+          // Lower Arched Wooden Door
+          ctx.fillStyle = '#78492a';
+          ctx.beginPath();
+          ctx.arc(10, 52, 32, Math.PI, 0);
+          ctx.lineTo(42, 85);
+          ctx.lineTo(-22, 85);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = '#4a2b16';
+          ctx.lineWidth = 3;
+          ctx.stroke();
+
+          // Little flowers on hill
+          const flowerCols = ['#f7d060', '#f28b82', '#ffffff'];
+          for (let i = 0; i < 14; i++) {
+            const ang = Math.PI * 1.12 + (i / 13) * Math.PI * 0.76;
+            const rad = 65 + (i % 3) * 26;
+            const fx = Math.cos(ang) * rad;
+            const fy = Math.sin(ang) * rad + 25;
+            ctx.fillStyle = flowerCols[i % 3];
+            ctx.beginPath();
+            ctx.arc(fx, fy, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        }, 340, 300, 12);
+
+        // 4. Windmill Tower Base & Rotating 4-Blade Wheel
+        this.register('windmillBase', (ctx, w, h) => {
+          ctx.save();
+          ctx.translate(w * 0.5, h * 0.55);
+          const towerGrad = ctx.createLinearGradient(-35, -80, 35, 90);
+          towerGrad.addColorStop(0, '#e3ceb0');
+          towerGrad.addColorStop(1, '#b89872');
+          ctx.fillStyle = towerGrad;
+          ctx.beginPath();
+          ctx.moveTo(-24, -85);
+          ctx.lineTo(24, -85);
+          ctx.lineTo(44, 95);
+          ctx.lineTo(-44, 95);
+          ctx.closePath();
+          ctx.fill();
+
+          // Conical roof
+          ctx.fillStyle = '#9c4c35';
+          ctx.beginPath();
+          ctx.moveTo(-32, -82);
+          ctx.lineTo(0, -125);
+          ctx.lineTo(32, -82);
+          ctx.closePath();
+          ctx.fill();
+
+          // Vines & window
+          ctx.fillStyle = '#52341e';
+          ctx.beginPath();
+          ctx.arc(0, -20, 13, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#f6c85f';
+          ctx.beginPath();
+          ctx.arc(0, -20, 9, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }, 220, 300, 10);
+
+        this.register('windmillBlades', (ctx, w, h) => {
+          ctx.save();
+          ctx.translate(w * 0.5, h * 0.5);
+          for (let i = 0; i < 4; i++) {
+            ctx.save();
+            ctx.rotate((i * Math.PI) / 2 + 0.25);
+            // Wooden spar
+            ctx.fillStyle = '#7c4b2b';
+            ctx.fillRect(-4, 0, 8, 118);
+            // Sail cloth
+            ctx.fillStyle = i % 2 === 0 ? '#f7ead5' : '#ebd0a9';
+            ctx.beginPath();
+            ctx.moveTo(4, 18);
+            ctx.lineTo(44, 26);
+            ctx.lineTo(36, 112);
+            ctx.lineTo(4, 112);
+            ctx.closePath();
+            ctx.fill();
+            ctx.strokeStyle = '#9e6b43';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.restore();
+          }
+          ctx.fillStyle = '#8c432b';
+          ctx.beginPath();
+          ctx.arc(0, 0, 14, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }, 280, 280, 9);
+
+        // 5. Glowing Lantern Flower (Page 1 & Page 5)
+        this.register('lanternFlower', (ctx, w, h) => {
+          ctx.save();
+          ctx.translate(w * 0.5, h * 0.55);
+          // Curved stem & leaves
+          ctx.strokeStyle = '#4d8547';
+          ctx.lineWidth = 10;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          ctx.moveTo(0, 95);
+          ctx.quadraticCurveTo(-18, 20, -4, -48);
+          ctx.stroke();
+
+          ctx.fillStyle = '#5c9954';
+          ctx.beginPath();
+          ctx.moveTo(-4, 55);
+          ctx.quadraticCurveTo(-55, 25, -42, -5);
+          ctx.quadraticCurveTo(-10, 15, -4, 55);
+          ctx.moveTo(2, 65);
+          ctx.quadraticCurveTo(55, 35, 46, 5);
+          ctx.quadraticCurveTo(12, 25, 2, 65);
+          ctx.fill();
+
+          // Glowing Bell Blossom
+          const glowGrad = ctx.createRadialGradient(6, -38, 6, 6, -38, 52);
+          glowGrad.addColorStop(0, '#ffffff');
+          glowGrad.addColorStop(0.45, '#ffe885');
+          glowGrad.addColorStop(1, '#e89c31');
+          ctx.fillStyle = glowGrad;
+          ctx.beginPath();
+          ctx.moveTo(-4, -55);
+          ctx.quadraticCurveTo(-44, -20, -28, 12);
+          ctx.quadraticCurveTo(6, -2, 38, 12);
+          ctx.quadraticCurveTo(48, -22, -4, -55);
+          ctx.fill();
+          ctx.restore();
+        }, 240, 260, 10);
+
+        // 6. Ringed Mini-Planet
+        this.register('ringPlanet', (ctx, w, h) => {
+          ctx.save();
+          ctx.translate(w * 0.5, h * 0.5);
+          ctx.rotate(-0.22);
+          const pGrad = ctx.createRadialGradient(-12, -12, 5, 0, 0, 44);
+          pGrad.addColorStop(0, '#f2d399');
+          pGrad.addColorStop(0.6, '#c9935b');
+          pGrad.addColorStop(1, '#7d5238');
+          ctx.fillStyle = pGrad;
+          ctx.beginPath();
+          ctx.arc(0, 0, 42, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.strokeStyle = '#e8c889';
+          ctx.lineWidth = 11;
+          ctx.beginPath();
+          ctx.ellipse(0, 4, 86, 22, 0, -0.2, Math.PI + 0.2);
+          ctx.stroke();
+          ctx.restore();
+        }, 240, 180, 9);
+
+        // 7. Origami Crane with Riding Traveler (Spread 2)
+        this.register('crane', (ctx, w, h) => {
+          ctx.save();
+          ctx.translate(w * 0.5, h * 0.54);
+          // Back Wing
+          ctx.fillStyle = '#dfd5c3';
+          ctx.beginPath();
+          ctx.moveTo(-15, 5);
+          ctx.lineTo(-95, -75);
+          ctx.lineTo(15, -25);
+          ctx.closePath();
+          ctx.fill();
+
+          // Origami Crane Body & Tail
+          ctx.fillStyle = '#fbf6ec';
+          ctx.beginPath();
+          ctx.moveTo(-55, 18);
+          ctx.lineTo(0, -18);
+          ctx.lineTo(62, 8);
+          ctx.lineTo(0, 36);
+          ctx.closePath();
+          ctx.fill();
+
+          // Neck & Head (Right)
+          ctx.fillStyle = '#f5ebd9';
+          ctx.beginPath();
+          ctx.moveTo(35, 10);
+          ctx.lineTo(88, -62);
+          ctx.lineTo(112, -46);
+          ctx.lineTo(92, -38);
+          ctx.lineTo(52, 24);
+          ctx.closePath();
+          ctx.fill();
+
+          // Tail Spike (Left)
+          ctx.fillStyle = '#efe2cc';
+          ctx.beginPath();
+          ctx.moveTo(-38, 16);
+          ctx.lineTo(-102, -42);
+          ctx.lineTo(-58, 28);
+          ctx.closePath();
+          ctx.fill();
+
+          // Little Traveler sitting on crane's back
+          ctx.fillStyle = '#4e7d4c';
+          ctx.beginPath();
+          ctx.moveTo(-14, -38);
+          ctx.lineTo(14, -38);
+          ctx.lineTo(24, 6);
+          ctx.lineTo(-22, 6);
+          ctx.closePath();
+          ctx.fill();
+          // Scarf
+          ctx.fillStyle = '#f5be42';
+          ctx.beginPath();
+          ctx.moveTo(-8, -36);
+          ctx.quadraticCurveTo(-55, -48, -75, -24);
+          ctx.lineTo(-65, -12);
+          ctx.quadraticCurveTo(-35, -30, 8, -28);
+          ctx.fill();
+          // Traveler Head & Hair
+          ctx.fillStyle = '#fce0c5';
+          ctx.beginPath();
+          ctx.arc(2, -54, 16, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#eab338';
+          ctx.beginPath();
+          ctx.arc(0, -60, 17, Math.PI * 0.8, Math.PI * 2.1);
+          ctx.fill();
+
+          // Foreground Wing
+          const wingGrad = ctx.createLinearGradient(0, -80, 0, 25);
+          wingGrad.addColorStop(0, '#fffdf9');
+          wingGrad.addColorStop(1, '#e3d5be');
+          ctx.fillStyle = wingGrad;
+          ctx.beginPath();
+          ctx.moveTo(-28, 12);
+          ctx.lineTo(-52, -92);
+          ctx.lineTo(38, -8);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = '#cbb89d';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.restore();
+        }, 320, 280, 11);
+
+        // 8. Chinese Auspicious Cloud (祥云 - Spread 2)
+        this.register('cloud', (ctx, w, h) => {
+          ctx.save();
+          ctx.translate(w * 0.5, h * 0.55);
+          const cGrad = ctx.createLinearGradient(0, -55, 0, 45);
+          cGrad.addColorStop(0, '#fff7e6');
+          cGrad.addColorStop(0.65, '#f5d9a6');
+          cGrad.addColorStop(1, '#d99a5b');
+          ctx.fillStyle = cGrad;
+          ctx.beginPath();
+          ctx.arc(-55, 15, 28, 0, Math.PI * 2);
+          ctx.arc(-20, -12, 38, 0, Math.PI * 2);
+          ctx.arc(28, -5, 34, 0, Math.PI * 2);
+          ctx.arc(62, 16, 25, 0, Math.PI * 2);
+          ctx.rect(-55, 10, 117, 32);
+          ctx.fill();
+
+          // Decorative golden spiral curls inside cloud
+          ctx.strokeStyle = '#c97a3e';
+          ctx.lineWidth = 3.5;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          ctx.arc(-22, 6, 16, 0, Math.PI * 1.45);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(26, 8, 14, Math.PI * 0.2, Math.PI * 1.65);
+          ctx.stroke();
+          ctx.restore();
+        }, 280, 190, 10);
+
+        // 9. Butterfly Kite (Spread 2)
+        this.register('kite', (ctx, w, h) => {
+          ctx.save();
+          ctx.translate(w * 0.5, h * 0.48);
+          ctx.rotate(-0.25);
+          ctx.fillStyle = '#f28b66';
+          ctx.beginPath();
+          ctx.ellipse(-24, -14, 28, 36, -0.4, 0, Math.PI * 2);
+          ctx.ellipse(24, -14, 28, 36, 0.4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#f7cf65';
+          ctx.beginPath();
+          ctx.ellipse(-18, 22, 18, 24, 0.3, 0, Math.PI * 2);
+          ctx.ellipse(18, 22, 18, 24, -0.3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }, 180, 180, 9);
+
+        // 10. Clockwork Tower (Spread 3)
+        this.register('clockTower', (ctx, w, h) => {
+          ctx.save();
+          ctx.translate(w * 0.5, h * 0.54);
+          // Steampunk fairytale tower body
+          const tGrad = ctx.createLinearGradient(-65, -110, 65, 110);
+          tGrad.addColorStop(0, '#d99e4c');
+          tGrad.addColorStop(0.5, '#b8762e');
+          tGrad.addColorStop(1, '#6e4019');
+          ctx.fillStyle = tGrad;
+          ctx.beginPath();
+          ctx.moveTo(-42, -90);
+          ctx.lineTo(42, -90);
+          ctx.lineTo(68, 105);
+          ctx.lineTo(-68, 105);
+          ctx.closePath();
+          ctx.fill();
+
+          // Spire roof
+          ctx.fillStyle = '#3c4f76';
+          ctx.beginPath();
+          ctx.moveTo(-50, -88);
+          ctx.lineTo(0, -145);
+          ctx.lineTo(50, -88);
+          ctx.closePath();
+          ctx.fill();
+
+          // Main Clock Dial
+          ctx.fillStyle = '#fdf5e6';
+          ctx.beginPath();
+          ctx.arc(0, -28, 42, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#8c531e';
+          ctx.lineWidth = 6;
+          ctx.stroke();
+
+          // Roman numeral ticks
+          ctx.strokeStyle = '#3b2310';
+          ctx.lineWidth = 2.5;
+          for (let i = 0; i < 12; i++) {
+            const a = (i * Math.PI) / 6;
+            ctx.beginPath();
+            ctx.moveTo(Math.cos(a) * 31, -28 + Math.sin(a) * 31);
+            ctx.lineTo(Math.cos(a) * 37, -28 + Math.sin(a) * 37);
+            ctx.stroke();
+          }
+
+          // Archway at bottom
+          ctx.fillStyle = '#2b190d';
+          ctx.beginPath();
+          ctx.arc(0, 68, 28, Math.PI, 0);
+          ctx.lineTo(28, 105);
+          ctx.lineTo(-28, 105);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }, 280, 330, 11);
+
+        // 11. Golden Mechanical Gear (Spread 3)
+        this.register('gear', (ctx, w, h) => {
+          ctx.save();
+          ctx.translate(w * 0.5, h * 0.5);
+          const teeth = 12;
+          const outerR = 88;
+          const innerR = 70;
+          const gGrad = ctx.createRadialGradient(-15, -15, 8, 0, 0, outerR);
+          gGrad.addColorStop(0, '#ffe48f');
+          gGrad.addColorStop(0.6, '#d99938');
+          gGrad.addColorStop(1, '#8c5518');
+          ctx.fillStyle = gGrad;
+
+          ctx.beginPath();
+          for (let i = 0; i < teeth; i++) {
+            const a1 = (i / teeth) * Math.PI * 2;
+            const a2 = ((i + 0.35) / teeth) * Math.PI * 2;
+            const a3 = ((i + 0.5) / teeth) * Math.PI * 2;
+            const a4 = ((i + 0.85) / teeth) * Math.PI * 2;
+            ctx.lineTo(Math.cos(a1) * innerR, Math.sin(a1) * innerR);
+            ctx.lineTo(Math.cos(a2) * outerR, Math.sin(a2) * outerR);
+            ctx.lineTo(Math.cos(a3) * outerR, Math.sin(a3) * outerR);
+            ctx.lineTo(Math.cos(a4) * innerR, Math.sin(a4) * innerR);
+          }
+          ctx.closePath();
+          ctx.fill();
+
+          // Inner cutouts (white so matting makes them hollow or cream)
+          ctx.fillStyle = '#3b2412';
+          ctx.beginPath();
+          ctx.arc(0, 0, 44, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#f5ca69';
+          for (let i = 0; i < 6; i++) {
+            ctx.save();
+            ctx.rotate((i * Math.PI) / 3);
+            ctx.fillRect(-5, 0, 10, 46);
+            ctx.restore();
+          }
+          ctx.beginPath();
+          ctx.arc(0, 0, 16, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }, 220, 220, 8);
+
+        // 12. Old Clockmaker (Spread 3)
+        this.register('clockmaker', (ctx, w, h) => {
+          ctx.save();
+          ctx.translate(w * 0.5, h * 0.55);
+          // Coat
+          ctx.fillStyle = '#8c5832';
+          ctx.beginPath();
+          ctx.moveTo(-26, -25);
+          ctx.lineTo(26, -25);
+          ctx.lineTo(38, 78);
+          ctx.lineTo(-38, 78);
+          ctx.closePath();
+          ctx.fill();
+
+          // Apron
+          ctx.fillStyle = '#e6d3b3';
+          ctx.fillRect(-22, -5, 44, 72);
+
+          // Head & White Beard
+          ctx.fillStyle = '#f7d8b5';
+          ctx.beginPath();
+          ctx.arc(0, -52, 26, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Fluffy White Beard & Mustache
+          ctx.fillStyle = '#f7f4ed';
+          ctx.beginPath();
+          ctx.moveTo(-26, -46);
+          ctx.quadraticCurveTo(-32, 12, 0, 18);
+          ctx.quadraticCurveTo(32, 12, 26, -46);
+          ctx.closePath();
+          ctx.fill();
+
+          // Round Spectacles
+          ctx.strokeStyle = '#d49b3b';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(-10, -54, 8, 0, Math.PI * 2);
+          ctx.arc(10, -54, 8, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }, 240, 280, 11);
+
+        // 13. Desert Dune Layer & Blazing Sun / Moon (Spread 4)
+        this.register('duneFront', (ctx, w, h) => {
+          ctx.save();
+          const dGrad = ctx.createLinearGradient(0, 30, 0, h);
+          dGrad.addColorStop(0, '#f29f4b');
+          dGrad.addColorStop(0.5, '#d96b38');
+          dGrad.addColorStop(1, '#9e3f22');
+          ctx.fillStyle = dGrad;
+          ctx.beginPath();
+          ctx.moveTo(20, h - 18);
+          ctx.bezierCurveTo(w * 0.25, 25, w * 0.55, 95, w * 0.78, 42);
+          ctx.bezierCurveTo(w * 0.9, 20, w - 20, 75, w - 20, h - 18);
+          ctx.closePath();
+          ctx.fill();
+
+          // Green desert cacti & shrubs
+          ctx.fillStyle = '#4f8248';
+          const spots = [w * 0.22, w * 0.48, w * 0.76];
+          spots.forEach((sx, idx) => {
+            const sy = idx === 1 ? 85 : 65;
+            ctx.beginPath();
+            ctx.roundRect(sx - 6, sy, 12, 34, 6);
+            ctx.roundRect(sx - 18, sy + 8, 10, 18, 5);
+            ctx.roundRect(sx + 8, sy + 12, 10, 16, 5);
+            ctx.fill();
+          });
+          ctx.restore();
+        }, 520, 200, 10);
+
+        this.register('sunCutout', (ctx, w, h) => {
+          ctx.save();
+          ctx.translate(w * 0.5, h * 0.5);
+          const rays = 16;
+          ctx.fillStyle = '#ff9838';
+          ctx.beginPath();
+          for (let i = 0; i < rays * 2; i++) {
+            const r = i % 2 === 0 ? 84 : 54;
+            const a = (i * Math.PI) / rays;
+            ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+          }
+          ctx.closePath();
+          ctx.fill();
+
+          const sGrad = ctx.createRadialGradient(0, 0, 6, 0, 0, 52);
+          sGrad.addColorStop(0, '#fff8c4');
+          sGrad.addColorStop(0.6, '#ffcf4d');
+          sGrad.addColorStop(1, '#f06428');
+          ctx.fillStyle = sGrad;
+          ctx.beginPath();
+          ctx.arc(0, 0, 50, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }, 210, 210, 9);
+
+        this.register('moonCutout', (ctx, w, h) => {
+          ctx.save();
+          ctx.translate(w * 0.5, h * 0.5);
+          const mGrad = ctx.createRadialGradient(-10, -10, 5, 0, 0, 55);
+          mGrad.addColorStop(0, '#fffef5');
+          mGrad.addColorStop(0.7, '#f5e2a8');
+          mGrad.addColorStop(1, '#d4b46a');
+          ctx.fillStyle = mGrad;
+          ctx.beginPath();
+          ctx.arc(0, 0, 52, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }, 160, 160, 8);
+
+        // 14. Origami White Dove (Spread 5)
+        this.register('dove', (ctx, w, h) => {
+          ctx.save();
+          ctx.translate(w * 0.5, h * 0.5);
+          ctx.fillStyle = '#faf5eb';
+          ctx.beginPath();
+          ctx.moveTo(-42, 8);
+          ctx.lineTo(-10, -36);
+          ctx.lineTo(18, -4);
+          ctx.lineTo(44, -18);
+          ctx.lineTo(22, 18);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }, 140, 140, 8);
+      },
+
+      register(key, drawFn, w, h, margin) {
+        const res = PaperArtPipeline.createIllustratedCutout(drawFn, w, h, margin);
+        this.processed[key] = res;
+        const tex = new THREE.CanvasTexture(res.diecutCanvas);
+        tex.encoding = THREE.sRGBEncoding;
+        tex.anisotropy = 8;
+        tex.needsUpdate = true;
+        if(this.textures[key]) { this.textures[key].image=res.diecutCanvas; this.textures[key].needsUpdate=true; }
+        else this.textures[key] = tex;
+      },
+
+      updateFromProcessed(key, processedResult) {
+        this.processed[key] = processedResult;
+        if (this.textures[key]) {
+          this.textures[key].image = processedResult.diecutCanvas;
+          this.textures[key].needsUpdate = true;
+        }
+      }
+    };
+
+    /********************************************************************
+     * 4. PROCEDURAL TEXTURES FOR WOOD DESK, SCALLOPED BACKDROPS & STORY CARDS
+     ********************************************************************/
+    function createWalnutWoodTexture(){
+      const cv=document.createElement('canvas');cv.width=2048;cv.height=2048;const c=cv.getContext('2d');
+      let seed=97;const r=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+      c.fillStyle='#67432c';c.fillRect(0,0,2048,2048);
+      for(let plank=0;plank<8;plank++){
+        const y=plank*256;
+        c.fillStyle=plank%2?'rgba(242,185,119,.035)':'rgba(20,8,3,.045)';c.fillRect(0,y,2048,256);
+        c.fillStyle='rgba(25,12,5,.22)';c.fillRect(0,y,2048,1.2);
+      }
+      for(let j=0;j<7500;j++){
+        const y=r()*2048,phase=r()*6.28;
+        c.strokeStyle=j%3?'rgba(30,13,5,.055)':'rgba(222,166,104,.07)';c.lineWidth=.3+r()*.9;c.beginPath();
+        for(let x=0;x<=2048;x+=32){const yy=y+Math.sin(x*.004+phase)*(.6+r()*1.6)+Math.sin(x*.012+phase)*.7;if(x===0)c.moveTo(x,yy);else c.lineTo(x,yy);}c.stroke();
+      }
+      const tex=new THREE.CanvasTexture(cv);tex.encoding=THREE.sRGBEncoding;tex.wrapS=tex.wrapT=THREE.RepeatWrapping;tex.repeat.set(10,10);tex.rotation=.28;tex.anisotropy=8;return tex;
+    }
+
+    /**
+     * Generates the Scalloped Arch Backdrop (波浪边立面背景板) matching the reference video
+     */
+    function createScallopedBackdropCanvas(theme) {
+      const cv = document.createElement('canvas');
+      cv.width = 1024;
+      cv.height = 512;
+      const ctx = cv.getContext('2d');
+
+      const drawScallopedPath = (inset = 0) => {
+        const scallops = 11;
+        const left = 18 + inset;
+        const right = 1024 - 18 - inset;
+        const bottom = 512;
+        const topBase = 76 + inset;
+        const span = (right - left) / scallops;
+
+        ctx.beginPath();
+        ctx.moveTo(left, bottom);
+        ctx.lineTo(left, topBase + 25);
+        for (let i = 0; i < scallops; i++) {
+          const sx = left + i * span;
+          const ex = sx + span;
+          const cx = (sx + ex) * 0.5;
+          // Gentle arch curve across the top
+          const archOffset = Math.sin((i / (scallops - 1)) * Math.PI) * -32;
+          const cy = topBase + archOffset - 28;
+          const ey = topBase + Math.sin(((i + 1) / (scallops - 1)) * Math.PI) * -32 + 12;
+          ctx.quadraticCurveTo(cx, cy, ex, ey);
+        }
+        ctx.lineTo(right, bottom);
+        ctx.closePath();
+      };
+
+      // 1. Cream paper outer die-cut border
+      drawScallopedPath(0);
+      ctx.fillStyle = '#fbf4e6';
+      ctx.fill();
+
+      // 2. Inner sky gradient clipped to scalloped shape
+      ctx.save();
+      drawScallopedPath(13);
+      ctx.clip();
+
+      const skyGrad = ctx.createLinearGradient(0, 40, 0, 512);
+      if (theme === 'starryNight') {
+        skyGrad.addColorStop(0, '#132247');
+        skyGrad.addColorStop(0.6, '#1f3666');
+        skyGrad.addColorStop(1, '#2b477d');
+      } else if (theme === 'tealSky') {
+        skyGrad.addColorStop(0, '#12354a');
+        skyGrad.addColorStop(0.55, '#1f5368');
+        skyGrad.addColorStop(1, '#3c7a82');
+      } else if (theme === 'clockworkViolet') {
+        skyGrad.addColorStop(0, '#1d183b');
+        skyGrad.addColorStop(0.6, '#33275c');
+        skyGrad.addColorStop(1, '#4c3875');
+      } else if (theme === 'desertSunset') {
+        skyGrad.addColorStop(0, '#d97652');
+        skyGrad.addColorStop(0.5, '#f0a365');
+        skyGrad.addColorStop(1, '#f7cf86');
+      } else if (theme === 'homecomingNight') {
+        skyGrad.addColorStop(0, '#101e3d');
+        skyGrad.addColorStop(0.6, '#1c3561');
+        skyGrad.addColorStop(1, '#294c7a');
+      }
+      ctx.fillStyle = skyGrad;
+      ctx.fillRect(0, 0, 1024, 512);
+
+      // Stars & celestial details
+      for (let i = 0; i < 85; i++) {
+        const sx = 40 + Math.random() * 944;
+        const sy = 55 + Math.random() * 360;
+        const sr = 1 + Math.random() * 2.5;
+        ctx.fillStyle = `rgba(255, 245, 200, ${0.35 + Math.random() * 0.65})`;
+        ctx.beginPath();
+        ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      if (theme === 'starryNight') {
+        // Glowing Full Moon on upper left
+        const mGrad = ctx.createRadialGradient(210, 165, 8, 210, 165, 68);
+        mGrad.addColorStop(0, '#fffef2');
+        mGrad.addColorStop(0.55, '#fce8a6');
+        mGrad.addColorStop(1, 'rgba(252, 232, 166, 0)');
+        ctx.fillStyle = mGrad;
+        ctx.beginPath();
+        ctx.arc(210, 165, 68, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (theme === 'tealSky') {
+        // Golden Crescent Moon on upper right
+        ctx.fillStyle = '#fae094';
+        ctx.beginPath();
+        ctx.arc(790, 175, 52, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#194558';
+        ctx.beginPath();
+        ctx.arc(770, 160, 44, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (theme === 'clockworkViolet') {
+        // Faint celestial clock rings & planets
+        ctx.strokeStyle = 'rgba(245, 205, 125, 0.22)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(512, 260, 180, 0, Math.PI * 2);
+        ctx.arc(512, 260, 240, 0, Math.PI * 2);
+        ctx.stroke();
+        // Distant reddish ringed planet on top-left
+        ctx.fillStyle = '#d97a54';
+        ctx.beginPath();
+        ctx.arc(210, 175, 34, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#f2c48d';
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.ellipse(210, 175, 64, 15, -0.3, 0, Math.PI * 2);
+        ctx.stroke();
+      } else if (theme === 'desertSunset') {
+        // Distant desert mountain range silhouette
+        ctx.fillStyle = '#c95f38';
+        ctx.beginPath();
+        ctx.moveTo(0, 512);
+        ctx.lineTo(0, 340);
+        ctx.quadraticCurveTo(240, 210, 490, 330);
+        ctx.quadraticCurveTo(760, 190, 1024, 340);
+        ctx.lineTo(1024, 512);
+        ctx.closePath();
+        ctx.fill();
+      } else if (theme === 'homecomingNight') {
+        const mGrad = ctx.createRadialGradient(800, 175, 10, 800, 175, 65);
+        mGrad.addColorStop(0, '#fffef2');
+        mGrad.addColorStop(0.6, '#fce8a6');
+        mGrad.addColorStop(1, 'rgba(252, 232, 166, 0)');
+        ctx.fillStyle = mGrad;
+        ctx.beginPath();
+        ctx.arc(800, 175, 65, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Central vertical fold crease line on the backdrop
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.28)';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(512, 45);
+      ctx.lineTo(512, 512);
+      ctx.stroke();
+      ctx.restore();
+
+      return cv;
+    }
+
+    /**
+     * Generates the Left Page Story Card Texture (白底金边故事文字卡)
+     */
+    function createStoryCardTexture(lines) {
+      const cv = document.createElement('canvas');
+      cv.width = 640;
+      cv.height = 280;
+      const ctx = cv.getContext('2d');
+
+      // Cream paper card with golden double border
+      ctx.fillStyle = '#fcf7eb';
+      ctx.fillRect(0, 0, 640, 280);
+
+      ctx.strokeStyle = '#c89e5b';
+      ctx.lineWidth = 6;
+      ctx.strokeRect(14, 14, 612, 252);
+      ctx.lineWidth = 2;
+      ctx.strokeRect(24, 24, 592, 232);
+
+      ctx.fillStyle = '#3b2818';
+      ctx.font = 'bold 25px "Noto Serif SC", serif';
+      lines.forEach((line, idx) => {
+        ctx.fillText(line, 48, 86 + idx * 48);
+      });
+
+      const resultTexture = new THREE.CanvasTexture(cv); resultTexture.encoding=THREE.sRGBEncoding; return resultTexture;
+    }
+
+    /**
+     * Generates the Pull-Tab Texture (点灯 / 起飞 / 日落 / 绽放)
+     */
+    function createPullTabTexture(label) {
+      const cv = document.createElement('canvas');
+      cv.width = 256;
+      cv.height = 256;
+      const ctx = cv.getContext('2d');
+
+      // Cream pull tab top + coral red grip tip
+      ctx.fillStyle = '#fbf5e8';
+      ctx.fillRect(0, 0, 256, 175);
+      ctx.fillStyle = '#e06c50';
+      ctx.fillRect(0, 175, 256, 81);
+
+      ctx.strokeStyle = '#cbbba0';
+      ctx.lineWidth = 6;
+      ctx.strokeRect(3, 3, 250, 250);
+
+      // Main Chinese Label
+      ctx.fillStyle = '#2e1d10';
+      ctx.font = 'bold 52px "Noto Serif SC", serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(label, 128, 118);
+
+      // Sub label on coral grip
+      ctx.fillStyle = '#fff8ee';
+      ctx.font = 'bold 28px "Noto Serif SC", serif';
+      ctx.fillText('拉动', 128, 226);
+
+      const resultTexture = new THREE.CanvasTexture(cv); resultTexture.encoding=THREE.sRGBEncoding; return resultTexture;
+    }
+
+    /********************************************************************
+     * 5. THREE.JS SCENE, LIGHTING, BOOK ARCHITECTURE & 5 SPREADS
+     ********************************************************************/
+    const SPREAD_DATA = [
+      {
+        title: '我的小星球',
+        hud: '拉动书页前缘的纸舌头点亮小星球 · 点点小狐狸和花',
+        pageColor: '#233b6e',
+        story: [
+          '在遥远的星河深处，有一颗只属于我的',
+          '小小星球。山丘上有一架旋转的风车，',
+          '还有一朵会在夜里静静发光的灯花……'
+        ]
+      },
+      {
+        title: '纸鹤风筝',
+        hud: '拉动纸舌头让纸鹤起飞 · 点点风筝和纸鹤',
+        pageColor: '#235363',
+        story: [
+          '一夜秋风吹过小山丘，我将思念折成',
+          '洁白的纸鹤。拉紧微光的丝线，',
+          '小旅人乘着流云向星海深处起飞……'
+        ]
+      },
+      {
+        title: '钟表星',
+        hud: '转动右下角的齿轮转盘 · 点点钟表匠',
+        pageColor: '#312554',
+        story: [
+          '第三颗星球上住着一位老钟表匠。',
+          '金色的齿轮咬合着岁月，滴答作响，',
+          '却没有人知道时间究竟流向何方……'
+        ]
+      },
+      {
+        title: '沙丘日落',
+        hud: '拉动纸舌头让太阳落山 · 点点狐狸',
+        pageColor: '#e8bd74',
+        story: [
+          '在金色的沙丘上，我和小狐狸并肩坐着，',
+          '静静等待一场盛大的日落。只要心中有',
+          '牵挂，荒漠也会开出温柔的花……'
+        ]
+      },
+      {
+        title: '回家',
+        hud: '拉动纸舌头让灯花盛开 · 点点灯花和星星',
+        pageColor: '#1f3666',
+        story: [
+          '走过万千星辰，最亮的依然是家门前',
+          '那朵小小的灯花。晚风轻拂，星光满怀，',
+          '原来所有的远行，都是为了温柔地归来。'
+        ]
+      }
+    ];
+
+    // Setup Scene, Camera & Renderer
+    const canvas = document.getElementById('three-canvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+    renderer.setPixelRatio(1);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.95;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color('#241409');
+
+    // Oblique Top-Down Camera matching the reference video
+    const camera = new THREE.PerspectiveCamera(37, window.innerWidth / window.innerHeight, 0.1, 100);
+    const baseCamPos = new THREE.Vector3(0, 10.3, 15.8);
+    const baseLookAt = new THREE.Vector3(0, 0.95, 0.2);
+    camera.position.copy(baseCamPos);
+    camera.lookAt(baseLookAt);
+
+    // Lighting System
+    const ambientLight = new THREE.AmbientLight(0xe5ecff, 0.38);
+    scene.add(ambientLight);
+    scene.add(new THREE.HemisphereLight(0xdce9ff, 0x65452e, 0.28));
+
+    const mainDirLight = new THREE.DirectionalLight(0xffecd2, 1.15);
+    mainDirLight.position.set(-8, 12, 6);
+    mainDirLight.shadow.normalBias = 0.022;
+    mainDirLight.shadow.radius = 2.4;
+    mainDirLight.castShadow = true;
+    mainDirLight.shadow.mapSize.width = 2048;
+    mainDirLight.shadow.mapSize.height = 2048;
+    mainDirLight.shadow.camera.near = 2;
+    mainDirLight.shadow.camera.far = 32;
+    const d = 10.5;
+    mainDirLight.shadow.camera.left = -d;
+    mainDirLight.shadow.camera.right = d;
+    mainDirLight.shadow.camera.top = d;
+    mainDirLight.shadow.camera.bottom = -d;
+    mainDirLight.shadow.bias = -0.0008;
+    scene.add(mainDirLight);
+
+    // Dynamic Story Point Light (Used for Page 1 Lamp, Page 4 Sunset, Page 5 Bloom)
+    const magicPointLight = new THREE.PointLight(0xffb84d, 0, 9.5);
+    magicPointLight.position.set(0.6, 2.2, 1.2);
+    scene.add(magicPointLight);
+
+    // Wooden Desk Surface
+    const deskGeo = new THREE.PlaneGeometry(200, 200);
+    const deskMat = new THREE.MeshStandardMaterial({
+      map: createWalnutWoodTexture(),
+      roughness: 0.72,
+      metalness: 0.08
+    });
+    const deskMesh = new THREE.Mesh(deskGeo, deskMat);
+    deskMesh.rotation.x = -Math.PI / 2;
+    deskMesh.position.y = -0.22;
+    deskMesh.receiveShadow = true;
+    scene.add(deskMesh);
+
+    // Initialize Cutout Asset Library
+    AssetLibrary.initAll();
+
+    // Master Book Group (Tilted slightly clockwise like the video)
+    const bookGroup = new THREE.Group();
+    bookGroup.rotation.y = 0.24;
+    scene.add(bookGroup);
+
+    // Hardcover Book Base & Paper Block Thickness
+    const coverMat = new THREE.MeshStandardMaterial({ color: 0x1b3059, roughness: 0.8 });
+    const goldEdgeMat = new THREE.MeshStandardMaterial({ color: 0xd9b372, roughness: 0.4, metalness: 0.3 });
+    const paperStackMat = new THREE.MeshStandardMaterial({ color: 0xf5ebd6, roughness: 0.85 });
+
+    // Left & Right Hardcover Boards
+    const coverLeft = new THREE.Mesh(new THREE.BoxGeometry(6.3, 0.12, 8.2), coverMat);
+    coverLeft.position.set(-3.18, -0.14, 0);
+    coverLeft.castShadow = true;
+    coverLeft.receiveShadow = true;
+    bookGroup.add(coverLeft);
+
+    const coverRight = new THREE.Mesh(new THREE.BoxGeometry(6.3, 0.12, 8.2), coverMat);
+    coverRight.position.set(3.18, -0.14, 0);
+    coverRight.castShadow = true;
+    coverRight.receiveShadow = true;
+    bookGroup.add(coverRight);
+
+    // Spine Center Ridge
+    const spineMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 8.24, 16), goldEdgeMat);
+    spineMesh.rotation.x = Math.PI / 2;
+    spineMesh.position.set(0, -0.14, 0);
+    bookGroup.add(spineMesh);
+
+    // Thick Cream Paper Block Under Spread
+    const stackLeft = new THREE.Mesh(new THREE.BoxGeometry(6.0, 0.14, 7.85), paperStackMat);
+    stackLeft.position.set(-3.02, -0.05, 0);
+    stackLeft.receiveShadow = true;
+    stackLeft.castShadow = true;
+    bookGroup.add(stackLeft);
+
+    const stackRight = new THREE.Mesh(new THREE.BoxGeometry(6.0, 0.14, 7.85), paperStackMat);
+    stackRight.position.set(3.02, -0.05, 0);
+    stackRight.receiveShadow = true;
+    stackRight.castShadow = true;
+    bookGroup.add(stackRight);
+
+    // Page Surfaces (Left & Right Spread Surface)
+    const leftPageMat = new THREE.MeshStandardMaterial({ color: 0x233b6e, roughness: 0.85 });
+    const rightPageMat = new THREE.MeshStandardMaterial({ color: 0x233b6e, roughness: 0.85 });
+    const leftPageSurface = new THREE.Mesh(new THREE.PlaneGeometry(5.96, 7.8), leftPageMat);
+    leftPageSurface.rotation.x = -Math.PI / 2;
+    leftPageSurface.position.set(-3.0, 0.025, 0);
+    leftPageSurface.receiveShadow = true;
+    bookGroup.add(leftPageSurface);
+
+    const rightPageSurface = new THREE.Mesh(new THREE.PlaneGeometry(5.96, 7.8), rightPageMat);
+    rightPageSurface.rotation.x = -Math.PI / 2;
+    rightPageSurface.position.set(3.0, 0.025, 0);
+    rightPageSurface.receiveShadow = true;
+    bookGroup.add(rightPageSurface);
+
+    // Animated Flipping Page Leaf (Used during page turn transitions)
+    const flipPivot = new THREE.Group();
+    flipPivot.position.set(0, 0.04, 0);
+    flipPivot.visible = false;
+    bookGroup.add(flipPivot);
+
+    const flipPageMat = new THREE.MeshStandardMaterial({
+      color: 0xf7efe0,
+      roughness: 0.82,
+      side: THREE.DoubleSide
+    });
+    const flipPageGeo = new THREE.PlaneGeometry(5.95, 7.78, 16, 1);
+    flipPageGeo.translate(2.975, 0, 0);
+    const flipPageMesh = new THREE.Mesh(flipPageGeo, flipPageMat);
+    flipPageMesh.rotation.x = -Math.PI / 2;
+    flipPageMesh.castShadow = true;
+    flipPageMesh.receiveShadow = true;
+    flipPivot.add(flipPageMesh);
+
+    /**
+     * Helper: Creates a bottom-hinged Pop-Up Cutout Mesh that casts accurate alpha shadows
+     */
+    function createPopupCutoutMesh(texKey, width, height, x, z, rotY = 0) {
+      const pivot = new THREE.Group();
+      pivot.position.set(x, 0.03, z);
+      pivot.userData.basePos = new THREE.Vector3(x, 0.03, z);
+      pivot.userData.baseRotY = rotY;
+      pivot.rotation.y = rotY;
+
+      const geo = new THREE.PlaneGeometry(width, height);
+      // Shift geometry so y=0 is at the bottom crease hinge!
+      geo.translate(0, height / 2, 0);
+
+      const tex = AssetLibrary.textures[texKey];
+      const mat = new THREE.MeshStandardMaterial({
+        map: tex,
+        transparent: true,
+        alphaTest: 0.38,
+        roughness: 0.94,
+        metalness: 0.0,
+        side: THREE.DoubleSide
+      });
+
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      mesh.customDepthMaterial = new THREE.MeshDepthMaterial({
+        depthPacking: THREE.RGBADepthPacking,
+        map: tex,
+        alphaTest: 0.42
+      });
+      mesh.userData.texKey = texKey;
+      mesh.userData.parentPivot = pivot;
+
+      pivot.add(mesh);
+      pivot.userData.mesh = mesh;
+      return pivot;
+    }
+
+    /**
+     * Helper: Creates the Scalloped Arch Vertical Backdrop for each spread
+     */
+    function createBackdropPivot(theme) {
+      const pivot = new THREE.Group();
+      pivot.position.set(0, 0.03, -2.35);
+
+      const width = 10.6;
+      const height = 4.65;
+      const geo = new THREE.PlaneGeometry(width, height);
+      geo.translate(0, height / 2, 0);
+
+      const cv = createScallopedBackdropCanvas(theme);
+      const tex = new THREE.CanvasTexture(cv);
+      tex.encoding = THREE.sRGBEncoding;
+      const mat = new THREE.MeshStandardMaterial({
+        map: tex,
+        transparent: true,
+        alphaTest: 0.4,
+        roughness: 0.85,
+        side: THREE.DoubleSide
+      });
+
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      mesh.customDepthMaterial = new THREE.MeshDepthMaterial({
+        depthPacking: THREE.RGBADepthPacking,
+        map: tex,
+        alphaTest: 0.45
+      });
+
+      pivot.add(mesh);
+      pivot.userData.mesh = mesh;
+      pivot.userData.canvas = cv;
+      pivot.userData.texture = tex;
+      return pivot;
+    }
+
+    /**
+     * Helper: Creates Left-Page Flat Story Text Card
+     */
+    function createStoryCardMesh(lines) {
+      const geo = new THREE.PlaneGeometry(4.4, 1.9);
+      const mat = new THREE.MeshStandardMaterial({
+        map: createStoryCardTexture(lines),
+        roughness: 0.8
+      });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.rotation.x = -Math.PI / 2;
+      mesh.position.set(-3.0, 0.04, 2.35);
+      mesh.receiveShadow = true;
+      return mesh;
+    }
+
+    /**
+     * Helper: Creates the Interactive Pull-Tab on the front edge of the Right Page
+     */
+    function createPullTabGroup(label, xPos = 1.65, isHorizontal = false) {
+      const group = new THREE.Group();
+      // Red recessed slot underneath
+      const slotW = isHorizontal ? 3.2 : 1.38;
+      const slotH = isHorizontal ? 0.55 : 1.55;
+      const slotMesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(slotW, slotH),
+        new THREE.MeshStandardMaterial({ color: 0xb8523b, roughness: 0.85 })
+      );
+      slotMesh.rotation.x = -Math.PI / 2;
+      slotMesh.position.set(xPos, 0.032, isHorizontal ? 3.25 : 3.35);
+      group.add(slotMesh);
+
+      // Movable paper pull tab tongue
+      const tabGeo = new THREE.PlaneGeometry(1.26, 1.48);
+      const tabMat = new THREE.MeshStandardMaterial({
+        map: createPullTabTexture(label),
+        roughness: 0.75,
+        side: THREE.DoubleSide
+      });
+      const tabMesh = new THREE.Mesh(tabGeo, tabMat);
+      tabMesh.rotation.x = -Math.PI / 2;
+      tabMesh.position.set(xPos, 0.055, isHorizontal ? 3.35 : 3.55);
+      tabMesh.castShadow = true;
+      tabMesh.userData.isMechanism = true;
+      tabMesh.userData.mechType = isHorizontal ? 'slideH' : 'pullV';
+      group.add(tabMesh);
+
+      group.userData.tabMesh = tabMesh;
+      group.userData.baseX = xPos;
+      group.userData.baseZ = isHorizontal ? 3.35 : 3.55;
+      return group;
+    }
+
+    // Build All 5 Spreads
+    const spreads = [];
+    const clickableMeshes = [];
+    const mechanismMeshes = [];
+
+    // =================================================================
+    // SPREAD 0 (Page 1/5): 《我的小星球》
+    // =================================================================
+    {
+      const group = new THREE.Group();
+      const foldables = [];
+
+      const backdrop = createBackdropPivot('starryNight');
+      group.add(backdrop);
+      foldables.push(backdrop);
+
+      const storyCard = createStoryCardMesh(SPREAD_DATA[0].story);
+      group.add(storyCard);
+
+      // Mossy Cottage Hill
+      const cottage = createPopupCutoutMesh('cottage', 4.3, 3.6, -0.35, -0.8, 0.04);
+      group.add(cottage);
+      foldables.push(cottage);
+
+      // Windmill Tower + Rotating Blades
+      const wmBase = createPopupCutoutMesh('windmillBase', 2.2, 3.0, 2.05, -0.45, -0.15);
+      const bladesGeo = new THREE.PlaneGeometry(2.5, 2.5);
+      const bladesMat = new THREE.MeshStandardMaterial({
+        map: AssetLibrary.textures['windmillBlades'],
+        transparent: true,
+        alphaTest: 0.38,
+        side: THREE.DoubleSide
+      });
+      const bladesMesh = new THREE.Mesh(bladesGeo, bladesMat);
+      bladesMesh.position.set(0, 2.15, 0.08);
+      bladesMesh.castShadow = true;
+      bladesMesh.customDepthMaterial = new THREE.MeshDepthMaterial({
+        depthPacking: THREE.RGBADepthPacking,
+        map: AssetLibrary.textures['windmillBlades'],
+        alphaTest: 0.42
+      });
+      wmBase.add(bladesMesh);
+      group.add(wmBase);
+      foldables.push(wmBase);
+
+      // Flanking Ringed Planets
+      const planetLeft = createPopupCutoutMesh('ringPlanet', 1.65, 1.25, -4.35, -0.7, 0.15);
+      const planetRight = createPopupCutoutMesh('ringPlanet', 1.5, 1.15, 4.15, -0.6, -0.15);
+      group.add(planetLeft, planetRight);
+      foldables.push(planetLeft, planetRight);
+
+      // Foreground Little Traveler, Fox & Lantern Flower
+      const traveler = createPopupCutoutMesh('traveler', 1.9, 2.2, 0.25, 0.95, -0.05);
+      const fox = createPopupCutoutMesh('fox', 1.35, 1.35, -0.95, 1.35, 0.08);
+      const flower = createPopupCutoutMesh('lanternFlower', 1.45, 1.6, 1.45, 1.4, -0.08);
+
+      fox.userData.mesh.userData.interactiveType = 'foxHop';
+      flower.userData.mesh.userData.interactiveType = 'flowerSparkle';
+      clickableMeshes.push(fox.userData.mesh, flower.userData.mesh);
+
+      group.add(traveler, fox, flower);
+      foldables.push(traveler, fox, flower);
+
+      // Pull Tab: 点灯
+      const pullTab = createPullTabGroup('点灯', 1.55, false);
+      group.add(pullTab);
+      mechanismMeshes.push(pullTab.userData.tabMesh);
+
+      bookGroup.add(group);
+      spreads.push({
+        group,
+        foldables,
+        pullTab,
+        mechValue: 0,
+        refs: { bladesMesh, fox, flower, cottage }
+      });
+    }
+
+    // =================================================================
+    // SPREAD 1 (Page 2/5): 《纸鹤风筝》
+    // =================================================================
+    {
+      const group = new THREE.Group();
+      group.visible = false;
+      const foldables = [];
+
+      const backdrop = createBackdropPivot('tealSky');
+      group.add(backdrop);
+      foldables.push(backdrop);
+
+      const storyCard = createStoryCardMesh(SPREAD_DATA[1].story);
+      group.add(storyCard);
+
+      // Left Mossy Cottage
+      const cottage = createPopupCutoutMesh('cottage', 3.1, 2.6, -2.55, -0.65, 0.12);
+      group.add(cottage);
+      foldables.push(cottage);
+
+      // Butterfly Kite
+      const kite = createPopupCutoutMesh('kite', 1.35, 1.35, -1.55, -0.25, 0.1);
+      kite.userData.mesh.userData.interactiveType = 'kiteFlap';
+      clickableMeshes.push(kite.userData.mesh);
+      group.add(kite);
+      foldables.push(kite);
+
+      // Multi-layered Auspicious Clouds (祥云)
+      const cloudBack = createPopupCutoutMesh('cloud', 2.9, 1.95, 1.6, -1.05, -0.06);
+      const cloudMid = createPopupCutoutMesh('cloud', 2.8, 1.85, 2.45, -0.15, -0.12);
+      const cloudFront = createPopupCutoutMesh('cloud', 2.6, 1.75, 0.95, 1.25, -0.05);
+      group.add(cloudBack, cloudMid, cloudFront);
+      foldables.push(cloudBack, cloudMid, cloudFront);
+
+      // Origami Crane with Riding Little Traveler
+      const crane = createPopupCutoutMesh('crane', 2.7, 2.35, 0.55, 0.45, -0.08);
+      crane.userData.mesh.userData.interactiveType = 'craneSoar';
+      clickableMeshes.push(crane.userData.mesh);
+      group.add(crane);
+      foldables.push(crane);
+
+      // Pull Tab: 起飞
+      const pullTab = createPullTabGroup('起飞', 1.55, false);
+      group.add(pullTab);
+      mechanismMeshes.push(pullTab.userData.tabMesh);
+
+      bookGroup.add(group);
+      spreads.push({
+        group,
+        foldables,
+        pullTab,
+        mechValue: 0,
+        refs: { crane, kite, cloudBack, cloudMid, cloudFront }
+      });
+    }
+
+    // =================================================================
+    // SPREAD 2 (Page 3/5): 《钟表星》
+    // =================================================================
+    {
+      const group = new THREE.Group();
+      group.visible = false;
+      const foldables = [];
+
+      const backdrop = createBackdropPivot('clockworkViolet');
+      group.add(backdrop);
+      foldables.push(backdrop);
+
+      const storyCard = createStoryCardMesh(SPREAD_DATA[2].story);
+      group.add(storyCard);
+
+      // Left Gazing Traveler
+      const traveler = createPopupCutoutMesh('traveler', 2.0, 2.3, -2.1, 0.35, 0.12);
+      group.add(traveler);
+      foldables.push(traveler);
+
+      // Central Clockwork Tower + Interlocking Gears
+      const tower = createPopupCutoutMesh('clockTower', 3.4, 3.9, 0.55, -0.75, -0.05);
+      const gearMeshes = [];
+      const gearConfigs = [
+        { s: 1.35, x: -1.15, y: 1.65, z: -0.06, ratio: -1.4 },
+        { s: 1.05, x: 1.15,  y: 2.15, z: 0.06,  ratio: 1.8 },
+        { s: 0.85, x: 0.95,  y: 1.05, z: 0.08,  ratio: -2.4 }
+      ];
+      gearConfigs.forEach(cfg => {
+        const gGeo = new THREE.PlaneGeometry(cfg.s, cfg.s);
+        const gMat = new THREE.MeshStandardMaterial({
+          map: AssetLibrary.textures['gear'],
+          transparent: true,
+          alphaTest: 0.38,
+          side: THREE.DoubleSide
+        });
+        const gMesh = new THREE.Mesh(gGeo, gMat);
+        gMesh.position.set(cfg.x, cfg.y, cfg.z);
+        gMesh.userData.ratio = cfg.ratio;
+        tower.add(gMesh);
+        gearMeshes.push(gMesh);
+      });
+      group.add(tower);
+      foldables.push(tower);
+
+      // Right Old Clockmaker
+      const clockmaker = createPopupCutoutMesh('clockmaker', 1.85, 2.15, 1.95, 0.65, -0.12);
+      clockmaker.userData.mesh.userData.interactiveType = 'clockmakerGreet';
+      clickableMeshes.push(clockmaker.userData.mesh);
+      group.add(clockmaker);
+      foldables.push(clockmaker);
+
+      // Flat Rotatable Golden Gear Dial on Bottom-Right of Right Page
+      const dialGeo = new THREE.PlaneGeometry(2.15, 2.15);
+      const dialMat = new THREE.MeshStandardMaterial({
+        map: AssetLibrary.textures['gear'],
+        transparent: true,
+        alphaTest: 0.38,
+        side: THREE.DoubleSide
+      });
+      const dialMesh = new THREE.Mesh(dialGeo, dialMat);
+      dialMesh.rotation.x = -Math.PI / 2;
+      dialMesh.position.set(4.15, 0.06, 2.35);
+      dialMesh.castShadow = true;
+      dialMesh.userData.isMechanism = true;
+      dialMesh.userData.mechType = 'gearDial';
+      group.add(dialMesh);
+      mechanismMeshes.push(dialMesh);
+
+      bookGroup.add(group);
+      spreads.push({
+        group,
+        foldables,
+        pullTab: null,
+        mechValue: 0,
+        refs: { dialMesh, gearMeshes, clockmaker, tower }
+      });
+    }
+
+    // =================================================================
+    // SPREAD 3 (Page 4/5): 《沙丘日落》
+    // =================================================================
+    {
+      const group = new THREE.Group();
+      group.visible = false;
+      const foldables = [];
+
+      const backdrop = createBackdropPivot('desertSunset');
+      group.add(backdrop);
+      foldables.push(backdrop);
+
+      const storyCard = createStoryCardMesh(SPREAD_DATA[3].story);
+      group.add(storyCard);
+
+      // Sun & Moon Cutouts behind dunes
+      const sun = createPopupCutoutMesh('sunCutout', 1.95, 1.95, 2.25, -1.55, 0);
+      sun.userData.mesh.position.y = 1.45;
+      const moon = createPopupCutoutMesh('moonCutout', 1.35, 1.35, -2.35, -1.65, 0);
+      moon.userData.mesh.position.y = -0.6;
+      group.add(sun, moon);
+      foldables.push(sun, moon);
+
+      // Multi-layered Desert Dunes
+      const duneMid = createPopupCutoutMesh('duneFront', 6.8, 2.4, 0.35, -0.55, 0);
+      const duneFront = createPopupCutoutMesh('duneFront', 6.2, 2.15, 0.55, 0.65, 0);
+      group.add(duneMid, duneFront);
+      foldables.push(duneMid, duneFront);
+
+      // Little Traveler & Fox sitting together watching sunset
+      const traveler = createPopupCutoutMesh('traveler', 1.85, 2.1, -0.55, 1.15, 0.05);
+      const fox = createPopupCutoutMesh('fox', 1.35, 1.35, 0.65, 1.25, -0.05);
+      fox.userData.mesh.userData.interactiveType = 'foxNuzzle';
+      clickableMeshes.push(fox.userData.mesh);
+      group.add(traveler, fox);
+      foldables.push(traveler, fox);
+
+      // Horizontal Slide Tab: 日落
+      const slideTab = createPullTabGroup('日落', 1.55, true);
+      group.add(slideTab);
+      mechanismMeshes.push(slideTab.userData.tabMesh);
+
+      bookGroup.add(group);
+      spreads.push({
+        group,
+        foldables,
+        pullTab: slideTab,
+        mechValue: 0,
+        refs: { sun, moon, fox, traveler, backdrop }
+      });
+    }
+
+    // =================================================================
+    // SPREAD 4 (Page 5/5): 《回家》
+    // =================================================================
+    {
+      const group = new THREE.Group();
+      group.visible = false;
+      const foldables = [];
+
+      const backdrop = createBackdropPivot('homecomingNight');
+      group.add(backdrop);
+      foldables.push(backdrop);
+
+      const storyCard = createStoryCardMesh(SPREAD_DATA[4].story);
+      group.add(storyCard);
+
+      // Mossy Cottage & Windmill
+      const cottage = createPopupCutoutMesh('cottage', 3.9, 3.3, -0.65, -0.85, 0.05);
+      const wmBase = createPopupCutoutMesh('windmillBase', 2.1, 2.85, 1.95, -0.55, -0.14);
+      const bladesMesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(2.35, 2.35),
+        new THREE.MeshStandardMaterial({
+          map: AssetLibrary.textures['windmillBlades'],
+          transparent: true,
+          alphaTest: 0.38,
+          side: THREE.DoubleSide
+        })
+      );
+      bladesMesh.position.set(0, 2.05, 0.08);
+      wmBase.add(bladesMesh);
+      group.add(cottage, wmBase);
+      foldables.push(cottage, wmBase);
+
+      // Giant Blooming Magic Lantern Flower in Center
+      const centerFlower = createPopupCutoutMesh('lanternFlower', 2.45, 2.75, 0.55, 0.45, -0.04);
+      const leftPetal = createPopupCutoutMesh('lanternFlower', 1.85, 2.1, 0.25, 0.55, 0.1);
+      const rightPetal = createPopupCutoutMesh('lanternFlower', 1.85, 2.1, 0.85, 0.55, -0.15);
+      centerFlower.userData.mesh.userData.interactiveType = 'flowerSparkle';
+      clickableMeshes.push(centerFlower.userData.mesh);
+      group.add(centerFlower, leftPetal, rightPetal);
+      foldables.push(centerFlower, leftPetal, rightPetal);
+
+      // Reunited Little Traveler & Fox
+      const traveler = createPopupCutoutMesh('traveler', 1.85, 2.15, -1.55, 0.85, 0.12);
+      const fox = createPopupCutoutMesh('fox', 1.3, 1.3, -0.55, 1.25, 0.06);
+      fox.userData.mesh.userData.interactiveType = 'foxHop';
+      clickableMeshes.push(fox.userData.mesh);
+      group.add(traveler, fox);
+      foldables.push(traveler, fox);
+
+      // Flying White Origami Doves
+      const dove1 = createPopupCutoutMesh('dove', 0.95, 0.95, -2.55, -0.25, 0.1);
+      dove1.userData.mesh.position.y = 1.65;
+      const dove2 = createPopupCutoutMesh('dove', 0.85, 0.85, -1.25, -0.35, 0.05);
+      dove2.userData.mesh.position.y = 2.15;
+      group.add(dove1, dove2);
+      foldables.push(dove1, dove2);
+
+      // Pull Tab: 绽放
+      const pullTab = createPullTabGroup('绽放', 1.55, false);
+      group.add(pullTab);
+      mechanismMeshes.push(pullTab.userData.tabMesh);
+
+      bookGroup.add(group);
+      spreads.push({
+        group,
+        foldables,
+        pullTab,
+        mechValue: 0,
+        refs: { bladesMesh, centerFlower, leftPetal, rightPetal, dove1, dove2, fox }
+      });
+    }
+
+    /********************************************************************
+     * 6. FLOATING STARLIGHT / FIREFLY PARTICLE SYSTEM
+     ********************************************************************/
+    const particleCount = 65;
+    const particleGeo = new THREE.BufferGeometry();
+    const pPositions = new Float32Array(particleCount * 3);
+    const pVelocities = [];
+
+    for (let i = 0; i < particleCount; i++) {
+      pPositions[i * 3]     = (Math.random() - 0.5) * 7.5;
+      pPositions[i * 3 + 1] = 0.3 + Math.random() * 3.8;
+      pPositions[i * 3 + 2] = (Math.random() - 0.5) * 4.5;
+      pVelocities.push({
+        vx: (Math.random() - 0.5) * 0.008,
+        vy: 0.006 + Math.random() * 0.012,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
+
+    const particleMat = new THREE.PointsMaterial({
+      color: 0xffe885,
+      size: 0.16,
+      transparent: true,
+      opacity: 0.0,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+    const starParticles = new THREE.Points(particleGeo, particleMat);
+    bookGroup.add(starParticles);
+
+    function burstParticlesAt(x, y, z) {
+      const pos = particleGeo.attributes.position.array;
+      for (let i = 0; i < 18; i++) {
+        pos[i * 3]     = x + (Math.random() - 0.5) * 0.9;
+        pos[i * 3 + 1] = y + (Math.random() - 0.5) * 0.9;
+        pos[i * 3 + 2] = z + (Math.random() - 0.5) * 0.9;
+      }
+      particleGeo.attributes.position.needsUpdate = true;
+      particleMat.opacity = 0.95;
+    }
+
+    /********************************************************************
+     * 7. PAGE TURNING KINEMATICS & INTERACTIVE MECHANISM CONTROLLER
+     ********************************************************************/
+    let currentSpreadIdx = 0;
+    let isTurningPage = false;
+    let turnProgress = 1; // 1 = fully open
+    let easterEggTimers = {
+      foxHop: 0,
+      flowerSparkle: 0,
+      kiteFlap: 0,
+      craneSoar: 0,
+      clockmakerGreet: 0,
+      foxNuzzle: 0
+    };
+
+    const titleEl = document.getElementById('spread-title');
+    const hudEl = document.getElementById('hud-instruction');
+    const counterEl = document.getElementById('page-counter');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+
+    function updateHudUI(idx) {
+      const info = SPREAD_DATA[idx];
+      titleEl.style.opacity = '0';
+      titleEl.style.transform = 'translateY(-6px)';
+      setTimeout(() => {
+        titleEl.textContent = info.title;
+        titleEl.style.opacity = '1';
+        titleEl.style.transform = 'translateY(0)';
+      }, 180);
+      hudEl.textContent = info.hud;
+      counterEl.textContent = `第 ${idx + 1}/5 页`;
+      btnPrev.disabled = idx === 0;
+      btnNext.disabled = idx === SPREAD_DATA.length - 1;
+    }
+
+    /**
+     * Folds or unfolds all pop-up cutouts on a spread according to openProgress ∈ [0, 1]
+     */
+    const clamp01 = x => Math.max(0, Math.min(1, x));
+    const smooth = x => { x=clamp01(x); return x*x*(3-2*x); };
+    let turnState = null;
+    const pageMaterials = SPREAD_DATA.map((data, i) => {
+      const cv=document.createElement('canvas'); cv.width=1024; cv.height=1024;
+      const c=cv.getContext('2d'); c.fillStyle=data.pageColor; c.fillRect(0,0,1024,1024);
+      let seed=817+i; const rand=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+      for(let j=0;j<12000;j++){c.fillStyle= j%2?'rgba(255,245,210,.045)':'rgba(0,0,20,.035)';c.fillRect(rand()*1024,rand()*1024,1+rand()*2,1);}
+      c.strokeStyle='rgba(240,214,156,.5)'; c.lineWidth=2;c.strokeRect(18,18,988,988);
+      if(i!==3) for(let j=0;j<100;j++){let x=rand()*1024,y=rand()*1024;c.fillStyle='rgba(255,241,199,.45)';c.beginPath();c.arc(x,y,rand()*1.7+.4,0,7);c.fill();}
+      c.fillStyle='rgba(245,227,190,.55)';c.font='16px serif';c.fillText('星 星 上 的 小 旅 人',680,970);
+      const tex=new THREE.CanvasTexture(cv);tex.encoding=THREE.sRGBEncoding;tex.anisotropy=8;
+      return new THREE.MeshStandardMaterial({map:tex,roughness:.96,side:THREE.DoubleSide});
+    });
+    function paperGeometry(side) {
+      const geo=new THREE.PlaneGeometry(5.96,7.8,48,12);geo.rotateX(-Math.PI/2);geo.translate(side*2.99,.028,0);
+      geo.userData.rest=geo.attributes.position.array.slice();return geo;
+    }
+    function initPaperArchitecture(){
+      // Persistent printed sheets cover the cream page block beneath the moving leaf.
+      // They stay on the book when the old spread is hidden at the midpoint.
+      leftPageSurface.visible=true;rightPageSurface.visible=true;
+      leftPageSurface.material=rightPageSurface.material=pageMaterials[0];
+      leftPageSurface.position.y=rightPageSurface.position.y=.024;
+      flipPivot.visible=false;
+      spreads.forEach((s,i)=>{
+        const left=new THREE.Group(),right=new THREE.Group();
+        const children=[...s.group.children], backdrop=s.foldables[0];
+        s.halves=[left,right];s.papers=[];s.group.add(left,right);
+        children.forEach(obj=>{
+          // A backdrop is two paper wings joined at the same central crease.
+          if(obj===backdrop){
+            const mesh=obj.userData.mesh;
+            [-1,1].forEach((side,k)=>{
+              const hinge=new THREE.Group();hinge.position.copy(obj.position);
+              const geo=new THREE.PlaneGeometry(5.3,4.65,1,1);geo.translate(side*2.65,2.325,0);
+              const uv=geo.attributes.uv;for(let j=0;j<uv.count;j++)uv.setX(j,uv.getX(j)*.5+(k*.5));
+              const m=new THREE.Mesh(geo,mesh.material);m.castShadow=true;m.receiveShadow=true;m.customDepthMaterial=mesh.customDepthMaterial;
+              hinge.add(m);hinge.userData.mesh=m;hinge.userData.isBackdrop=true;
+              s.halves[k].add(hinge);s.foldables.push(hinge);
+            });
+            s.foldables.splice(s.foldables.indexOf(obj),1);s.group.remove(obj);
+          }else s.halves[obj.position.x<0?0:1].add(obj);
+        });
+        s.halves.forEach((half,k)=>{
+          const p=new THREE.Mesh(paperGeometry(k?1:-1),pageMaterials[i]);p.receiveShadow=true;p.castShadow=true;
+          half.add(p);s.papers.push(p);
+        });
+        s.group.visible=i===0;
+        s.foldables.forEach(pivot=>pivot.traverse(mesh=>{
+          if(mesh.isMesh){mesh.material.side=THREE.FrontSide;mesh.material.needsUpdate=true;}
+        }));
+        applySpreadFolding(s,1);
+      });
+      // Visible laminated page edges, separate from the cream book block.
+      for(let side of [-1,1])for(let j=0;j<6;j++){
+        const edge=new THREE.Mesh(new THREE.BoxGeometry(5.99,.009,7.83),new THREE.MeshStandardMaterial({color:j%2?0xd6c7ac:0xfff1d4,roughness:1}));
+        edge.position.set(side*3,-.1+j*.018,0);bookGroup.add(edge);
+      }
+    }
+    function applySpreadFolding(spread,openProgress){
+      const p=clamp01(openProgress);
+      spread.foldables.forEach((pivot,idx)=>{
+        const local=smooth((p-idx*.008)/(1-idx*.008));
+        pivot.rotation.x=(Math.PI/2)*(1-local)-.035*local;
+        pivot.position.y=(pivot.userData.basePos?.y??.03)+(.12+.018*idx)*(1-local);
+        pivot.userData.foldVisible=local>.48;
+        pivot.visible=pivot.userData.foldVisible;
+        pivot.traverse(o=>{if(o.isMesh)o.receiveShadow=p>.92;});
+      });
+    }
+    function bendPaper(s,k,angle){
+      const geo=s.papers[k].geometry,rest=geo.userData.rest,pos=geo.attributes.position;
+      const amplitude=Math.sin(angle)*.08;
+      for(let j=0;j<pos.count;j++){
+        let x=rest[j*3],r=Math.abs(x)/5.98;
+        pos.setXYZ(j,x,rest[j*3+1]+Math.sin(r*Math.PI)*amplitude,rest[j*3+2]+Math.sin(angle)*Math.sin(r*Math.PI)*.08);
+      }
+      pos.needsUpdate=true;geo.computeVertexNormals();
+    }
+    function showPaperContents(s,visible){
+      s.halves.forEach((half,k)=>half.children.forEach(child=>{if(child!==s.papers[k])child.visible=visible&&child.userData.foldVisible!==false;}));
+    }
+    function resetPaperMaterial(s){
+      // A turning leaf carries its actual printed paper, never a projection of
+      // the scenery's underside. Pop-up scenery remains separate geometry.
+      s.papers.forEach(paper=>paper.material=pageMaterials[spreads.indexOf(s)]);
+    }
+    function renderTurn(p){
+      if(!turnState)return;
+      const {old:oldS,next:newS,direction}=turnState;
+      // Fold with the sheet still flat, turn the closed sheet, then unfold.
+      const foldEnd=.2, turnEnd=.82;
+      const a=smooth((p-foldEnd)/(turnEnd-foldEnd))*Math.PI;
+      const outgoing=direction>0?1:0, incoming=direction>0?0:1;
+      const oldFixed=1-outgoing, newFixed=1-incoming;
+      oldS.group.visible=true;newS.group.visible=true;
+      oldS.halves[outgoing].rotation.z=direction*a;
+      newS.halves[incoming].rotation.z=direction*(a-Math.PI);
+      oldS.halves[outgoing].position.y=.055;
+      newS.halves[incoming].position.y=.06;
+      oldS.halves[outgoing].visible=a<=Math.PI/2;
+      newS.halves[incoming].visible=a>Math.PI/2;
+      oldS.halves[oldFixed].visible=a<Math.PI/2;
+      newS.halves[newFixed].visible=true;
+      // New fixed page lies beneath the departing paper; the crease drives both scenes.
+      newS.halves[newFixed].position.y=0;
+      applySpreadFolding(oldS,1-smooth(p/foldEnd));
+      applySpreadFolding(newS,smooth((p-turnEnd)/(1-turnEnd)));
+      showPaperContents(oldS,p<foldEnd);
+      showPaperContents(newS,p>=turnEnd);
+      resetPaperMaterial(oldS);
+      resetPaperMaterial(newS);
+      bendPaper(oldS,outgoing,a);bendPaper(newS,incoming,a);
+      document.getElementById('turn-progress').value=Math.round(p*100);
+    }
+    function finishTurn(){
+      if(!turnState)return;
+      const {old:oldS,next:newS,target}=turnState;
+      for(const s of [oldS,newS]){
+        resetPaperMaterial(s);showPaperContents(s,true);
+      }
+      for(const s of [oldS,newS])s.halves.forEach((h,k)=>{h.rotation.z=0;h.position.y=0;h.visible=true;bendPaper(s,k,0);});
+      oldS.group.visible=false;newS.group.visible=true;applySpreadFolding(newS,1);
+      currentSpreadIdx=target;isTurningPage=false;turnState=null;
+      document.getElementById('turn-progress').value=100;
+      updateHudUI(target);
+    }
+    function goToSpread(targetIdx){
+      if(isTurningPage||targetIdx<0||targetIdx>=spreads.length||targetIdx===currentSpreadIdx)return;
+      activeMechanism=null;orbitDrag=null;isTurningPage=true;
+      leftPageSurface.material=rightPageSurface.material=pageMaterials[targetIdx];
+      turnState={old:spreads[currentSpreadIdx],next:spreads[targetIdx],target:targetIdx,direction:targetIdx>currentSpreadIdx?1:-1,start:performance.now(),progress:0,manual:false};
+      renderTurn(0);
+      audio.playPageTurn();updateHudUI(targetIdx);
+      function step(now){
+        if(!turnState)return;
+        if(!turnState.manual){turnState.progress=clamp01((now-turnState.start)/(1350*view.turnSpeed));renderTurn(turnState.progress);if(turnState.progress>=1){finishTurn();return;}}
+        requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    btnPrev.addEventListener('click', () => goToSpread(currentSpreadIdx - 1));
+    btnNext.addEventListener('click', () => goToSpread(currentSpreadIdx + 1));
+    updateHudUI(0);
+
+    /********************************************************************
+     * 8. RAYCASTING, PULL-TAB DRAGGING & CAMERA PARALLAX
+     ********************************************************************/
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    const dragPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -0.05);
+    const dragIntersect = new THREE.Vector3();
+
+    let activeMechanism = null;
+    let dragStartVal = 0;
+    let dragStartPos = new THREE.Vector3();
+    let targetParallax = { x: 0, y: 0 };
+
+    function updateMouseCoords(e) {
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      mouse.x = (clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(clientY / window.innerHeight) * 2 + 1;
+      targetParallax.x = mouse.x * 0.55;
+      targetParallax.y = mouse.y * 0.35;
+    }
+
+    function onPointerDown(e) {
+      audio.init();
+      updateMouseCoords(e);
+      if (isTurningPage) return;
+
+      raycaster.setFromCamera(mouse, camera);
+
+      // 1. Check active spread's pull-tab or gear mechanism first
+      const activeSpread = spreads[currentSpreadIdx];
+      const mechHits = raycaster.intersectObjects(mechanismMeshes, false).filter(hit => {
+        let p = hit.object;
+        while (p) {
+          if (p === activeSpread.group) return true;
+          p = p.parent;
+        }
+        return false;
+      });
+
+      if (mechHits.length > 0) {
+        activeMechanism = mechHits[0].object;
+        raycaster.ray.intersectPlane(dragPlane, dragStartPos);
+        dragStartVal = activeSpread.mechValue;
+        canvas.classList.add('dragging-mech');
+        return;
+      }
+
+      // 2. Check interactive character/prop Easter eggs on active spread
+      const charHits = raycaster.intersectObjects(clickableMeshes, false).filter(hit => {
+        let p = hit.object;
+        while (p) {
+          if (p === activeSpread.group) return true;
+          p = p.parent;
+        }
+        return false;
+      });
+
+      if (charHits.length === 0) startOrbit(e);
+      if (charHits.length > 0) {
+        const hitObj = charHits[0].object;
+        const type = hitObj.userData.interactiveType;
+        if (type) {
+          easterEggTimers[type] = 1.0;
+          const wp = new THREE.Vector3();
+          hitObj.getWorldPosition(wp);
+          bookGroup.worldToLocal(wp);
+          burstParticlesAt(wp.x, wp.y + 0.8, wp.z);
+
+          if (type === 'foxHop' || type === 'foxNuzzle') {
+            audio.playSparkleChime(659.25);
+          } else if (type === 'flowerSparkle') {
+            audio.playSparkleChime(783.99);
+          } else if (type === 'kiteFlap' || type === 'craneSoar') {
+            audio.playFluteNote(587.33);
+            setTimeout(() => audio.playFluteNote(783.99), 160);
+          } else if (type === 'clockmakerGreet') {
+            audio.playSparkleChime(523.25);
+          }
+        }
+      }
+    }
+
+    function onPointerMove(e) {
+      if (orbitDrag) { moveOrbit(e); return; }
+      updateMouseCoords(e);
+      raycaster.setFromCamera(mouse, camera);
+
+      const activeSpread = spreads[currentSpreadIdx];
+
+      if (activeMechanism) {
+        raycaster.ray.intersectPlane(dragPlane, dragIntersect);
+        const localDelta = dragIntersect.clone().sub(dragStartPos).applyAxisAngle(new THREE.Vector3(0,1,0), -bookGroup.rotation.y);
+        const mechType = activeMechanism.userData.mechType;
+
+        if (mechType === 'pullV') {
+          // Pull forward along Z axis
+          const nextVal = Math.max(0, Math.min(1, dragStartVal + localDelta.z * 0.85));
+          activeSpread.mechValue = nextVal;
+        } else if (mechType === 'slideH') {
+          // Slide horizontally along X axis
+          const nextVal = Math.max(0, Math.min(1, dragStartVal + localDelta.x * 0.55));
+          activeSpread.mechValue = nextVal;
+        } else if (mechType === 'gearDial') {
+          const prevVal = activeSpread.mechValue;
+          activeSpread.mechValue += (localDelta.x - localDelta.z) * 1.4;
+          dragStartPos.copy(dragIntersect);
+          if (Math.floor(activeSpread.mechValue * 5) !== Math.floor(prevVal * 5)) {
+            audio.playClockTick();
+          }
+        }
+        return;
+      }
+
+      // Hover cursor feedback
+      const allInteractive = [...mechanismMeshes, ...clickableMeshes];
+      const hits = raycaster.intersectObjects(allInteractive, false).filter(hit => {
+        let p = hit.object;
+        while (p) {
+          if (p === activeSpread.group) return true;
+          p = p.parent;
+        }
+        return false;
+      });
+      if (hits.length > 0) {
+        canvas.classList.add('pointer-interactive');
+      } else {
+        canvas.classList.remove('pointer-interactive');
+      }
+    }
+
+    function onPointerUp() {
+      orbitDrag = null;
+      activeMechanism = null;
+      canvas.classList.remove('dragging-mech');
+    }
+
+    canvas.addEventListener('mousedown', onPointerDown);
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
+    canvas.addEventListener('touchstart', onPointerDown, { passive: true });
+    window.addEventListener('touchmove', onPointerMove, { passive: true });
+    window.addEventListener('touchend', onPointerUp);
+
+    /********************************************************************
+     * 9. MAIN ANIMATION LOOP (Per-Spread Mechanical Linkages & Lighting)
+     ********************************************************************/
+    const clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const dt = Math.min(0.05, clock.getDelta());
+      const elapsed = clock.getElapsedTime();
+
+      updateView(dt);
+      // Decay Easter egg timers
+      Object.keys(easterEggTimers).forEach(k => {
+        if (easterEggTimers[k] > 0) {
+          easterEggTimers[k] = Math.max(0, easterEggTimers[k] - dt * 1.4);
+        }
+      });
+
+      const s = spreads[currentSpreadIdx];
+      const t = s.mechValue;
+
+      if (!isTurningPage) {
+      // Update Pull-Tab position visually if present
+      if (s.pullTab) {
+        const tabMesh = s.pullTab.userData.tabMesh;
+        if (tabMesh.userData.mechType === 'pullV') {
+          tabMesh.position.z = s.pullTab.userData.baseZ + t * 1.15;
+        } else if (tabMesh.userData.mechType === 'slideH') {
+          tabMesh.position.x = s.pullTab.userData.baseX - 0.85 + t * 1.85;
+        }
+      }
+
+      // Spread-specific paper linkages
+      if (currentSpreadIdx === 0) {
+        // Page 1: 《我的小星球》 -> Pull tab lights up lamp & cottage, spins windmill faster
+        const { bladesMesh, fox, flower } = s.refs;
+        bladesMesh.rotation.z -= dt * (0.45 + t * 2.4);
+        magicPointLight.color.setHex(0xffc252);
+        magicPointLight.intensity = t * 2.2 + (easterEggTimers.flowerSparkle * 1.5);
+        magicPointLight.position.set(0.6, 1.8, 0.8);
+        particleMat.opacity = t * 0.85 + easterEggTimers.flowerSparkle * 0.8;
+
+        // Fox hop easter egg
+        const hop = Math.sin(easterEggTimers.foxHop * Math.PI * 3) * Math.sin(easterEggTimers.foxHop * Math.PI);
+        fox.position.y = 0.03 + Math.max(0, hop) * 0.65;
+        fox.rotation.z = hop * 0.18;
+
+        // Flower pulse
+        const fScale = 1 + t * 0.16 + Math.sin(elapsed * 3.5) * 0.03 * t + easterEggTimers.flowerSparkle * 0.22;
+        flower.scale.set(fScale, fScale, 1);
+
+      } else if (currentSpreadIdx === 1) {
+        // Page 2: 《纸鹤风筝》 -> Pull tab makes crane soar in an arc toward the moon & parts clouds
+        const { crane, kite, cloudBack, cloudMid, cloudFront } = s.refs;
+        const flap = Math.sin(elapsed * 4.2) * 0.06 + Math.sin(easterEggTimers.craneSoar * Math.PI * 4) * 0.22;
+        crane.position.x = crane.userData.basePos.x + t * 1.45;
+        crane.position.y = 0.03 + t * 1.15 + Math.sin(elapsed * 2.2) * 0.08;
+        crane.rotation.z = t * 0.18 + flap;
+
+        kite.position.y = 0.03 + t * 0.75 + Math.sin(elapsed * 3.0) * 0.08 + easterEggTimers.kiteFlap * 0.45;
+        kite.rotation.z = Math.sin(elapsed * 4.5) * 0.12 + easterEggTimers.kiteFlap * 0.35;
+
+        cloudBack.position.x = cloudBack.userData.basePos.x - t * 0.65;
+        cloudMid.position.x = cloudMid.userData.basePos.x + t * 0.75;
+        cloudFront.position.x = cloudFront.userData.basePos.x - t * 0.55;
+
+        magicPointLight.intensity = t * 0.9;
+        particleMat.opacity = t * 0.65;
+
+      } else if (currentSpreadIdx === 2) {
+        // Page 3: 《钟表星》 -> Rotating gear dial drives interlocking tower gears
+        const { dialMesh, gearMeshes, clockmaker } = s.refs;
+        const autoTick = elapsed * 0.25;
+        const totalAngle = t + autoTick;
+        dialMesh.rotation.z = totalAngle;
+        gearMeshes.forEach(gm => {
+          gm.rotation.z = totalAngle * gm.userData.ratio;
+        });
+
+        const greet = Math.sin(easterEggTimers.clockmakerGreet * Math.PI * 4) * 0.18;
+        clockmaker.rotation.z = greet;
+        magicPointLight.color.setHex(0xf5c869);
+        magicPointLight.intensity = 0.65 + easterEggTimers.clockmakerGreet * 1.2;
+        particleMat.opacity = 0.35 + easterEggTimers.clockmakerGreet * 0.6;
+
+      } else if (currentSpreadIdx === 3) {
+        // Page 4: 《沙丘日落》 -> Horizontal slide tab makes sun set & moon rise, shifting lighting
+        const { sun, moon, fox } = s.refs;
+        sun.userData.mesh.position.y = 1.45 - t * 2.15;
+        sun.position.x = sun.userData.basePos.x + t * 0.55;
+
+        moon.userData.mesh.position.y = -0.65 + t * 2.1;
+        moon.position.x = moon.userData.basePos.x + t * 0.45;
+
+        // Shift scene light from warm golden sunset to cool starry moonlight
+        const sunsetColor = new THREE.Color(0xff9442);
+        const nightColor = new THREE.Color(0x6e98ff);
+        magicPointLight.color.copy(sunsetColor).lerp(nightColor, t);
+        magicPointLight.intensity = 1.45;
+        magicPointLight.position.set(2.0 - t * 4.0, 2.5, -0.5);
+
+        // Fox nuzzles toward Little Traveler
+        const nuz = Math.sin(easterEggTimers.foxNuzzle * Math.PI);
+        fox.position.x = fox.userData.basePos.x - nuz * 0.38;
+        fox.rotation.z = nuz * 0.22;
+        particleMat.opacity = t * 0.75 + nuz * 0.8;
+
+      } else if (currentSpreadIdx === 4) {
+        // Page 5: 《回家》 -> Pull tab blooms the giant lantern flower & releases fireflies
+        const { bladesMesh, centerFlower, leftPetal, rightPetal, dove1, dove2, fox } = s.refs;
+        bladesMesh.rotation.z -= dt * (0.5 + t * 1.5);
+
+        // Multi-petal blooming kinematics
+        leftPetal.rotation.z = t * 0.42;
+        leftPetal.position.x = leftPetal.userData.basePos.x - t * 0.45;
+        rightPetal.rotation.z = -t * 0.42;
+        rightPetal.position.x = rightPetal.userData.basePos.x + t * 0.45;
+        const bloomScale = 1 + t * 0.22 + easterEggTimers.flowerSparkle * 0.2;
+        centerFlower.scale.set(bloomScale, bloomScale, 1);
+
+        // Doves flutter upward
+        dove1.userData.mesh.position.y = 1.65 + t * 0.65 + Math.sin(elapsed * 3.8) * 0.12;
+        dove2.userData.mesh.position.y = 2.15 + t * 0.75 + Math.cos(elapsed * 3.4) * 0.12;
+
+        // Fox hop
+        const hop = Math.sin(easterEggTimers.foxHop * Math.PI * 3) * Math.sin(easterEggTimers.foxHop * Math.PI);
+        fox.position.y = 0.03 + Math.max(0, hop) * 0.6;
+
+        magicPointLight.color.setHex(0xffe066);
+        magicPointLight.intensity = 0.5 + t * 2.4;
+        particleMat.opacity = 0.25 + t * 0.75;
+
+        if (t > 0.75 && Math.random() < 0.015) {
+          audio.playBirdChirp();
+        }
+      }
+
+      }
+      // Animate floating starlight particles
+      if (particleMat.opacity > 0.02) {
+        const pos = particleGeo.attributes.position.array;
+        for (let i = 0; i < particleCount; i++) {
+          const v = pVelocities[i];
+          pos[i * 3]     += v.vx + Math.sin(elapsed * 2 + v.phase) * 0.003;
+          pos[i * 3 + 1] += v.vy;
+          if (pos[i * 3 + 1] > 4.2) {
+            pos[i * 3 + 1] = 0.35;
+            pos[i * 3] = (Math.random() - 0.5) * 6.5;
+          }
+        }
+        particleGeo.attributes.position.needsUpdate = true;
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    /********************************************************************
+     * 10. UI MODALS & AI ILLUSTRATION + AUTO-MATTING WORKSHOP LOGIC
+     ********************************************************************/
+    const modalAnalysis = document.getElementById('modal-analysis');
+    const modalWorkshop = document.getElementById('modal-workshop');
+
+    document.getElementById('btn-analysis').addEventListener('click', () => {
+      modalAnalysis.classList.remove('hidden');
+      modalAnalysis.classList.add('flex');
+    });
+    document.getElementById('close-analysis').addEventListener('click', () => {
+      modalAnalysis.classList.add('hidden');
+      modalAnalysis.classList.remove('flex');
+    });
+
+    document.getElementById('btn-workshop').addEventListener('click', () => {
+      modalWorkshop.classList.remove('hidden');
+      modalWorkshop.classList.add('flex');
+      syncWorkshopPreviewFromKey(wsTargetSelect.value);
+    });
+    document.getElementById('close-workshop').addEventListener('click', () => {
+      modalWorkshop.classList.add('hidden');
+      modalWorkshop.classList.remove('flex');
+    });
+
+    document.getElementById('btn-audio').addEventListener('click', () => {
+      const on = audio.toggle();
+      document.getElementById('audio-icon').textContent = on ? '🔊' : '🔇';
+    });
+
+    // Workshop Elements
+    const wsTargetSelect = document.getElementById('ws-target-layer');
+    const wsPromptInput = document.getElementById('ws-prompt');
+    const wsStatus = document.getElementById('ws-status');
+    const rngTolerance = document.getElementById('rng-tolerance');
+    const rngMargin = document.getElementById('rng-margin');
+    const valTolerance = document.getElementById('val-tolerance');
+    const valMargin = document.getElementById('val-margin');
+
+    const cvStageRaw = document.getElementById('cv-stage-raw');
+    const cvStageMatted = document.getElementById('cv-stage-matted');
+    const cvStageDiecut = document.getElementById('cv-stage-diecut');
+
+    const defaultPrompts = {
+      traveler: 'A cute storybook little prince traveler wearing a green coat and flowing yellow scarf, warm colored pencil and watercolor illustration, isolated on a solid pure white background, no shadow',
+      fox: 'A cute little red fox sitting happily with a fluffy white-tipped tail, warm storybook colored pencil and watercolor illustration, isolated on a solid pure white background',
+      cottage: 'A cozy fairytale mossy green hill cottage with a round glowing window and wooden arched door, storybook watercolor illustration, isolated on a solid pure white background',
+      crane: 'A child traveler riding on the back of a giant white origami paper crane flying, storybook watercolor illustration, isolated on a solid pure white background',
+      clockmaker: 'A kindly old clockmaker with round spectacles and a fluffy white beard, fairytale storybook illustration, isolated on a solid pure white background',
+      lanternFlower: 'A magical glowing golden bell-shaped lantern flower on a curved green stem, fairytale storybook watercolor illustration, isolated on a solid pure white background'
+    };
+
+    let currentWorkshopRawCanvas = null;
+    let currentWorkshopProcessed = null;
+
+    function drawToPreviewCanvas(sourceCanvas, targetCanvas) {
+      const ctx = targetCanvas.getContext('2d');
+      ctx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
+      ctx.drawImage(sourceCanvas, 0, 0, targetCanvas.width, targetCanvas.height);
+    }
+
+    function runWorkshopMattingPipeline() {
+      if (!currentWorkshopRawCanvas) return;
+      const tolerance = parseInt(rngTolerance.value, 10);
+      const margin = parseInt(rngMargin.value, 10);
+      valTolerance.textContent = tolerance;
+      valMargin.textContent = `${margin} px`;
+
+      currentWorkshopProcessed = PaperArtPipeline.processCutout(currentWorkshopRawCanvas, {
+        tolerance,
+        margin
+      });
+      drawToPreviewCanvas(currentWorkshopProcessed.rawCanvas, cvStageRaw);
+      drawToPreviewCanvas(currentWorkshopProcessed.mattedCanvas, cvStageMatted);
+      drawToPreviewCanvas(currentWorkshopProcessed.diecutCanvas, cvStageDiecut);
+    }
+
+    function syncWorkshopPreviewFromKey(key) {
+      wsPromptInput.value = defaultPrompts[key] || defaultPrompts.traveler;
+      const item = AssetLibrary.processed[key];
+      if (item) {
+        currentWorkshopRawCanvas = item.rawCanvas;
+        runWorkshopMattingPipeline();
+      }
+    }
+
+    wsTargetSelect.addEventListener('change', () => {
+      syncWorkshopPreviewFromKey(wsTargetSelect.value);
+    });
+    rngTolerance.addEventListener('input', runWorkshopMattingPipeline);
+    rngMargin.addEventListener('input', runWorkshopMattingPipeline);
+
+    // Upload Local Image to Matting Pipeline
+    document.getElementById('ws-upload').addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const img = new Image();
+        img.onload = () => {
+          const raw = document.createElement('canvas');
+          raw.width = 280;
+          raw.height = 280;
+          const ctx = raw.getContext('2d');
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, 280, 280);
+          const scale = Math.min(240 / img.width, 240 / img.height);
+          const dw = img.width * scale;
+          const dh = img.height * scale;
+          ctx.drawImage(img, (280 - dw) / 2, (280 - dh) / 2, dw, dh);
+          currentWorkshopRawCanvas = raw;
+          runWorkshopMattingPipeline();
+          wsStatus.textContent = '已载入本地图片并完成自动抠图加白边！';
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Gemini AI Image Generation + Auto Background Removal + Die-Cut White Margin
+    async function generateAIImageWithBackoff() {
+      const key = wsTargetSelect.value;
+      if(generatedCutouts[key]) return generatedCutouts[key];
+      throw new Error('此图层暂无生成素材，请上传本地图片。');
+    }
+
+    document.getElementById('btn-ai-generate').addEventListener('click', async () => {
+      const btn = document.getElementById('btn-ai-generate');
+      btn.disabled = true;
+      wsStatus.textContent = '⏳ 正在调用 Gemini 生图模型生成纯色背景绘本素材...';
+      try {
+        const dataUrl = await generateAIImageWithBackoff(wsPromptInput.value);
+        const img = new Image();
+        img.onload = () => {
+          const raw = document.createElement('canvas');
+          raw.width = 280;
+          raw.height = 280;
+          const ctx = raw.getContext('2d');
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, 280, 280);
+          ctx.drawImage(img, 14, 14, 252, 252);
+          currentWorkshopRawCanvas = raw;
+          runWorkshopMattingPipeline();
+          wsStatus.textContent = '✨ AI生图完成！已自动抠除纯色背景并膨胀生成纸艺白边。';
+        };
+        img.src = dataUrl;
+      } catch (e) {
+        wsStatus.textContent = '⚠️ ' + e.message;
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    // Apply Processed Cutout to 3D Pop-up Book
+    document.getElementById('btn-apply-to-book').addEventListener('click', () => {
+      if (!currentWorkshopProcessed) return;
+      const key = wsTargetSelect.value;
+      AssetLibrary.updateFromProcessed(key, currentWorkshopProcessed);
+      audio.playSparkleChime(659.25);
+      wsStatus.textContent = '🎉 已成功替换到 3D 立体书对应图层！关闭面板即可查看效果。';
+    });
+
+    document.getElementById('btn-reset-procedural').addEventListener('click', () => {
+      AssetLibrary.initAll();
+      loadIllustrations();
+      syncWorkshopPreviewFromKey(wsTargetSelect.value);
+      wsStatus.textContent = '已恢复全部内置彩铅绘本贴图。';
+    });
+
+    const view={yaw:-14,pitch:35,zoom:100,light:100,turnSpeed:1};
+    let orbitDrag=null,pinch=null;
+    function clientPoint(e){return e.touches?e.touches[0]:e;}
+    function startOrbit(e){if(e.touches?.length>1)return;const p=clientPoint(e);orbitDrag={x:p.clientX,y:p.clientY,yaw:view.yaw,pitch:view.pitch};canvas.classList.add('dragging-mech');}
+    function moveOrbit(e){const p=clientPoint(e);view.yaw=Math.max(-65,Math.min(65,orbitDrag.yaw+(p.clientX-orbitDrag.x)*.19));view.pitch=Math.max(16,Math.min(75,orbitDrag.pitch+(p.clientY-orbitDrag.y)*.15));syncViewUI();}
+    function updateView(dt){
+      bookGroup.rotation.y=THREE.MathUtils.degToRad(view.yaw);
+      const elevation=THREE.MathUtils.degToRad(view.pitch);
+      const aspect=innerWidth/innerHeight;
+      const distance=21.4*(100/view.zoom)*Math.max(1,1.12/aspect);
+      const target=new THREE.Vector3(0,Math.sin(elevation)*distance+.9,Math.cos(elevation)*distance+.2);
+      camera.position.lerp(target,1-Math.exp(-dt*10));camera.lookAt(baseLookAt);
+      mainDirLight.intensity=1.15*view.light/100;
+    }
+    function syncViewUI(){
+      for(const [key,suffix] of [['yaw','°'],['pitch','°'],['zoom','%'],['light','%']]){
+        document.getElementById('view-'+key).value=view[key];document.getElementById(key+'-value').textContent=Math.round(view[key])+suffix;
+      }
+    }
+    for(const key of ['yaw','pitch','zoom','light'])document.getElementById('view-'+key).addEventListener('input',e=>{view[key]=+e.target.value;syncViewUI();});
+    document.getElementById('view-speed').addEventListener('input',e=>{view.turnSpeed=+e.target.value/100;document.getElementById('speed-value').textContent=(1.35*view.turnSpeed).toFixed(2)+' 秒';});
+    function resetView(){Object.assign(view,{yaw:-14,pitch:35,zoom:100});syncViewUI();}
+    document.getElementById('reset-view').onclick=resetView;
+    document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{resetView();if(b.dataset.view==='front'){view.yaw=0;view.pitch=21;}if(b.dataset.view==='top'){view.yaw=0;view.pitch=70;}syncViewUI();});
+    canvas.addEventListener('dblclick',resetView);
+    canvas.addEventListener('wheel',e=>{e.preventDefault();view.zoom=Math.max(65,Math.min(140,view.zoom-e.deltaY*.05));syncViewUI();},{passive:false});
+    canvas.addEventListener('touchstart',e=>{if(e.touches.length===2){orbitDrag=null;activeMechanism=null;pinch={distance:Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY),zoom:view.zoom};}},{passive:true});
+    canvas.addEventListener('touchmove',e=>{if(e.touches.length===2&&pinch){e.preventDefault();const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);view.zoom=Math.max(65,Math.min(140,pinch.zoom*d/pinch.distance));syncViewUI();}},{passive:false});
+    window.addEventListener('touchend',()=>pinch=null);
+    window.addEventListener('blur',()=>{orbitDrag=null;activeMechanism=null;});
+    document.addEventListener('keydown',e=>{
+      if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;
+      if(!modalAnalysis.classList.contains('hidden')||!modalWorkshop.classList.contains('hidden'))return;
+      if(e.key==='ArrowRight'){e.preventDefault();goToSpread(currentSpreadIdx+1);}
+      if(e.key==='ArrowLeft'){e.preventDefault();goToSpread(currentSpreadIdx-1);}
+    });
+    const progressInput=document.getElementById('turn-progress');
+    progressInput.addEventListener('pointerdown',()=>{if(!turnState)goToSpread(currentSpreadIdx<4?currentSpreadIdx+1:3);if(turnState)turnState.manual=true;});
+    progressInput.addEventListener('input',e=>{
+      if(!turnState)goToSpread(currentSpreadIdx<4?currentSpreadIdx+1:3);
+      if(turnState){turnState.manual=true;turnState.progress=+e.target.value/100;renderTurn(turnState.progress);document.getElementById('progress-value').textContent=e.target.value+'%';}
+    });
+    document.getElementById('resume-turn').onclick=()=>{if(turnState){turnState.manual=false;turnState.start=performance.now()-turnState.progress*1350*view.turnSpeed;}};
+    const generatedCutouts={};
+    async function loadIllustrations(){
+      try{
+        const atlas=new Image();atlas.src=window.ILLUSTRATION_ATLAS||'storybook-atlas.png';await atlas.decode();
+        const keys=['cottage','traveler','fox','lanternFlower','windmillBase','windmillBlades','crane','clockTower','clockmaker','duneFront','cloud','gear'];
+        const boxes=[[0,0,414,376],[414,0,340,376],[754,0,351,376],[1105,0,343,376],[0,376,363,357],[363,376,370,357],[733,376,417,357],[1150,376,298,357],[0,733,244,353],[244,733,510,353],[754,733,366,353],[1120,733,328,353]];
+        keys.forEach((key,i)=>{
+          const [sx,sy,sw,sh]=boxes[i].map((v,j)=>v*(j%2?atlas.height/1086:atlas.width/1448));
+          const cv=document.createElement('canvas');cv.width=Math.round(sw);cv.height=Math.round(sh);
+          const c=cv.getContext('2d');c.drawImage(atlas,sx,sy,sw,sh,0,0,cv.width,cv.height);
+          // Trim only transparent gutters; preserve every generated watercolor pixel.
+          const d=c.getImageData(0,0,cv.width,cv.height).data;
+          let x0=cv.width,y0=cv.height,x1=0,y1=0;
+          for(let y=0;y<cv.height;y++)for(let x=0;x<cv.width;x++)if(d[(y*cv.width+x)*4+3]>32){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y);}
+          if(x1<=x0)return;
+          const trimmed=document.createElement('canvas');trimmed.width=x1-x0+13;trimmed.height=y1-y0+13;
+          trimmed.getContext('2d').drawImage(cv,x0,y0,x1-x0+1,y1-y0+1,6,6,x1-x0+1,y1-y0+1);
+          generatedCutouts[key]=trimmed.toDataURL('image/png');
+          AssetLibrary.updateFromProcessed(key,{rawCanvas:trimmed,mattedCanvas:trimmed,diecutCanvas:trimmed});
+        });
+        document.getElementById('asset-status').textContent='水彩纸艺 · 12 张生成素材';
+        window.assetsReady=true;
+      }catch(err){document.getElementById('asset-status').textContent='内置绘本素材';console.warn('Illustration atlas unavailable',err);}
+    }
+    syncViewUI();
+    window.bookDebug={get state(){return {page:currentSpreadIdx,turning:isTurningPage,progress:turnState?.progress,view:{...view},assets:window.assetsReady};},go:goToSpread,seek(p){if(!turnState)goToSpread(currentSpreadIdx<4?currentSpreadIdx+1:3);turnState.manual=true;turnState.progress=p;renderTurn(p);},finish:finishTurn,scene,camera,renderer,spreads};
+
+    // Start Animation Loop on Window Load
+    window.onload=async function(){
+      initPaperArchitecture();await loadIllustrations();
+      starParticles.visible=false;audio.enabled=false;
+      window.filmDraw=function(o){
+        const t=o.time||0,m=o.mech||0;
+        turnState=null;isTurningPage=false;
+        spreads.forEach((s,i)=>{
+          s.group.visible=false;
+          s.halves.forEach((h,k)=>{h.visible=true;h.rotation.z=0;h.position.y=0;bendPaper(s,k,0);});
+          resetPaperMaterial(s);showPaperContents(s,true);applySpreadFolding(s,1);
+        });
+        currentSpreadIdx=o.page||0;
+        const s=spreads[currentSpreadIdx];s.group.visible=true;
+        leftPageSurface.material=rightPageSurface.material=pageMaterials[currentSpreadIdx];
+        magicPointLight.color.setHex(0xffc469);magicPointLight.intensity=0;
+        if(o.turn){
+          turnState={old:spreads[o.turn.from],next:spreads[o.turn.to],direction:o.turn.to>o.turn.from?1:-1};
+          leftPageSurface.material=rightPageSurface.material=pageMaterials[o.turn.to];
+          renderTurn(o.turn.progress);
+        }else{
+          applySpreadFolding(s,o.open??1);s.mechValue=m;
+          if(s.pullTab){const tab=s.pullTab.userData.tabMesh;tab.position.x=s.pullTab.userData.baseX+(tab.userData.mechType==='slideH'?m*1.35:0);tab.position.z=s.pullTab.userData.baseZ+(tab.userData.mechType==='pullV'?m*.9:0);}
+          if(currentSpreadIdx===0){const r=s.refs;r.bladesMesh.rotation.z=-t*.7-m*.5;r.flower.scale.setScalar(1+m*.16);magicPointLight.intensity=m*2;}
+          if(currentSpreadIdx===1){const r=s.refs;r.crane.position.y=.03+m*1.15;r.crane.rotation.z=Math.sin(t*4)*.06;r.kite.position.y=.03+m*.75;r.cloudBack.position.x=r.cloudBack.userData.basePos.x+m*.3;r.cloudMid.position.x=r.cloudMid.userData.basePos.x-m*.3;}
+          if(currentSpreadIdx===2){s.refs.dialMesh.rotation.z=-m*2;s.refs.gearMeshes.forEach((g,i)=>g.rotation.z=(i%2?-1:1)*(t*.5+m*2));}
+          if(currentSpreadIdx===3){const r=s.refs;r.sun.userData.mesh.position.y=1.45-m*2.15;r.moon.userData.mesh.position.y=-.65+m*2.1;magicPointLight.color.lerpColors(new THREE.Color(0xff9442),new THREE.Color(0x6e98ff),m);magicPointLight.intensity=.6+m*.3;}
+          if(currentSpreadIdx===4){const r=s.refs;r.bladesMesh.rotation.z=-t*.8;r.leftPetal.rotation.z=m*.42;r.rightPetal.rotation.z=-m*.42;r.leftPetal.position.x=r.leftPetal.userData.basePos.x-m*.45;r.rightPetal.position.x=r.rightPetal.userData.basePos.x+m*.45;r.centerFlower.scale.set(1+m*.22,1+m*.22,1);magicPointLight.intensity=.4+m*2.4;}
+        }
+        bookGroup.rotation.y=THREE.MathUtils.degToRad(o.yaw??-14);
+        const pitch=THREE.MathUtils.degToRad(o.pitch??35),distance=o.distance??21.4,focus=o.focus??0;
+        camera.position.set(focus,Math.sin(pitch)*distance+.9,Math.cos(pitch)*distance+.2);
+        camera.lookAt(focus,.95,.2);renderer.render(scene,camera);
+      };
+      window.filmReady=true;
+      window.filmDraw({page:0,open:0,time:0,yaw:-14,distance:20.5});
+    };
+
+  </script>
+</body>
+</html>

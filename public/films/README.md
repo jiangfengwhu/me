@@ -8,8 +8,20 @@ Local HTML / GSAP / Three.js compositions imported from the original film worksp
 - `fx-film`: existing 16-second landscape VFX showreel, reused from
   `C:/Users/shado/工作/html视频特效/promo`; its Animee source frames and score are retained.
 - `creator-film`: 24-second landscape film, four screenshots → 35 note cards → 3D director.
-- `agent-film`: 26-second landscape film, planning → tools → evidence → context/checkpoint.
-- `interview-film`: 22-second landscape film, role/company → question → code → explanation.
+- `little-traveler-film`: original 32-second landscape film for 星星上的小旅人, with actual paper folding and interactive mechanisms.
+- `clack-launch-film`: original 30-second landscape film for CLACK, with actual keys, typebars, Chinese input and paper feed.
+
+The last two works replace Agent 学习工坊 and 面试题库. Their original standalone
+applications are also included at `/apps/little-traveler/` and `/apps/clack/`.
+To refresh their original applications, artwork and films:
+
+```powershell
+node scripts/import-handmade-works.mjs 'C:\Users\shado\工作\html视频特效'
+```
+
+The shared player resolves each composition's own timeline ID and waits for its
+product scene to be ready before revealing the first frame. Former agent/interview
+film files remain as inactive source archives; they are no longer mapped to works.
 
 The three new films are editable huashu-motion compositions with local fonts, GSAP,
 composition variables, scene labels, original ABC scores and generated WAV audio.

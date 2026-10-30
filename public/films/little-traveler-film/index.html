@@ -1,0 +1,61 @@
+<!doctype html><html lang="zh-CN" data-composition-variables='[{"id": "brand", "type": "string", "label": "产品名", "default": "星星上的小旅人"}, {"id": "hook", "type": "string", "label": "开场标题", "default": "把故事，翻成立体。"}, {"id": "tagline", "type": "string", "label": "片尾文案", "default": "翻开一页，遇见一个小宇宙。"}, {"id": "gold", "type": "color", "default": "#d9b677"}, {"id": "paper", "type": "color", "default": "#f7ebd9"}, {"id": "endHold", "type": "number", "label": "片尾停留", "default": 6, "min": 3, "max": 10, "step": 0.5}]'><head><meta charset="utf-8"><title>星星上的小旅人 · 产品视频</title>
+<script src="vendor/gsap.min.js"></script><script src="vendor/om.js"></script>
+<style>
+@font-face{font-family:Book;src:url('assets/fonts/LXGWWenKai-500.woff')}@font-face{font-family:Inter;src:url('assets/fonts/Inter-var.woff')}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#28190e}#film{position:relative;width:1920px;height:1080px;overflow:hidden;color:var(--paper);font-family:Book,serif}iframe{position:absolute;inset:0;width:1920px;height:1080px;border:0;pointer-events:none}.shade{position:absolute;inset:0;background:linear-gradient(90deg,#1b1008e8 0%,#1b1008b0 28%,transparent 63%);pointer-events:none}.top{position:absolute;left:76px;right:76px;top:56px;display:flex;justify-content:space-between;align-items:center;font-size:24px;letter-spacing:2px}.edition{font:14px Inter;letter-spacing:5px;color:#d9c9ac}.copy{position:absolute;left:78px;top:300px;width:640px}.copy h1{font-size:89px;line-height:1.25;font-weight:500;margin:0 0 35px;letter-spacing:-3px}.copy p{font-size:29px;line-height:1.8;color:#d6c3a5}.eyebrow{font:14px Inter;letter-spacing:5px;color:var(--gold);margin-bottom:28px}.caption{position:absolute;left:78px;bottom:78px;max-width:1300px}.caption h2{font-weight:500;font-size:48px;letter-spacing:3px;margin:0 0 15px}.caption p{font-size:23px;color:#dfc9a8;margin:0}.label{position:absolute;right:76px;bottom:78px;font:14px Inter;letter-spacing:4px;color:#d5c09f}.under{position:absolute;inset:0;background:linear-gradient(0deg,#201108cb,transparent 30%);pointer-events:none}#end h1{font-size:75px;line-height:1.32;letter-spacing:1px}#end .rule{width:80px;height:2px;background:var(--gold);margin:32px 0}#end .small{font-size:22px;letter-spacing:4px}.count{font:16px Inter;color:var(--gold);margin-bottom:18px}.hidden{visibility:hidden}
+</style><link rel="stylesheet" href="../player.css"></head><body><main id="film" data-composition-id="traveler" data-width="1920" data-height="1080" data-fps="60">
+  <audio id="om-sound" src="assets/sound.wav" data-start="0" data-duration="32" data-track-index="8" data-volume="1"></audio>
+<iframe id="product" src="assets/product.html" data-om-id="storybook-product" data-layout-allow-occlusion></iframe>
+<div class="shade" id="shade"></div><div class="under"></div>
+<div class="top" data-om-id="brand-header"><span data-var-text="brand">星星上的小旅人</span><span class="edition">INTERACTIVE POP-UP STORYBOOK</span></div>
+<section id="intro" class="copy" data-om-id="intro-copy"><div class="eyebrow">A LITTLE WORLD, UNFOLDED</div><h1 data-var-text="hook">把故事，翻成立体。</h1><p>一本可以翻动、触碰、探索的<br>互动纸艺立体书。</p></section>
+<section id="caption" class="caption" data-om-id="feature-caption"><div class="count" id="chapter"></div><h2 id="feature-title"></h2><p id="feature-sub"></p></section>
+<section id="end" class="copy hidden" data-om-id="end-copy"><div class="eyebrow">YOUR JOURNEY BEGINS HERE</div><h1 data-var-text="brand">星星上的小旅人</h1><div class="rule"></div><p data-var-text="tagline">翻开一页，遇见一个小宇宙。</p><p class="small">五个跨页 · 纸艺机关 · 自由视角</p></section>
+<div class="label" id="scene-label" data-om-id="page-label">01 / 05</div>
+</main><script type="text/vnd.abc" id="om-score">X:1
+T:The Little Traveler - Paper Constellations
+M:4/4
+L:1/8
+Q:1/4=120
+K:F
+V:PN inst=piano role=melody gain=0.7
+!mark:hook! !mp! C2 F2 A2 G2 | F3 E D2 C2 |
+!mark:light! F2 A2 c2 A2 | G3 F E2 C2 |
+!mf! D2 F2 A2 c2 | B2 A2 G2 F2 |
+!crescendo(! A2 c2 d2 c2 | A2 G2 C2 z2 !crescendo)! |
+!f! F2 A2 c2 a2 | g2 f2 e2 c2 |
+d2 c2 A2 F2 | G3 A c2 G2 |
+!mf! A2 G2 F2 C2 |
+!mark:logo! !mp! C2 F2 A2 c2 | A2 G2 F4 | !pp! [FAC]6 z2 |
+V:GL inst=glock gain=0.23
+!p! z4 c2 f2 | a4 g4 | z4 a2 c'2 | a4 g4 |
+z4 f2 a2 | c'4 a4 | a2 c'2 d'2 c'2 | a2 g2 z4 |
+!mf! c'2 a2 f2 c2 | e'2 c'2 g2 e2 | f'2 d'2 a2 f2 | g'4 e'4 |
+!p! c'4 a4 | c2 f2 a2 c'2 | a4 g2 f2 | !pp! f6 z2 |
+V:CH inst=pizz gain=0.38
+!p! [F,A,C]2 z2 [F,A,C]2 z2 | [C,E,G,]2 z2 [C,E,G,]2 z2 |
+[D,F,A,]2 z2 [D,F,A,]2 z2 | [B,,D,F,]2 z2 [C,E,G,]2 z2 |
+!mf! [D,F,A,]2 [D,F,A,]2 [D,F,A,]2 [D,F,A,]2 | [B,,D,F,]2 [B,,D,F,]2 [B,,D,F,]2 [B,,D,F,]2 |
+[F,A,C]2 [F,A,C]2 [F,A,C]2 [F,A,C]2 | [C,E,G,]2 [C,E,G,]2 [C,E,G,]2 z2 |
+!f! [F,A,C]2 [F,A,C]2 [F,A,C]2 [F,A,C]2 | [C,E,G,]2 [C,E,G,]2 [C,E,G,]2 [C,E,G,]2 |
+[D,F,A,]2 [D,F,A,]2 [D,F,A,]2 [D,F,A,]2 | [B,,D,F,]2 [B,,D,F,]2 [C,E,G,]2 [C,E,G,]2 |
+!mp! [F,A,C]2 z2 [C,E,G,]2 z2 | [F,A,C]2 z2 [F,A,C]2 z2 | [C,E,G,]2 z2 [C,E,G,]2 z2 | !pp! [F,A,C]6 z2 |
+V:ST inst=strings gain=0.28
+Z4 |
+!p! [D,F,A,]8 | [B,,D,F,]8 | !crescendo(! [F,A,C]8 | [C,E,G,]6 z2 !crescendo)! |
+!mf! [F,A,c]8 | [E,G,c]8 | [F,A,d]8 | [E,G,c]8 |
+!p! [F,A,c]8 | [F,A,c]8 | [E,G,c]8 | !pp! [F,A,c]6 z2 |
+V:BS inst=bass gain=0.38
+!p! F,,4 C,,4 | C,,4 G,,,4 | D,,4 A,,,4 | B,,,4 C,,4 |
+!mf! D,,4 A,,,4 | B,,,4 F,,,4 | F,,4 C,,4 | C,,4 G,,,2 z2 |
+F,,4 C,,4 | C,,4 G,,,4 | D,,4 A,,,4 | B,,,4 C,,4 |
+!p! F,,4 C,,4 | F,,8 | C,,8 | F,,6 z2 |
+V:DR inst=drums kit=pop gain=0.15
+Z2 |
+!p! C,,2 z2 C,,2 z2 | C,,2 z2 C,,2 z2 |
+!mp! C,,2 ^F,,2 D,,2 ^F,,2 | C,,2 ^F,,2 D,,2 ^F,,2 |
+C,, ^F,, D,, ^F,, C,, ^F,, D,, ^F,, | C,, ^F,, D,, ^F,, C,,2 z2 |
+!mf! C,,2 ^F,,2 D,,2 ^F,,2 | C,,2 ^F,,2 D,,2 ^F,,2 | C,,2 ^F,,2 D,,2 ^F,,2 | C,,2 ^F,,2 D,,2 ^F,,2 |
+!p! C,,4 z4 | C,,4 z4 | z8 | z8 |
+
+</script><script src="assets/film.js"></script><script>window.__filmAssetsReady=Promise.all(Object.values(window.__hf?.buildReady||{}));</script><script src="../player.js"></script></body></html>

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN" data-composition-variables='[
+ {"id":"brand","type":"string","label":"品牌","default":"clack","group":"文案"},
+ {"id":"headline","type":"string","label":"主张","default":"每一声敲击，落在纸上。","group":"文案"},
+ {"id":"imeTitle","type":"string","label":"中文输入标题","default":"中文，逐键成章。","group":"文案"},
+ {"id":"manuscript","type":"string","label":"手稿","default":"落笔无悔，字字留痕。","group":"文案"},
+ {"id":"accent","type":"color","label":"暖橙","default":"#d95338","group":"颜色"},
+ {"id":"paper","type":"color","label":"纸白","default":"#fbf9f3","group":"颜色"},
+ {"id":"endHold","type":"number","label":"品牌停留","default":4,"min":2,"max":6,"step":0.5,"group":"节奏"}
+]'>
+<head><meta charset="utf-8"><title>CLACK · 每一声敲击，落在纸上</title>
+<script src="vendor/gsap.min.js"></script><script src="vendor/om.js"></script><script src="vendor/three.min.js"></script>
+<link rel="stylesheet" href="assets/product-fonts.css">
+<style>
+@font-face{font-family:'Noto Sans SC';src:url('assets/fonts/NotoSansSC-500.woff') format('woff');font-weight:500;font-display:block}
+:root{--accent:#d95338;--paper:#fbf9f3}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}body{font-family:Inter,'Noto Sans SC',sans-serif}#film{width:1920px;height:1080px;position:relative;overflow:hidden;background:#e7e7e5;color:#202124;isolation:isolate}#ground{position:absolute;inset:0;background:#e7e7e5}#dark-ground{position:absolute;inset:0;background:#111216}.hatch{position:absolute;top:0;bottom:0;width:48px;background:repeating-linear-gradient(-45deg,transparent 0 8px,#26262612 8px 9px);border-right:1px dashed #19191925}.hatch.right{right:0;transform:rotate(180deg)}#webglStageContainer{position:absolute;inset:0;width:1920px;height:1080px;transform-origin:50% 50%;z-index:2;pointer-events:none}#webglStageContainer canvas{display:block;width:1920px;height:1080px}#intro-shade{position:absolute;inset:0;z-index:3;background:linear-gradient(90deg,#111216 0%,#111216ee 30%,#11121600 72%);pointer-events:none}.topline{position:absolute;top:62px;left:108px;right:108px;display:flex;justify-content:space-between;align-items:center;z-index:8}.topbrand{font:700 36px 'Courier Prime',monospace;letter-spacing:-1px}.topcategory{font:14px Inter,sans-serif;letter-spacing:3px;color:#777974}.copy{position:absolute;left:108px;z-index:5;width:650px}.eyebrow{font:500 16px Inter,sans-serif;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin:0 0 28px}.copy h1,.copy h2{font-family:'Noto Sans SC',sans-serif;font-size:82px;font-weight:500;letter-spacing:-3px;line-height:1.3;margin:0}.copy p{font-family:'Noto Sans SC',sans-serif;font-size:25px;line-height:1.8;color:#797a74;margin:28px 0 0}.line{display:block;overflow:hidden}.line>span{display:block;white-space:nowrap}#opening{top:280px;color:var(--paper)}#opening .bigmark{font:700 228px/.95 'Courier Prime',monospace;letter-spacing:-10px;margin:0 0 34px}#opening .bigmark span{display:inline-block}#opening p{font-size:26px;letter-spacing:3px;color:#c2c0b9}#hero-copy{top:360px}#hero-copy h1 .warm{color:var(--accent)}#type-copy{top:345px}#type-copy h2{font:400 96px/1.1 'Courier Prime',monospace;letter-spacing:-4px}#type-copy p{font-size:24px}#detail-copy{position:absolute;left:108px;top:135px;z-index:5}#detail-copy h2{font:500 56px 'Noto Sans SC',sans-serif;letter-spacing:-2px;margin:0}#detail-copy .eyebrow{margin-bottom:20px}#ime-copy{top:320px}#ime-copy h2{font-size:76px;line-height:1.45}#ime-copy p{font-size:24px}.ime-preview{margin-top:38px;display:inline-flex;flex-direction:column;gap:17px;border-left:3px solid var(--accent);padding:2px 0 2px 22px}.ime-preview b{font:400 37px 'Courier Prime',monospace;color:var(--accent)}.ime-preview span{font:500 22px 'Noto Sans SC',sans-serif;color:#696b64}.ime-preview small{font:12px Inter,sans-serif;letter-spacing:3px;color:#888b83}.caption{position:absolute;left:108px;bottom:78px;z-index:7;font:14px Inter,sans-serif;letter-spacing:3px;color:#777974}.caption em{font-style:normal;color:var(--accent)}#paper-caption{position:absolute;left:130px;top:154px;z-index:6;font:500 42px 'Noto Sans SC',sans-serif;letter-spacing:-1px}#manuscript-card{position:absolute;left:138px;top:310px;width:580px;height:390px;background:var(--paper);padding:42px;box-shadow:0 18px 32px #16161820,0 3px 7px #16161813;z-index:6;transform-origin:50% 50%;color:#242426}.card-head{display:flex;justify-content:space-between;align-items:center;font:700 25px 'Courier Prime',monospace}.card-head small{font:11px Inter,sans-serif;letter-spacing:3px;color:#989991}.manuscript{font:500 46px/1.7 'Noto Sans SC',serif;margin:53px 0 36px;letter-spacing:5px}.card-footer{border-top:1px dashed #d4d0c5;padding-top:17px;display:flex;justify-content:space-between;font:13px Inter,sans-serif;letter-spacing:2px;color:#8d8b83}#paper-actions{position:absolute;left:149px;top:757px;font:500 21px 'Noto Sans SC',sans-serif;z-index:7;color:#77776e}#ending{top:340px;width:750px}#ending .endbrand{font:700 166px/.95 'Courier Prime',monospace;letter-spacing:-8px;margin-bottom:27px}#ending h2{font:400 47px/1.25 'Courier Prime',monospace;letter-spacing:-2px}#ending p{font:500 25px 'Noto Sans SC',sans-serif;margin-top:20px}#cta{display:inline-flex;align-items:center;gap:27px;padding:19px 27px;border-radius:40px;background:#25282c;color:#fbf9f3;font:500 18px Inter,sans-serif;margin-top:42px;box-shadow:0 5px 9px #1112}#cta span{font:21px 'Courier Prime',monospace;color:#c7c8c6}.endnote{position:absolute;left:108px;bottom:77px;font:13px Inter,sans-serif;letter-spacing:4px;z-index:7;color:#898b83}
+</style><link rel="stylesheet" href="../player.css"></head>
+<body><div id="film" data-composition-id="clack" data-width="1920" data-height="1080" data-fps="30">
+  <audio id="om-sound" src="assets/sound.wav" data-start="0" data-duration="30" data-track-index="8" data-volume="1"></audio>
+<div id="ground" data-om-id="paper-ground"></div><div id="dark-ground"></div><div class="hatch"></div><div class="hatch right"></div>
+<div id="webglStageContainer" data-om-id="real-typewriter" data-layout-allow-overflow></div><div id="intro-shade"></div>
+<div class="topline" data-om-id="top-line"><div class="topbrand" data-var-text="brand">clack</div><div class="topcategory">A DIGITAL TYPEWRITER</div></div>
+<div id="opening" class="copy" data-om-id="opening-copy"><div class="eyebrow">MEET YOUR NEXT SENTENCE.</div><div class="bigmark" data-om-var="brand"><span>c</span><span>l</span><span>a</span><span>c</span><span>k</span></div><p>每一声敲击，落在纸上。</p></div>
+<div id="hero-copy" class="copy" data-om-id="hero-claim"><div class="eyebrow">CLACK / WRITER STUDIO</div><h1><span class="line"><span>每一声<span class="warm">敲击</span>，</span></span><span class="line"><span>落在纸上。</span></span></h1><p>把打字，变成一件有触感的事。</p></div>
+<div id="type-copy" class="copy" data-om-id="typing-copy"><div class="eyebrow">01 / FEEL EVERY KEY</div><h2>Every key<br>matters.</h2><p>键帽下压，字杆跃起。<br>每次输入，都有回应。</p></div>
+<div id="detail-copy" data-om-id="detail-title"><div class="eyebrow" id="detail-index">CRAFT / 01</div><h2 id="detail-name">圆润长键</h2></div>
+<div id="ime-copy" class="copy" data-om-id="chinese-input"><div class="eyebrow">02 / WORDS TAKE SHAPE</div><h2>中文，<br>逐键成章。</h2><p>拼音实时浮现，<br>选词即落墨。</p><div class="ime-preview" data-om-id="live-pinyin"><small>纸面拼音 IME</small><b id="pinyin-value">luo bi wu hui</b><span id="candidate-value">1. 落笔无悔</span></div></div>
+<div id="paper-caption" data-om-id="paper-caption">这一页，值得留下。</div>
+<div id="manuscript-card" data-om-id="saved-manuscript"><div class="card-head"><span>clack</span><small>YOUR ORIGINAL WORDS</small></div><div class="manuscript" data-om-var="manuscript">落笔无悔，<br>字字留痕。</div><div class="card-footer"><span>WRITER STUDIO</span><span>自由创作 · 手稿</span></div></div><div id="paper-actions" data-om-id="export-caption">手稿档案　/　PNG　/　TXT</div>
+<div id="ending" class="copy" data-om-id="brand-ending"><div class="endbrand" data-var-text="brand">clack</div><h2>Typos stay on paper.</h2><p data-var-text="headline">每一声敲击，落在纸上。</p><div id="cta" data-om-id="start-typing">Start typing <span>↵</span></div></div><div class="endnote" data-om-id="end-note">PRACTICE. WRITE. KEEP.</div>
+<div id="chapter-caption" class="caption" data-om-id="chapter-caption"><em>CLACK</em> / EVERY KEY HITS THE PAPER.</div>
+</div>
+<script type="text/vnd.abc" id="om-score">
+X:1
+T:CLACK - The next sentence
+M:4/4
+L:1/8
+Q:1/4=120
+K:Em
+V:PN inst=piano role=melody gain=0.78
+!mark:hook! !mp! E2 G B2 G E2 | B,2 E G2 B A2 | G2 E D2 E G2 |
+!mark:typing! !mf! E G B G E G B G | D F A F D F A F |
+!mark:detail! !f! EGBG EGBG | DGBG DGBG |
+!mark:ime! !f! e2 B d2 B G2 | d2 A c2 A F2 | e2 B g2 e d2 |
+!mark:manuscript! !mp! B2 G A2 G E2 | D2 F A2 F D2 | G2 E D2 B, E2 |
+!mark:logo! !mf! E2 G B2 e2 | !p! [EGB]8 |
+V:CH inst=rhodes gain=0.27
+!p! [EGB]8 | [EGB]8 | [DGA]8 |
+!mp! [EGB]8 | [DFA]8 |
+!mf! [EGB]8 | [DGB]8 |
+!f! [EGB]8 | [DFA]8 | [EGB]8 |
+!mp! [CEG]8 | [DFA]8 | [B,EG]8 |
+!mf! [EGB]8 | !p! [EGB]8 |
+V:PL inst=stacc gain=0.30
+z8 | z8 | z8 |
+!p! E,B,EB, E,B,EB, | D,A,DA, D,A,DA, |
+!mf! E,B,EB, E,B,EB, | D,B,GB, D,B,GB, |
+!mf! E,B,EB, E,B,EB, | D,A,DA, D,A,DA, | E,B,EB, E,B,EB, |
+z8 | z8 | z8 | z8 | z8 |
+V:BA inst=bass gain=0.56
+!p! E,,4 z4 | z8 | E,,4 B,,,4 |
+!mp! E,,3 E,, B,,,2 E,,2 | D,,3 D,, A,,,2 D,,2 |
+!mf! E,,3 E,, B,,,2 E,,2 | G,,3 G,, D,,2 G,,2 |
+!f! E,,3 E,, B,,,2 E,,2 | D,,3 D,, A,,,2 D,,2 | E,,3 E,, B,,,2 E,,2 |
+!mp! C,,4 G,,,4 | D,,4 A,,,4 | E,,4 B,,,4 |
+!mf! E,,4 B,,,4 | !p! E,,8 |
+V:DR inst=drums kit=pop gain=0.40
+!p! C,,4 ^C,,4 | C,,4 z4 | C,,4 ^C,,4 |
+!mp! [C,,^F,,]^F,, ^F,,^F,, [^C,,^F,,]^F,, ^F,,^F,, | [C,,^F,,]^F,, ^F,,^F,, [^C,,^F,,]^F,, ^F,,^F,, |
+!mf! [C,,^F,,]^F,, [D,,^F,,]^F,, [C,,^F,,]^F,, [D,,^F,,]^F,, | [C,,^F,,]^F,, [D,,^F,,]^F,, [C,,^F,,]^F,, [D,,^F,,]^F,, |
+!f! [C,,^C,]^F,, [D,,^F,,]^F,, [C,,^F,,]^F,, [D,,^F,,]^F,, | [C,,^F,,]^F,, [D,,^F,,]^F,, [C,,^F,,]^F,, [D,,^F,,]^F,, | [C,,^F,,]^F,, [D,,^F,,]^F,, [C,,^F,,]^F,, [D,,^F,,]^F,, |
+!p! C,,4 ^C,,4 | C,,4 z4 | C,,4 z4 |
+!mp! [C,,^C,]4 z4 | z8 |
+</script>
+
+<script src="assets/product-engine.js"></script><script src="assets/film.js"></script>
+<script>window.__filmAssetsReady=Promise.all(Object.values(window.__hf?.buildReady||{}));</script><script src="../player.js"></script></body></html>
