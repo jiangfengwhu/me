@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN" data-composition-variables='[{"id":"name","type":"string","label":"姓名","default":"JIANG FENG"},{"id":"hook","type":"string","label":"开场","default":"我的自我介绍，\n可以翻开。"},{"id":"bio","type":"string","label":"个人介绍","default":"从前端出发。\n现在，独立造物。"},{"id":"url","type":"string","label":"网站","default":"me.297782.xyz"},{"id":"endLine","type":"string","label":"结束语","default":"认识我，从我做的东西开始。"},{"id":"ink","type":"color","label":"文字","default":"#f0f4f8"},{"id":"accent","type":"color","label":"公告栏强调色","default":"#38bdf8"},{"id":"endHold","type":"number","label":"结尾停留","default":6,"min":3,"max":10}]'>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JIANG FENG · 可以翻开的自我介绍</title>
+<script src="vendor/gsap.min.js"></script><script src="vendor/om.js"></script><script src="vendor/composition-runtime.js"></script>
+<link rel="stylesheet" href="assets/style.css"><style id="om-fonts">
+@font-face { font-family: "Inter"; src: url("assets/fonts/Inter-var.woff") format("woff"); font-weight: 100 900; font-style: normal; }
+</style>
+</head>
+<body><main id="film" data-composition-id="me-intro" data-width="1920" data-height="1080" data-fps="30">
+  <audio id="om-sound" src="assets/sound.wav" data-start="0" data-duration="36" data-track-index="8" data-volume="1"></audio>
+<div id="stage" data-om-id="original-3d-scene" data-layout-allow-occlusion></div><div class="hero-shade"></div><div class="bio-shade" data-om-id="bio-reading-ground"></div><div class="top-shade"></div>
+<div class="folio" data-om-id="name-rail"><span data-var-text="name">JIANG FENG</span><span>INDEPENDENT DEVELOPER</span></div>
+<div class="site-rail" data-om-id="site-rail" data-var-text="url">me.297782.xyz</div>
+<section class="hook copy" data-om-id="opening-hook"><p class="eyebrow">一个独立开发者的作品馆</p><h1 data-var-text="hook">我的自我介绍，<br>可以翻开。</h1><p class="sub">每一本，都是一个亲手做出的产品。</p></section>
+<section class="bio copy" data-om-id="personal-story"><p class="eyebrow">EX-FRONTEND → INDEPENDENT MAKER</p><h2 data-var-text="bio">从前端出发。<br>现在，独立造物。</h2><p class="history" data-om-id="real-work-history">在小米、快手做过前端，<br>现在，把自己的想法做成可用的产品。</p><div class="stack" data-om-id="actual-stack"><span>React Native / Web</span><span>Golang / Node.js / iOS</span><span>低代码 / D2C</span></div></section>
+<section class="shelf-caption" data-om-id="shelf-invitation"><p>认识我，从这些作品开始。</p><span>七本书，七个可以打开的想法。</span></section>
+<div id="products" data-om-id="original-product-films"></div>
+<div class="project-caption" data-om-id="product-caption"><p id="project-category"></p><h2 id="project-title"></h2><p id="project-tagline"></p></div>
+<div class="project-index" data-om-id="project-progress"></div>
+<section class="ending copy" data-om-id="closing-signature"><p class="eyebrow">FROM IDEA TO PRODUCT</p><h2 data-var-text="name">JIANG FENG</h2><p class="end-role">独立开发者 · 把想法做出来</p><p class="end-line" data-var-text="endLine">认识我，从我做的东西开始。</p><div class="end-url" data-om-id="final-url"><span data-var-text="url">me.297782.xyz</span><svg viewBox="0 0 40 40"><path d="M9 31L31 9M9 9H31V31" fill="none" stroke="currentColor" stroke-width="3"/></svg></div><p class="social">X @jiangfengwhu202 &nbsp; / &nbsp; GitHub @jiangfengwhu</p></section>
+</main>
+<script type="text/vnd.abc" id="om-score">
+X:1
+T:Open a book, meet the maker
+M:4/4
+L:1/8
+Q:1/4=120
+K:Dm
+V:M inst=pluck role=melody gain=0.38
+!mark:hook! !mf! D2 F2 A2 z2 | A2 c2 A2 F2 | !mark:bio! !p! D2 z2 F2 z2 | A2 z2 E2 z2 | F2 A2 z4 | !mark:shelf! !mf! D F A c A F D2 | E G A c A G E2 | !mark:bead! !f! d2 A F A2 c2 | d2 f2 e2 c2 | !mark:outfits! !f! d A F A c A F A | e c A c G A c e | !mark:fx! !ff! d f a f d A F A | !mark:creator! !ff! e g a g e c A c | !mark:montage! !ff! d f a f c e g e | d f a g f e d2 | !mark:end! !mp! D2 F2 A4 | !p! A2 F2 E2 z2 | !pp! D4 z4 |
+V:H inst=rhodes gain=0.18
+!mp! [DFA]8 | [DFA]8 | !pp! [B,DF]8 | [CEG]8 | [DFA]8 | !mf! [B,DF]8 | [CEG]8 | !f! [DFA]8 | [B,DF]8 | [FAC]8 | [CEG]8 | !ff! [DFA]8 | [B,DF]8 | [FAC]8 | [CEG]8 | !mp! [DFA]8 | !p! [CEG]8 | !pp! [DFA]8 |
+V:B inst=synbass gain=0.16
+!mf! D,,2 z2 D,,2 z2 | D,,2 z2 D,,2 z2 | !p! B,,,4 z4 | C,,4 z4 | D,,4 z4 | !mf! B,,,2 z2 B,,,2 z2 | C,,2 z2 C,,2 z2 | !f! D,,2 D,,2 z2 A,,,2 | B,,,2 B,,,2 z2 F,,,2 | F,,2 F,,2 z2 C,,2 | C,,2 C,,2 z2 G,,,2 | !ff! D,,2 D,,2 A,,,2 D,,2 | B,,,2 B,,,2 F,,,2 B,,,2 | F,,2 F,,2 C,,2 F,,2 | C,,2 C,,2 G,,,2 C,,2 | !mp! D,,4 z4 | !p! C,,4 z4 | !pp! D,,4 z4 |
+V:D inst=drums kit=pop gain=0.16
+!mf! C,,2 ^F,,2 D,,2 ^F,,2 | C,,2 ^F,,2 D,,2 ^F,,2 | !pp! z4 ^F,,2 z2 | z4 ^F,,2 z2 | z8 | !mf! C,,2 ^F,,2 D,,2 ^F,,2 | C,,2 ^F,,2 D,,^F,, D,,^F,, | !f! C,,^F,, z^F,, D,,^F,, z^F,, | C,,^F,, z^F,, D,,^F,, z^F,, | C,,^F,, C,,^F,, D,,^F,, z^F,, | C,,^F,, z^F,, D,,^F,, z^F,, | !ff! C,,^F,, C,,^F,, D,,^F,, D,,^F,, | C,,^F,, C,,^F,, D,,^F,, D,,^F,, | C,,^F,, C,,^F,, D,,^F,, D,,^F,, | C,,^F,, C,,^F,, D,,2 z2 | !mp! C,,2 z2 D,,2 z2 | !p! z4 ^F,,2 z2 | !pp! C,,2 z6 |
+</script>
+<script src="assets/scene.js"></script><script src="assets/motion.js"></script></body></html>
