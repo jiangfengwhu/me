@@ -11,9 +11,10 @@ Local HTML / GSAP / Three.js compositions imported from the original film worksp
 - `little-traveler-film`: original 32-second landscape film for 星星上的小旅人, with actual paper folding and interactive mechanisms.
 - `clack-launch-film`: original 30-second landscape film for CLACK, with actual keys, typebars, Chinese input and paper feed.
 
-The last two works replace Agent 学习工坊 and 面试题库. Their original standalone
-applications are also included at `/apps/little-traveler/` and `/apps/clack/`.
-To refresh their original applications, artwork and films:
+The last two works replace Agent 学习工坊 and 面试题库. Their experience links point
+directly to `https://zhezhi.297782.xyz/` and `https://typo.297782.xyz/`.
+Standalone application copies are not included in the portfolio.
+To refresh their artwork and films:
 
 ```powershell
 node scripts/import-handmade-works.mjs 'C:\Users\shado\工作\html视频特效'

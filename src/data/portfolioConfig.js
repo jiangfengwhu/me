@@ -79,7 +79,7 @@ export const BOOKS = [
     "subtitle": "翻开一页，遇见一个小宇宙",
     "spineTitle": "星星上的小旅人 — 互动纸艺立体书",
     "category": "INTERACTIVE POP-UP STORYBOOK",
-    "liveUrl": "/apps/little-traveler/",
+    "liveUrl": "https://zhezhi.297782.xyz/",
     "coverImage": "/assets/covers/cover-origami.png",
     "dimensions": {
       "width": 22,
@@ -153,7 +153,7 @@ export const BOOKS = [
     "subtitle": "每一声敲击，落在纸上",
     "spineTitle": "CLACK — 3D 机械打字机记事本",
     "category": "3D TYPEWRITER",
-    "liveUrl": "/apps/clack/",
+    "liveUrl": "https://typo.297782.xyz/",
     "coverImage": "/assets/covers/cover-clack.png",
     "dimensions": {
       "width": 21.5,
