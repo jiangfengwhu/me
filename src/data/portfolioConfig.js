@@ -63,308 +63,6 @@ export const GITHUB_ACTIVITY = githubSnapshot.activity;
  */
 export const BOOKS = [
   {
-    id: 'pindou-3d-studio',
-    productDescription: '把喜欢的照片变成一颗颗立体拼豆。在浏览器里预览、调整配色，再带着图纸开始手作。',
-    productFeatures: ['图片转 3D 拼豆', '自由调整颗粒与配色', '导出图纸和用料清单'],
-    films: [{ title: '把喜欢，拼成 3D', src: '/films/bead-film/index.html', poster: '/films/bead-film/poster.png', duration: 16, orientation: 'portrait' }],
-    volume: 'VOL. I',
-    edition: 'FIRST EDITION · 2026',
-    title: '豆物 BEAD STUDIO',
-    subtitle: '相册里的喜欢，一颗颗立起来 — 图片转 3D 拼豆与图纸工坊',
-    spineTitle: '豆物 BEAD STUDIO — 图片转 3D 拼豆工坊',
-    author: 'JIANG FENG',
-    year: '2026',
-    category: 'WebGL 2 · Creative Craft Tool',
-    liveUrl: 'https://pindou.297782.xyz/',
-    repoUrl: 'https://github.com/jiangfengwhu',
-    coverImage: '/assets/covers/cover-pindou.png',
-    // Physical dimensions in Stripe Press scene units
-    dimensions: {
-      width: 22.5,
-      height: 29.0,
-      thickness: 3.1
-    },
-    palette: {
-      coverBg: '#d9263e',
-      coverSecondary: '#ff5c72',
-      spineBg: '#c91e35',
-      spineText: '#fff8f6',
-      foilColor: '#ffd9df',
-      pageEdge: '#f8f2ec',
-      accentHex: '#ff2442',
-      detailBg: '#281019'
-    },
-    tagline: '把相册里的平面像素，实时锻造成可捧在手心的 WebGL 2 立体拼豆与施工图纸。',
-    synopsis: [
-      '《豆物 BEAD STUDIO》是一座完全运行在浏览器本地的 2D 图片转 3D 拼豆（Perler Beads）数字工坊。用户只需拖入任意照片（或一键载入内置的「花园里的小橘猫」示例），引擎便会在本地完成像素采样、Floyd-Steinberg 抖色量化，并通过 WebGL 2 InstancedMesh 实时构建出成百上千颗带有中空孔径与明暗浮雕起伏的 3D 拼豆模型。',
-      '除了支持在 3D 立体旋转视图与 2D 正交视图之间丝滑切换，工坊还内置了一支 16 秒的原生 HTML+Web Audio 交互式产品宣传片，并支持实时统计 5mm 物理尺寸、悬停检视色号用量，以及一键导出高清 3D 快照、SVG 编号施工图纸与 CSV 配色物料清单（BOM）。'
-    ],
-    highlights: [
-      '100% 浏览器本地像素采样与 8/16/24/32/48 色盘智能量化，支持移除近白背景与像素抖色',
-      'WebGL 2 参数化空心圆柱几何：实时调节拼豆横向颗数 (16–100 颗)、厚度 (0.3×–2.0×)、孔径比与明暗浮雕高度',
-      '一键导出生产级三大件：PNG 3D 渲染快照、带坐标网格的 SVG 编号图纸、CSV 配色及用量统计表',
-      '内置 16 秒原生 HTML 动画宣传片（含 Web Audio 合成音效），无需视频流即可呈现丝滑产品叙事'
-    ],
-    techStack: ['Three.js (WebGL 2)', 'InstancedMesh', 'Color Quantization', 'Floyd-Steinberg Dither', 'SVG Blueprint Engine', 'CSV BOM Exporter'],
-    metrics: [
-      { label: 'MAX RESOLUTION', value: '100×100 Beads' },
-      { label: 'PALETTE MODES', value: '8 – 48 Colors' },
-      { label: 'PRIVACY MODEL', value: '100% Local Memory' }
-    ],
-    praise: [
-      {
-        quote: '将像素艺术的颗粒感与 WebGL 2 的物理光影结合得恰到好处，连拼豆中空的孔径与底板卡槽都清晰可辨。',
-        source: 'CREATIVE WEBGL REVIEW'
-      },
-      {
-        quote: '从上传照片到导出 SVG 编号施工图纸只需 3 秒，真正为手作玩家省去了繁琐的排豆算色过程。',
-        source: 'MAKER TOOLKIT DIGEST'
-      }
-    ]
-  },
-  {
-    id: 'city-sidekick-dazi',
-    productDescription: '给周末找一个舒服的小局。按兴趣、时间和社交电量，发现适合自己的 3–5 人城市活动。',
-    productFeatures: ['咖啡、散步、看展与桌游', '破冰话题与轻量行程', '偏好与日程保存在本机'],
-    films: [{ title: '把「下次吧」变成「走吧」', src: '/films/city-dazi-film/index.html', poster: '/films/city-dazi-film/poster.png', duration: 22, orientation: 'portrait' }],
-    volume: 'VOL. II',
-    edition: 'FIRST EDITION · 2026',
-    title: '城市搭子 CITY SIDEKICK',
-    subtitle: '一个人出门，也能刚好成局 — 3～5 人低压力同频生活指南',
-    spineTitle: '城市搭子 CITY SIDEKICK — 低压力同城小局',
-    author: 'JIANG FENG',
-    year: '2026',
-    category: 'Social Product · Local-First Web App',
-    liveUrl: 'https://dazi.297782.xyz/',
-    repoUrl: 'https://github.com/jiangfengwhu',
-    coverImage: '/assets/covers/cover-dazi.png',
-    dimensions: {
-      width: 21.8,
-      height: 28.4,
-      thickness: 2.8
-    },
-    palette: {
-      coverBg: '#2546f0',
-      coverSecondary: '#f5fb85',
-      spineBg: '#1c39cc',
-      spineText: '#f8f9fc',
-      foilColor: '#f5fb85',
-      pageEdge: '#f4f5f8',
-      accentHex: '#3859ff',
-      detailBg: '#111d3a'
-    },
-    tagline: '小局有边界，快乐没负担：可以安静听 · 可以跳过问题 · 可以按时离开 · 不用交换联系方式。',
-    synopsis: [
-      '在一线城市（北京、上海、深圳、广州），成年人的社交常常陷入「大型聚会太吵、一对一太尴尬」的困境。《城市搭子 CITY SIDEKICK》以「先一起做件小事，再慢慢认识彼此」为核心理念，为慢热、重边界的都市青年设计了一套 3～5 人、60～120 分钟的轻量级小局匹配体验。',
-      '产品独创「今日社交电量」三档匹配维度（◔ 低电量慢热 / ◑ 随便聊聊 / ● 状态在线），结合出发片区、3–20km 距离半径与咖啡闲聊、城市散步、看展同游、桌游破冰四大场景，自动生成破冰话题与行程模板，并附带 22 秒 HTML 交互宣传片与四条「安心出门约定」。'
-    ],
-    highlights: [
-      '支持北京、上海、深圳、广州四城片区切换，基于片区距离与时段偏好实时筛选同频小局',
-      '独创「社交电量」匹配机制：不给性格打分、不需要立人设，慢热低电量也能舒服参与',
-      '结构化小局卡片：内置可切换的破冰话题库、60–120 分钟清晰行程节点与 AA 预算透明说明',
-      '隐私与边界优先：全部偏好、日程与反馈保存在本地浏览器，支持一键清空本机体验数据'
-    ],
-    techStack: ['Vanilla ES Modules', 'Rule-Based Matcher', 'Local-First Storage', 'HTML5 Interactive Film', 'Editorial CSS Grid'],
-    metrics: [
-      { label: 'GROUP SIZE', value: '3 – 5 People' },
-      { label: 'CITIES COVERED', value: 'BJ · SH · SZ · GZ' },
-      { label: 'PROMO FILM', value: '22s HTML Animation' }
-    ],
-    praise: [
-      {
-        quote: '「可以安静听、可以跳过问题、可以按时离开」——这是我见过对都市慢热人群最温柔也最克制的产品文案与机制设计。',
-        source: 'URBAN LIFESTYLE LAB'
-      }
-    ]
-  },
-  {
-    "id": "xhs-3d-studio",
-    "films": [{ "title": "让主页，自己开场", "src": "/films/creator-film/index.html", "poster": "/films/creator-film/poster.svg", "duration": 24, "orientation": "landscape" }],
-    "volume": "VOL. III",
-    "edition": "CREATOR EDITION · 2026",
-    "title": "3D 主页大片",
-    "subtitle": "把小红书主页，拍成一支有运镜的宣传片",
-    "spineTitle": "3D 主页大片 — 个人频道视频工作台",
-    "category": "3D CREATOR TOOLS",
-    "liveUrl": "https://xhs-vid.297782.xyz/",
-    "coverImage": "/assets/covers/cover-creator.svg",
-    "dimensions": {
-      "width": 23.2,
-      "height": 29.8,
-      "thickness": 3.5
-    },
-    "palette": {
-      "coverBg": "#20213e",
-      "coverSecondary": "#f5be72",
-      "spineBg": "#16172c",
-      "spineText": "#fff1d8",
-      "foilColor": "#f5be72",
-      "pageEdge": "#eee8dc",
-      "accentHex": "#f5be72",
-      "detailBg": "#302114"
-    },
-    "productDescription": "上传小红书主页截图，把头像、简介和笔记封面排进 3D 胶片。跟随自动运镜预览，再导出自己的频道宣传片。",
-    "productFeatures": [
-      "四张截图，自动提取头像与笔记封面",
-      "27 秒运镜与合成配乐",
-      "自定义资料与浏览器视频导出"
-    ],
-    "primaryStack": "Three.js",
-    "techStack": [
-      "Three.js",
-      "Web Audio API",
-      "MediaRecorder"
-    ],
-    "metrics": [
-      {
-        "label": "TIMELINE",
-        "value": "27 seconds"
-      },
-      {
-        "label": "SOURCE",
-        "value": "4 screenshots"
-      }
-    ],
-    "legacyIds": [
-      "xhs-vid-3d-director"
-    ],
-    "author": "JIANG FENG",
-    "year": "2026",
-    "repoUrl": "https://github.com/jiangfengwhu",
-    "tagline": "上传小红书主页截图，把头像、简介和笔记封面排进 3D 胶片。跟随自动运镜预览，再导出自己的频道宣传片。",
-    "synopsis": [
-      "上传小红书主页截图，把头像、简介和笔记封面排进 3D 胶片。跟随自动运镜预览，再导出自己的频道宣传片。"
-    ],
-    "highlights": [
-      "四张截图，自动提取头像与笔记封面",
-      "27 秒运镜与合成配乐",
-      "自定义资料与浏览器视频导出"
-    ],
-    "praise": []
-  },
-  {
-    id: 'yixu-ai-fashion-studio',
-    productDescription: '从一张服装图，寻找下一季的上新灵感。预览模特换装效果，核对服装细节，再整理成商品素材。',
-    productFeatures: ['同一模特，六套换装样片', '多种造型与场景参考', '核对细节并导出九宫格'],
-    films: [
-      { title: '六套换装', src: '/films/yixu-outfits-film/index.html', poster: '/films/yixu-outfits-film/poster.png', duration: 28, orientation: 'landscape' }
-    ],
-    volume: 'VOL. IV',
-    edition: 'STUDIO EDITION · 2026',
-    title: '衣序 YIXU STUDIO',
-    subtitle: '好衣服，值得好好出镜 — 女装 AI 模特上身图与九宫格工作台',
-    spineTitle: '衣序 YIXU STUDIO — AI 时尚摄影与九宫格工作台',
-    author: 'JIANG FENG',
-    year: '2026',
-    category: 'AI Fashion Studio · E-Commerce Workflow',
-    liveUrl: 'https://yixu.297782.xyz/',
-    repoUrl: 'https://github.com/jiangfengwhu',
-    coverImage: '/assets/covers/cover-yixu.png',
-    dimensions: {
-      width: 22.2,
-      height: 29.2,
-      thickness: 3.0
-    },
-    palette: {
-      coverBg: '#8c3f2b',
-      coverSecondary: '#d8c3b0',
-      spineBg: '#783321',
-      spineText: '#f7f6f2',
-      foilColor: '#e8bea0',
-      pageEdge: '#f7f6f2',
-      accentHex: '#a44e35',
-      detailBg: '#321b17'
-    },
-    tagline: '从一张平铺图，到一套有序的上新素材——把时间留给选款，把好看的事交给衣序。',
-    synopsis: [
-      '《衣序 STUDIO》是专为独立女装主理人与买手店设计的 AI 时尚摄影工作台。面对高频的换季上新需求，主理人只需上传一张服装平铺原图，即可在「匀称 / 丰盈 / 纤细」三种体型、「自然 / 暖棕 / 深棕」三种包容性肤色，以及「奶油白影棚 / 城市街角 / 日光咖啡馆」三大场景间自由组合，生成具有杂志质感的模特上身大片。',
-      '不同于盲目堆砌 AI 噱头的生成工具，《衣序》坚持「服装细节始终由你把关」：内置拍摄指令透明检视器、导出前必检的三大细节核对清单（领口与版型、纽扣与图案、颜色与面料），以及不虚构背面细节的 1800×1800 详情页九宫格排版画布，并配有 28 秒「同一模特 · 六套穿搭」交互式宣传片。'
-    ],
-    highlights: [
-      '多元审美与杂志级布光：支持 3 种体型 × 3 种真实肤色 × 3 大拍摄场景与 2:3 竖图 / 1:1 主图画幅切换',
-      '负责任的 AI 电商工作流：强制前置「领口版型 · 纽扣图案 · 颜色面料」人工核对流程，拒绝虚假买家秀',
-      '1800×1800 详情页九宫格合成器：自动将上身成片、平铺原图与局部细节裁切编排为高分辨率商品详情大图',
-      '内置 28 秒《ONE MODEL. SIX LOOKS.》交互式换装短片，直观呈现衬衫、开衫、大衣、连衣裙等六套秋冬成片'
-    ],
-    techStack: ['OpenAI Image Pipeline', 'Canvas 1800×1800 Compositor', 'Editorial Design System', 'Human-in-the-Loop QA', '28s Lookbook Film'],
-    metrics: [
-      { label: 'GRID OUTPUT', value: '1800 × 1800 PNG' },
-      { label: 'LOOKBOOK FILM', value: '28s / 6 Outfits' },
-      { label: 'QA CHECKLIST', value: '3-Point Verification' }
-    ],
-    praise: [
-      {
-        quote: '没有夸张的赛博霓虹，而是用温润的燕麦纸色与克制的编辑部排版，让 AI 工具真正融入独立服装品牌的审美语境。',
-        source: 'EDITORIAL TECH REVIEW'
-      }
-    ]
-  },
-  {
-    "id": "fx-vfx-studio",
-    "films": [{ "title": "突破屏幕", "src": "/films/fx-film/index.html", "poster": "/films/fx-film/poster.svg", "duration": 16, "orientation": "landscape" }],
-    "volume": "VOL. V",
-    "edition": "VFX EDITION · 2026",
-    "title": "FX 特效工坊",
-    "subtitle": "用前端图形学，为竖屏视频设计一次出场",
-    "spineTitle": "FX 特效工坊 — 30 种图形特效与导演运镜",
-    "category": "REALTIME VFX",
-    "liveUrl": "https://fx.297782.xyz/",
-    "coverImage": "/assets/covers/cover-fx.svg",
-    "dimensions": {
-      "width": 22.8,
-      "height": 29.4,
-      "thickness": 3.4
-    },
-    "palette": {
-      "coverBg": "#38451d",
-      "coverSecondary": "#d3f84f",
-      "spineBg": "#273411",
-      "spineText": "#f1f9d7",
-      "foilColor": "#d3f84f",
-      "pageEdge": "#ecf0e5",
-      "accentHex": "#d3f84f",
-      "detailBg": "#23300f"
-    },
-    "productDescription": "给一段竖屏视频，换一种电影感的出场方式。在 30 种实时特效之间切换，调整粒子、光影与转场，再用自动导演完成一段短片。",
-    "productFeatures": [
-      "30 种实时图形特效",
-      "导入视频，调整特效强度与光标力场",
-      "8 秒自动运镜与内录导出"
-    ],
-    "primaryStack": "Three.js",
-    "techStack": [
-      "Three.js",
-      "GLSL",
-      "Canvas 2D"
-    ],
-    "metrics": [
-      {
-        "label": "EFFECTS",
-        "value": "30 scenes"
-      },
-      {
-        "label": "FORMAT",
-        "value": "9:16"
-      }
-    ],
-    "legacyIds": [
-      "shenghua-zjh-ecosystem"
-    ],
-    "author": "JIANG FENG",
-    "year": "2026",
-    "repoUrl": "https://github.com/jiangfengwhu",
-    "tagline": "给一段竖屏视频，换一种电影感的出场方式。在 30 种实时特效之间切换，调整粒子、光影与转场，再用自动导演完成一段短片。",
-    "synopsis": [
-      "给一段竖屏视频，换一种电影感的出场方式。在 30 种实时特效之间切换，调整粒子、光影与转场，再用自动导演完成一段短片。"
-    ],
-    "highlights": [
-      "30 种实时图形特效",
-      "导入视频，调整特效强度与光标力场",
-      "8 秒自动运镜与内录导出"
-    ],
-    "praise": []
-  },
-  {
     "id": "little-traveler",
     "films": [
       {
@@ -375,7 +73,7 @@ export const BOOKS = [
         "orientation": "landscape"
       }
     ],
-    "volume": "VOL. VI",
+    "volume": "VOL. I",
     "edition": "PAPER ART EDITION · 2026",
     "title": "星星上的小旅人",
     "subtitle": "翻开一页，遇见一个小宇宙",
@@ -449,7 +147,7 @@ export const BOOKS = [
         "orientation": "landscape"
       }
     ],
-    "volume": "VOL. VII",
+    "volume": "VOL. II",
     "edition": "MECHANICAL EDITION · 2026",
     "title": "CLACK 打字机",
     "subtitle": "每一声敲击，落在纸上",
@@ -509,6 +207,308 @@ export const BOOKS = [
       "真实 3D 键帽、字杆、色带与字车联动",
       "中文拼音输入与逐键反馈",
       "回车、卷纸与手稿卡片"
+    ],
+    "praise": []
+  },
+  {
+    id: 'pindou-3d-studio',
+    productDescription: '把喜欢的照片变成一颗颗立体拼豆。在浏览器里预览、调整配色，再带着图纸开始手作。',
+    productFeatures: ['图片转 3D 拼豆', '自由调整颗粒与配色', '导出图纸和用料清单'],
+    films: [{ title: '把喜欢，拼成 3D', src: '/films/bead-film/index.html', poster: '/films/bead-film/poster.png', duration: 16, orientation: 'portrait' }],
+    volume: 'VOL. III',
+    edition: 'FIRST EDITION · 2026',
+    title: '豆物 BEAD STUDIO',
+    subtitle: '相册里的喜欢，一颗颗立起来 — 图片转 3D 拼豆与图纸工坊',
+    spineTitle: '豆物 BEAD STUDIO — 图片转 3D 拼豆工坊',
+    author: 'JIANG FENG',
+    year: '2026',
+    category: 'WebGL 2 · Creative Craft Tool',
+    liveUrl: 'https://pindou.297782.xyz/',
+    repoUrl: 'https://github.com/jiangfengwhu',
+    coverImage: '/assets/covers/cover-pindou.png',
+    // Physical dimensions in Stripe Press scene units
+    dimensions: {
+      width: 22.5,
+      height: 29.0,
+      thickness: 3.1
+    },
+    palette: {
+      coverBg: '#d9263e',
+      coverSecondary: '#ff5c72',
+      spineBg: '#c91e35',
+      spineText: '#fff8f6',
+      foilColor: '#ffd9df',
+      pageEdge: '#f8f2ec',
+      accentHex: '#ff2442',
+      detailBg: '#281019'
+    },
+    tagline: '把相册里的平面像素，实时锻造成可捧在手心的 WebGL 2 立体拼豆与施工图纸。',
+    synopsis: [
+      '《豆物 BEAD STUDIO》是一座完全运行在浏览器本地的 2D 图片转 3D 拼豆（Perler Beads）数字工坊。用户只需拖入任意照片（或一键载入内置的「花园里的小橘猫」示例），引擎便会在本地完成像素采样、Floyd-Steinberg 抖色量化，并通过 WebGL 2 InstancedMesh 实时构建出成百上千颗带有中空孔径与明暗浮雕起伏的 3D 拼豆模型。',
+      '除了支持在 3D 立体旋转视图与 2D 正交视图之间丝滑切换，工坊还内置了一支 16 秒的原生 HTML+Web Audio 交互式产品宣传片，并支持实时统计 5mm 物理尺寸、悬停检视色号用量，以及一键导出高清 3D 快照、SVG 编号施工图纸与 CSV 配色物料清单（BOM）。'
+    ],
+    highlights: [
+      '100% 浏览器本地像素采样与 8/16/24/32/48 色盘智能量化，支持移除近白背景与像素抖色',
+      'WebGL 2 参数化空心圆柱几何：实时调节拼豆横向颗数 (16–100 颗)、厚度 (0.3×–2.0×)、孔径比与明暗浮雕高度',
+      '一键导出生产级三大件：PNG 3D 渲染快照、带坐标网格的 SVG 编号图纸、CSV 配色及用量统计表',
+      '内置 16 秒原生 HTML 动画宣传片（含 Web Audio 合成音效），无需视频流即可呈现丝滑产品叙事'
+    ],
+    techStack: ['Three.js (WebGL 2)', 'InstancedMesh', 'Color Quantization', 'Floyd-Steinberg Dither', 'SVG Blueprint Engine', 'CSV BOM Exporter'],
+    metrics: [
+      { label: 'MAX RESOLUTION', value: '100×100 Beads' },
+      { label: 'PALETTE MODES', value: '8 – 48 Colors' },
+      { label: 'PRIVACY MODEL', value: '100% Local Memory' }
+    ],
+    praise: [
+      {
+        quote: '将像素艺术的颗粒感与 WebGL 2 的物理光影结合得恰到好处，连拼豆中空的孔径与底板卡槽都清晰可辨。',
+        source: 'CREATIVE WEBGL REVIEW'
+      },
+      {
+        quote: '从上传照片到导出 SVG 编号施工图纸只需 3 秒，真正为手作玩家省去了繁琐的排豆算色过程。',
+        source: 'MAKER TOOLKIT DIGEST'
+      }
+    ]
+  },
+  {
+    id: 'city-sidekick-dazi',
+    productDescription: '给周末找一个舒服的小局。按兴趣、时间和社交电量，发现适合自己的 3–5 人城市活动。',
+    productFeatures: ['咖啡、散步、看展与桌游', '破冰话题与轻量行程', '偏好与日程保存在本机'],
+    films: [{ title: '把「下次吧」变成「走吧」', src: '/films/city-dazi-film/index.html', poster: '/films/city-dazi-film/poster.png', duration: 22, orientation: 'portrait' }],
+    volume: 'VOL. IV',
+    edition: 'FIRST EDITION · 2026',
+    title: '城市搭子 CITY SIDEKICK',
+    subtitle: '一个人出门，也能刚好成局 — 3～5 人低压力同频生活指南',
+    spineTitle: '城市搭子 CITY SIDEKICK — 低压力同城小局',
+    author: 'JIANG FENG',
+    year: '2026',
+    category: 'Social Product · Local-First Web App',
+    liveUrl: 'https://dazi.297782.xyz/',
+    repoUrl: 'https://github.com/jiangfengwhu',
+    coverImage: '/assets/covers/cover-dazi.png',
+    dimensions: {
+      width: 21.8,
+      height: 28.4,
+      thickness: 2.8
+    },
+    palette: {
+      coverBg: '#2546f0',
+      coverSecondary: '#f5fb85',
+      spineBg: '#1c39cc',
+      spineText: '#f8f9fc',
+      foilColor: '#f5fb85',
+      pageEdge: '#f4f5f8',
+      accentHex: '#3859ff',
+      detailBg: '#111d3a'
+    },
+    tagline: '小局有边界，快乐没负担：可以安静听 · 可以跳过问题 · 可以按时离开 · 不用交换联系方式。',
+    synopsis: [
+      '在一线城市（北京、上海、深圳、广州），成年人的社交常常陷入「大型聚会太吵、一对一太尴尬」的困境。《城市搭子 CITY SIDEKICK》以「先一起做件小事，再慢慢认识彼此」为核心理念，为慢热、重边界的都市青年设计了一套 3～5 人、60～120 分钟的轻量级小局匹配体验。',
+      '产品独创「今日社交电量」三档匹配维度（◔ 低电量慢热 / ◑ 随便聊聊 / ● 状态在线），结合出发片区、3–20km 距离半径与咖啡闲聊、城市散步、看展同游、桌游破冰四大场景，自动生成破冰话题与行程模板，并附带 22 秒 HTML 交互宣传片与四条「安心出门约定」。'
+    ],
+    highlights: [
+      '支持北京、上海、深圳、广州四城片区切换，基于片区距离与时段偏好实时筛选同频小局',
+      '独创「社交电量」匹配机制：不给性格打分、不需要立人设，慢热低电量也能舒服参与',
+      '结构化小局卡片：内置可切换的破冰话题库、60–120 分钟清晰行程节点与 AA 预算透明说明',
+      '隐私与边界优先：全部偏好、日程与反馈保存在本地浏览器，支持一键清空本机体验数据'
+    ],
+    techStack: ['Vanilla ES Modules', 'Rule-Based Matcher', 'Local-First Storage', 'HTML5 Interactive Film', 'Editorial CSS Grid'],
+    metrics: [
+      { label: 'GROUP SIZE', value: '3 – 5 People' },
+      { label: 'CITIES COVERED', value: 'BJ · SH · SZ · GZ' },
+      { label: 'PROMO FILM', value: '22s HTML Animation' }
+    ],
+    praise: [
+      {
+        quote: '「可以安静听、可以跳过问题、可以按时离开」——这是我见过对都市慢热人群最温柔也最克制的产品文案与机制设计。',
+        source: 'URBAN LIFESTYLE LAB'
+      }
+    ]
+  },
+  {
+    "id": "xhs-3d-studio",
+    "films": [{ "title": "让主页，自己开场", "src": "/films/creator-film/index.html", "poster": "/films/creator-film/poster.svg", "duration": 24, "orientation": "landscape" }],
+    "volume": "VOL. V",
+    "edition": "CREATOR EDITION · 2026",
+    "title": "3D 主页大片",
+    "subtitle": "把小红书主页，拍成一支有运镜的宣传片",
+    "spineTitle": "3D 主页大片 — 个人频道视频工作台",
+    "category": "3D CREATOR TOOLS",
+    "liveUrl": "https://xhs-vid.297782.xyz/",
+    "coverImage": "/assets/covers/cover-creator.svg",
+    "dimensions": {
+      "width": 23.2,
+      "height": 29.8,
+      "thickness": 3.5
+    },
+    "palette": {
+      "coverBg": "#20213e",
+      "coverSecondary": "#f5be72",
+      "spineBg": "#16172c",
+      "spineText": "#fff1d8",
+      "foilColor": "#f5be72",
+      "pageEdge": "#eee8dc",
+      "accentHex": "#f5be72",
+      "detailBg": "#302114"
+    },
+    "productDescription": "上传小红书主页截图，把头像、简介和笔记封面排进 3D 胶片。跟随自动运镜预览，再导出自己的频道宣传片。",
+    "productFeatures": [
+      "四张截图，自动提取头像与笔记封面",
+      "27 秒运镜与合成配乐",
+      "自定义资料与浏览器视频导出"
+    ],
+    "primaryStack": "Three.js",
+    "techStack": [
+      "Three.js",
+      "Web Audio API",
+      "MediaRecorder"
+    ],
+    "metrics": [
+      {
+        "label": "TIMELINE",
+        "value": "27 seconds"
+      },
+      {
+        "label": "SOURCE",
+        "value": "4 screenshots"
+      }
+    ],
+    "legacyIds": [
+      "xhs-vid-3d-director"
+    ],
+    "author": "JIANG FENG",
+    "year": "2026",
+    "repoUrl": "https://github.com/jiangfengwhu",
+    "tagline": "上传小红书主页截图，把头像、简介和笔记封面排进 3D 胶片。跟随自动运镜预览，再导出自己的频道宣传片。",
+    "synopsis": [
+      "上传小红书主页截图，把头像、简介和笔记封面排进 3D 胶片。跟随自动运镜预览，再导出自己的频道宣传片。"
+    ],
+    "highlights": [
+      "四张截图，自动提取头像与笔记封面",
+      "27 秒运镜与合成配乐",
+      "自定义资料与浏览器视频导出"
+    ],
+    "praise": []
+  },
+  {
+    id: 'yixu-ai-fashion-studio',
+    productDescription: '从一张服装图，寻找下一季的上新灵感。预览模特换装效果，核对服装细节，再整理成商品素材。',
+    productFeatures: ['同一模特，六套换装样片', '多种造型与场景参考', '核对细节并导出九宫格'],
+    films: [
+      { title: '六套换装', src: '/films/yixu-outfits-film/index.html', poster: '/films/yixu-outfits-film/poster.png', duration: 28, orientation: 'landscape' }
+    ],
+    volume: 'VOL. VI',
+    edition: 'STUDIO EDITION · 2026',
+    title: '衣序 YIXU STUDIO',
+    subtitle: '好衣服，值得好好出镜 — 女装 AI 模特上身图与九宫格工作台',
+    spineTitle: '衣序 YIXU STUDIO — AI 时尚摄影与九宫格工作台',
+    author: 'JIANG FENG',
+    year: '2026',
+    category: 'AI Fashion Studio · E-Commerce Workflow',
+    liveUrl: 'https://yixu.297782.xyz/',
+    repoUrl: 'https://github.com/jiangfengwhu',
+    coverImage: '/assets/covers/cover-yixu.png',
+    dimensions: {
+      width: 22.2,
+      height: 29.2,
+      thickness: 3.0
+    },
+    palette: {
+      coverBg: '#8c3f2b',
+      coverSecondary: '#d8c3b0',
+      spineBg: '#783321',
+      spineText: '#f7f6f2',
+      foilColor: '#e8bea0',
+      pageEdge: '#f7f6f2',
+      accentHex: '#a44e35',
+      detailBg: '#321b17'
+    },
+    tagline: '从一张平铺图，到一套有序的上新素材——把时间留给选款，把好看的事交给衣序。',
+    synopsis: [
+      '《衣序 STUDIO》是专为独立女装主理人与买手店设计的 AI 时尚摄影工作台。面对高频的换季上新需求，主理人只需上传一张服装平铺原图，即可在「匀称 / 丰盈 / 纤细」三种体型、「自然 / 暖棕 / 深棕」三种包容性肤色，以及「奶油白影棚 / 城市街角 / 日光咖啡馆」三大场景间自由组合，生成具有杂志质感的模特上身大片。',
+      '不同于盲目堆砌 AI 噱头的生成工具，《衣序》坚持「服装细节始终由你把关」：内置拍摄指令透明检视器、导出前必检的三大细节核对清单（领口与版型、纽扣与图案、颜色与面料），以及不虚构背面细节的 1800×1800 详情页九宫格排版画布，并配有 28 秒「同一模特 · 六套穿搭」交互式宣传片。'
+    ],
+    highlights: [
+      '多元审美与杂志级布光：支持 3 种体型 × 3 种真实肤色 × 3 大拍摄场景与 2:3 竖图 / 1:1 主图画幅切换',
+      '负责任的 AI 电商工作流：强制前置「领口版型 · 纽扣图案 · 颜色面料」人工核对流程，拒绝虚假买家秀',
+      '1800×1800 详情页九宫格合成器：自动将上身成片、平铺原图与局部细节裁切编排为高分辨率商品详情大图',
+      '内置 28 秒《ONE MODEL. SIX LOOKS.》交互式换装短片，直观呈现衬衫、开衫、大衣、连衣裙等六套秋冬成片'
+    ],
+    techStack: ['OpenAI Image Pipeline', 'Canvas 1800×1800 Compositor', 'Editorial Design System', 'Human-in-the-Loop QA', '28s Lookbook Film'],
+    metrics: [
+      { label: 'GRID OUTPUT', value: '1800 × 1800 PNG' },
+      { label: 'LOOKBOOK FILM', value: '28s / 6 Outfits' },
+      { label: 'QA CHECKLIST', value: '3-Point Verification' }
+    ],
+    praise: [
+      {
+        quote: '没有夸张的赛博霓虹，而是用温润的燕麦纸色与克制的编辑部排版，让 AI 工具真正融入独立服装品牌的审美语境。',
+        source: 'EDITORIAL TECH REVIEW'
+      }
+    ]
+  },
+  {
+    "id": "fx-vfx-studio",
+    "films": [{ "title": "突破屏幕", "src": "/films/fx-film/index.html", "poster": "/films/fx-film/poster.svg", "duration": 16, "orientation": "landscape" }],
+    "volume": "VOL. VII",
+    "edition": "VFX EDITION · 2026",
+    "title": "FX 特效工坊",
+    "subtitle": "用前端图形学，为竖屏视频设计一次出场",
+    "spineTitle": "FX 特效工坊 — 30 种图形特效与导演运镜",
+    "category": "REALTIME VFX",
+    "liveUrl": "https://fx.297782.xyz/",
+    "coverImage": "/assets/covers/cover-fx.svg",
+    "dimensions": {
+      "width": 22.8,
+      "height": 29.4,
+      "thickness": 3.4
+    },
+    "palette": {
+      "coverBg": "#38451d",
+      "coverSecondary": "#d3f84f",
+      "spineBg": "#273411",
+      "spineText": "#f1f9d7",
+      "foilColor": "#d3f84f",
+      "pageEdge": "#ecf0e5",
+      "accentHex": "#d3f84f",
+      "detailBg": "#23300f"
+    },
+    "productDescription": "给一段竖屏视频，换一种电影感的出场方式。在 30 种实时特效之间切换，调整粒子、光影与转场，再用自动导演完成一段短片。",
+    "productFeatures": [
+      "30 种实时图形特效",
+      "导入视频，调整特效强度与光标力场",
+      "8 秒自动运镜与内录导出"
+    ],
+    "primaryStack": "Three.js",
+    "techStack": [
+      "Three.js",
+      "GLSL",
+      "Canvas 2D"
+    ],
+    "metrics": [
+      {
+        "label": "EFFECTS",
+        "value": "30 scenes"
+      },
+      {
+        "label": "FORMAT",
+        "value": "9:16"
+      }
+    ],
+    "legacyIds": [
+      "shenghua-zjh-ecosystem"
+    ],
+    "author": "JIANG FENG",
+    "year": "2026",
+    "repoUrl": "https://github.com/jiangfengwhu",
+    "tagline": "给一段竖屏视频，换一种电影感的出场方式。在 30 种实时特效之间切换，调整粒子、光影与转场，再用自动导演完成一段短片。",
+    "synopsis": [
+      "给一段竖屏视频，换一种电影感的出场方式。在 30 种实时特效之间切换，调整粒子、光影与转场，再用自动导演完成一段短片。"
+    ],
+    "highlights": [
+      "30 种实时图形特效",
+      "导入视频，调整特效强度与光标力场",
+      "8 秒自动运镜与内录导出"
     ],
     "praise": []
   }
